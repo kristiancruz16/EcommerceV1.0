@@ -10,6 +10,7 @@ import java.util.Set;
  * 6/5/2021
  */
 public interface ProductRepository extends JpaRepository<Product,Long> {
+
     Set<Product> findAllBySkuLikeIgnoreCase(Long sku);
 
     Set<Product> findAllByNameLikeIgnoreCase(String name);
