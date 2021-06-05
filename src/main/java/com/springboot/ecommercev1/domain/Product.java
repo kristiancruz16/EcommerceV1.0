@@ -32,7 +32,7 @@ public class Product extends BaseEntity{
     private Integer productPrice;
 
     @ManyToOne
-    @JoinColumn("product_id")
+    @JoinColumn( name = "product_id")
     private Category category;
 
 }
