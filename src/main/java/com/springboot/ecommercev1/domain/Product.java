@@ -21,7 +21,7 @@ public class Product extends BaseEntity{
     }
 
     private Long sku;
-    private String description;
-    private Integer price;
+    private String productDescription;
+    private Integer productPrice;
 
 }
