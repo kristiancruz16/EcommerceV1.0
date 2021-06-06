@@ -1,6 +1,7 @@
 package com.springboot.ecommercev1.services;
 
 import com.springboot.ecommercev1.domain.Category;
+import com.springboot.ecommercev1.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,38 +13,48 @@ import java.util.Set;
  */
 @Service
 public class CategoryServiceImpl implements CategoryService {
+
+    private final CategoryRepository categoryRepository;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+
     @Override
     public Category findByCategoryCode(String categoryCode) {
-        return null;
+
+        return categoryRepository.findByCategoryCode(categoryCode);
     }
 
     @Override
     public List<Category> findAllByNameLikeIgnoreCase(String name) {
-        return null;
+
+        return categoryRepository.findAllByNameLikeIgnoreCase(name);
     }
 
     @Override
     public List <Category> findAll() {
-        return null;
+
+        return categoryRepository.findAll();
     }
 
     @Override
     public Category findById(Long aLong) {
-        return null;
+        return categoryRepository.findById(aLong).orElse(null);
     }
 
     @Override
-    public Category save(Category object) {
-        return null;
+    public Category save(Category category) {
+        return categoryRepository.save(category);
     }
 
     @Override
-    public void delete(Category object) {
-
+    public void delete(Category category) {
+        categoryRepository.delete(category);
     }
 
     @Override
     public void deleteById(Long aLong) {
-
+        categoryRepository.deleteById(aLong);
     }
 }

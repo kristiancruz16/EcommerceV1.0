@@ -25,10 +25,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findAll() {
-        List <Product> products = new ArrayList<>();
-        productRepository.findAll()
-                .forEach(products::add);
-        return products;
+        return productRepository.findAll();
     }
 
     @Override

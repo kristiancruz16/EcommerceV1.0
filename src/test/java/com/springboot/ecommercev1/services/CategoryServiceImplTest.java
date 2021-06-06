@@ -64,7 +64,6 @@ class CategoryServiceImplTest {
 
 
     @Test
-    @Disabled
     void findAll() {
         List<Category> categoryList = new ArrayList<>();
         categoryList.add(Category.builder().id(1L).build());
