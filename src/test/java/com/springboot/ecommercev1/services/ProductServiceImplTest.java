@@ -101,7 +101,7 @@ class ProductServiceImplTest {
     void findAllBySkuLike() {
         when(productRepositoryMock.findAllBySkuLike(anyLong())).thenReturn(Arrays.asList(returnProduct));
         List <Product> productList = productServiceMock.findAllBySkuLike(12L);
-        assertEquals(Collections.singleton(returnProduct),productList);
+        assertEquals(returnProduct,productList.get(0));
         verify(productRepositoryMock).findAllBySkuLike(anyLong());
     }
 

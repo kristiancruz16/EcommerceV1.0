@@ -42,23 +42,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(Product object) {
-
-
+    public void delete(Product product) {
+        productRepository.delete(product);
     }
 
     @Override
     public void deleteById(Long aLong) {
-
+        productRepository.deleteById(aLong);
     }
 
     @Override
     public List <Product> findAllBySkuLike(Long sku) {
-        return null;
+        return productRepository.findAllBySkuLike(sku);
     }
 
     @Override
     public List<Product> findAllByNameLikeIgnoreCase(String name) {
-        return null;
+        return productRepository.findAllByNameLikeIgnoreCase(name);
     }
 }
