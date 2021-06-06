@@ -1,6 +1,7 @@
 package com.springboot.ecommercev1.services;
 
 import com.springboot.ecommercev1.domain.Category;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import java.util.Set;
  * @author KMCruz
  * 6/5/2021
  */
+@Service
 public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findByCategoryCode(String categoryCode) {

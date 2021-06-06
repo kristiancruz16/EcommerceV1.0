@@ -15,10 +15,12 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "product")
 public class Product extends BaseEntity{
 
+    @Builder
     public Product(Long id, String name, Long sku, String productDescription, Integer productPrice, Category category) {
         super(id, name);
         this.sku = sku;

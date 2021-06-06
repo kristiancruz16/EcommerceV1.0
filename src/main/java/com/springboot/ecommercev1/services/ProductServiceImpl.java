@@ -1,8 +1,11 @@
 package com.springboot.ecommercev1.services;
 
 import com.springboot.ecommercev1.domain.Product;
+import com.springboot.ecommercev1.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,23 +16,34 @@ import java.util.Set;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final ProductRepository productRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     @Override
     public Set<Product> findAll() {
-        return null;
+        Set <Product> products = new HashSet<>();
+        productRepository.findAll()
+                .forEach(products::add);
+        return products;
     }
 
     @Override
     public Product findById(Long aLong) {
-        return null;
+        return productRepository.findById(aLong).orElse(null);
+
     }
 
     @Override
-    public Product save(Product object) {
-        return null;
+    public Product save(Product product) {
+    return productRepository.save(product);
     }
 
     @Override
     public void delete(Product object) {
+
 
     }
 
@@ -39,12 +53,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> findAllBySkuLikeIgnoreCase(Long sku) {
+    public List <Product> findAllBySkuLike(Long sku) {
         return null;
     }
 
     @Override
-    public Set<Product> findAllByNameLikeIgnoreCase(String name) {
+    public List<Product> findAllByNameLikeIgnoreCase(String name) {
         return null;
     }
 }

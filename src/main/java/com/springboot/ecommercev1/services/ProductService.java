@@ -2,6 +2,7 @@ package com.springboot.ecommercev1.services;
 
 import com.springboot.ecommercev1.domain.Product;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Set;
  */
 public interface ProductService extends CrudService<Product,Long>{
 
-    Set<Product> findAllBySkuLikeIgnoreCase(Long sku);
+    List<Product> findAllBySkuLike(Long sku);
 
-    Set<Product> findAllByNameLikeIgnoreCase(String name);
+    List <Product> findAllByNameLikeIgnoreCase(String name);
 }
