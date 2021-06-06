@@ -4,6 +4,7 @@ import com.springboot.ecommercev1.domain.Product;
 import com.springboot.ecommercev1.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,8 +24,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> findAll() {
-        Set <Product> products = new HashSet<>();
+    public List<Product> findAll() {
+        List <Product> products = new ArrayList<>();
         productRepository.findAll()
                 .forEach(products::add);
         return products;

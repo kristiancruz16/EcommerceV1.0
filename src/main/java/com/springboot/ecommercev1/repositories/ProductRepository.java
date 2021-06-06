@@ -11,7 +11,7 @@ import java.util.List;
  * @author KMCruz
  * 6/5/2021
  */
-public interface ProductRepository extends CrudRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findAllBySkuLike(Long sku);
 

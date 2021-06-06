@@ -47,13 +47,13 @@ class ProductServiceImplTest {
 
     @Test
     void findAll() {
-        Set<Product>productSet = new HashSet<>();
-        productSet.add(Product.builder().id(1L).build());
-        productSet.add(Product.builder().id(2L).build());
+        List<Product>productList = new ArrayList<>();
+        productList.add(Product.builder().id(1L).build());
+        productList.add(Product.builder().id(2L).build());
 
-        when(productRepositoryMock.findAll()).thenReturn(productSet);
+        when(productRepositoryMock.findAll()).thenReturn(productList);
 
-        Set <Product> products = productServiceMock.findAll();
+        List <Product> products = productServiceMock.findAll();
         assertNotNull(products);
         assertEquals(2,products.size());
 

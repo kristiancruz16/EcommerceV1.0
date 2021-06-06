@@ -3,6 +3,7 @@ package com.springboot.ecommercev1.repositories;
 import com.springboot.ecommercev1.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,6 +13,6 @@ import java.util.Set;
 public interface CategoryRepository extends JpaRepository<Category,Long> {
     Category findByCategoryCode(String categoryCode);
 
-    Set<Category> findAllByNameLikeIgnoreCase(String name);
+    List<Category> findAllByNameLikeIgnoreCase(String name);
 
 }

@@ -3,6 +3,7 @@ package com.springboot.ecommercev1.services;
 import com.springboot.ecommercev1.domain.Category;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,12 +18,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Set<Category> findAllByNameLikeIgnoreCase(String name) {
+    public List<Category> findAllByNameLikeIgnoreCase(String name) {
         return null;
     }
 
     @Override
-    public Set<Category> findAll() {
+    public List <Category> findAll() {
         return null;
     }
 
