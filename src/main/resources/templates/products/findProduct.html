@@ -10,8 +10,6 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th style="width: 150px;">Category Code</th>
-        <th style="width: 150px;">Category Name</th>
         <th style="width: 150px;">SKU</th>
         <th style="width: 150px;">Product Name</th>
         <th style="width: 150px;">Description</th>
@@ -20,9 +18,9 @@
     </thead>
     <tbody>
     <tr th:each="product:${products}">
-        <td th:text="${product.category.categoryCode}">MAA</td>
-        <td th:text="${product.category.name}">Men's Accessories</td>
-        <td th:text="${product.sku}">12345678</td>
+        <td>
+            <a th:href="@{/products/__${product.id}__}" th:text="${product.sku}"/></a>
+        </td>
         <td th:text="${product.name}">Nike</td>
         <td th:text="${product.productDescription}">One Size Fits All/White/Caps</td>
         <td th:text="${product.productPrice}">PHP1,499.00</td>

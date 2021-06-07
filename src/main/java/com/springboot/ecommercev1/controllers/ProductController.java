@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 6/5/2021
  */
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     private final CategoryService categoryService;

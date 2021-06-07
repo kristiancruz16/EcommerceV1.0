@@ -1,6 +1,7 @@
 package com.springboot.ecommercev1.controllers;
 
 import com.springboot.ecommercev1.repositories.CategoryRepository;
+import com.springboot.ecommercev1.services.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 6/7/2021
  */
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public String showAllCategory(Model model){
-        return "/category/showAllCategory";
+        model.addAttribute("categories",categoryService.findAll());
+        return "/categories/showAllCategory";
     }
 }
