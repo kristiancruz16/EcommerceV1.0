@@ -19,7 +19,14 @@
     </tr>
     </thead>
     <tbody>
-
+    <tr th:each="product:${products}">
+        <td th:text="${product.category.categoryCode}">MAA</td>
+        <td th:text="${product.category.name}">Men's Accessories</td>
+        <td th:text="${product.sku}">12345678</td>
+        <td th:text="${product.name}">Nike</td>
+        <td th:text="${product.productDescription}">One Size Fits All/White/Caps</td>
+        <td th:text="${product.productPrice}">PHP1,499.00</td>
+    </tr>
     </tbody>
 </table>
 
