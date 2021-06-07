@@ -7,7 +7,42 @@
 <body>
     <h2 th:text="'Category List'">Category Details</h2>
 
-    <table></table>
+    <table class="table table-striped" th:object="${category}">
+        <tr>
+            <th>Category Code:</th>
+            <td th:text="*{categoryCode}">AAA </td>
+        </tr>
+        <tr>
+            <th>Category Name: </th>
+            <td th:text="*{name}"> Alpha Alpha Alpha</td>
+        </tr>
+        <tr>
+            <table class="table table-striped" >
+                <thead>
+                <tr>
+                    <th style="width: 200px">SKU</th>
+                    <th style="width: 200px">Product Name</th>
+                    <th style="width: 200px">Description</th>
+                    <th style="width: 200px">Price</th>
+                </tr>
+                </thead>
+                <tr th:each="product : ${category.products}">
+                    <td>
+                        <a th:href="@{/products/__${product.id}__}" th:text="${product.sku}"></a>
+                    </td>
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.productDescription}"></td>
+                    <td th:text="${product.productPrice}"></td>
+
+                </tr>
+            </table>
+        </tr>
+    </table>
+
+    <br/>
+    <br/>
+
+
 
 </body>
 </html>

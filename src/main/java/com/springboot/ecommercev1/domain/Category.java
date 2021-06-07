@@ -1,9 +1,6 @@
 package com.springboot.ecommercev1.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,6 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "category")
 public class Category extends BaseEntity{
@@ -35,4 +33,5 @@ public class Category extends BaseEntity{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products = new HashSet<>();
+
 }
