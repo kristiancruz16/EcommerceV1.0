@@ -1,6 +1,9 @@
 package com.springboot.ecommercev1.controllers;
 
+import com.springboot.ecommercev1.services.CategoryService;
+import com.springboot.ecommercev1.services.ProductService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -12,8 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/product")
 public class ProductController {
 
+    private final CategoryService categoryService;
+    private final ProductService productService;
+
+    public ProductController(CategoryService categoryService, ProductService productService) {
+        this.categoryService = categoryService;
+        this.productService = productService;
+    }
+
     @GetMapping
-    public String showAllProducts(){
+    public String showAllProducts(Model model){
+        model.addAttribute("products",productService.findAll());
         return "/products/findProduct";
     }
 
