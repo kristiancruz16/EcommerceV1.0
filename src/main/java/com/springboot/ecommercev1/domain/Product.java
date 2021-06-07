@@ -21,7 +21,7 @@ import javax.persistence.Table;
 public class Product extends BaseEntity{
 
     @Builder
-    public Product(Long id, String name, Long sku, String productDescription, Integer productPrice, Category category) {
+    public Product(Long id, String name, Long sku, String productDescription, Double productPrice, Category category) {
         super(id, name);
         this.sku = sku;
         this.productDescription = productDescription;
@@ -31,10 +31,10 @@ public class Product extends BaseEntity{
 
     private Long sku;
     private String productDescription;
-    private Integer productPrice;
+    private Double productPrice;
 
     @ManyToOne
-    @JoinColumn( name = "product_id")
+    @JoinColumn( name = "category_id")
     private Category category;
 
 }

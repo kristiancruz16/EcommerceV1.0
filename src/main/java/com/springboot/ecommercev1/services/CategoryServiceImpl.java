@@ -4,6 +4,7 @@ import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,8 +35,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List <Category> findAll() {
-
-        return categoryRepository.findAll();
+        List<Category> categoryList = new ArrayList<>();
+        categoryRepository.findAll().forEach(categoryList::add);
+        return categoryList;
     }
 
     @Override

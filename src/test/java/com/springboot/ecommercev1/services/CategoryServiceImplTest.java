@@ -62,7 +62,6 @@ class CategoryServiceImplTest {
 
     }
 
-
     @Test
     void findAll() {
         List<Category> categoryList = new ArrayList<>();
@@ -119,4 +118,4 @@ class CategoryServiceImplTest {
 
         verify(categoryRepositoryMock,times(1)).deleteById(anyLong());
     }
-}
+}   
