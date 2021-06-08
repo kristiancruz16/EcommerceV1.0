@@ -14,7 +14,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -57,6 +58,12 @@ class ProductControllerTest {
     }
 
     @Test
-    void showProductDetails() {
+    void showProductDetails() throws Exception {
+        when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
+
+        mockMvc.perform(get("/products/123"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("products/productDetails"))
+                .andExpect(model().attribute("product",hasProperty("id",is(1L))));
     }
 }
