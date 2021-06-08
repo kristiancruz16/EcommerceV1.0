@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+
 /**
  * @author KMCruz
  * 6/7/2021
@@ -57,6 +59,17 @@ public class CategoryController {
     public String initializeUpdateCategoryForm (@PathVariable Long categoryId, Model model) {
         model.addAttribute("category",categoryService.findById(categoryId));
         return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
+    }
+
+    @PostMapping("/{categoryId}/edit")
+    public String processUpdateCategoryForm(@PathVariable Long categoryId, @Valid Category category, BindingResult result) {
+        if (result.hasErrors()) {
+            return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
+        } else {
+            category.setId(categoryId);
+            Category savedCategory = categoryService.save(category);
+            return "redirect:categories/"+savedCategory.getId();
+        }
     }
 
 }

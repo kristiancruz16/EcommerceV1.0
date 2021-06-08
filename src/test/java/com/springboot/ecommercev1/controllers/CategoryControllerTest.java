@@ -106,7 +106,7 @@ class CategoryControllerTest {
     void processUpdateCategoryForm() throws Exception {
         when(categoryService.save(any())).thenReturn(Category.builder().id(1L).build());
 
-        mockMvc.perform(post("categories/1/edit"))
+        mockMvc.perform(post("/categories/1/edit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:categories/1"))
                 .andExpect(model().attributeExists("category"));
