@@ -94,11 +94,12 @@ class CategoryControllerTest {
 
     @Test
     void initializeUpdateCategoryForm () throws Exception {
+        when(categoryService.findById(anyLong())).thenReturn(Category.builder().id(1L).build());
+
         mockMvc.perform(get("/categories/145/edit"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories/createOrUpdateCategoryForm"))
                 .andExpect(model().attributeExists("category"));
-        verifyNoInteractions(categoryService);
     }
 
 }
