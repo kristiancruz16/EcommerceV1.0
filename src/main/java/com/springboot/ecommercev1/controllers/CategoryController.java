@@ -51,8 +51,6 @@ public class CategoryController {
             Category savedCategory = categoryService.save(category);
             return "redirect:/categories/" + savedCategory.getId();
         }
-
     }
-
 
 }

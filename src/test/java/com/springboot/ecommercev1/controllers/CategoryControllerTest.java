@@ -16,15 +16,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -92,6 +90,15 @@ class CategoryControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/categories/1"))
                 .andExpect(model().attributeExists("category"));
+    }
+
+    @Test
+    void initializeUpdateCategoryForm () throws Exception {
+        mockMvc.perform(get("/categories/145/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("categories/createOrUpdateCategoryForm"))
+                .andExpect(model().attributeExists("category"));
+        verifyNoInteractions(categoryService);
     }
 
 }
