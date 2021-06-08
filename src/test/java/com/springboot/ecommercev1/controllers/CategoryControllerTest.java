@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
@@ -70,5 +71,14 @@ class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories/categoryDetails"))
                 .andExpect(model().attribute("category",hasProperty("id",is(1L))));
+    }
+
+    @Test
+    void initializeNewCategoryForm() throws Exception {
+        mockMvc.perform(get("/categories/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("categories/createOrUpdateCategoryForm"))
+                .andExpect(model().attributeExists("category"));
+        verifyNoInteractions(categoryService);
     }
 }
