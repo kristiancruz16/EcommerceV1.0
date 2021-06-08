@@ -16,18 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final CategoryService categoryService;
     private final ProductService productService;
 
-    public ProductController(CategoryService categoryService, ProductService productService) {
-        this.categoryService = categoryService;
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @GetMapping
     public String showAllProducts(Model model){
         model.addAttribute("products",productService.findAll());
-        return "showAllProducts";
+        return "products/allProducts";
     }
 
     @GetMapping("/{productId}")
