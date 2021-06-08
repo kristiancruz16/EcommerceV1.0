@@ -5,6 +5,7 @@ import com.springboot.ecommercev1.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -28,5 +29,12 @@ public class ProductController {
         model.addAttribute("products",productService.findAll());
         return "/products/findProduct";
     }
+
+    @GetMapping("/{productId}")
+    public String showProductDetails(@PathVariable Long productId, Model model){
+        model.addAttribute("product",productService.findById(productId));
+        return "/products/productDetails";
+    }
+
 
 }

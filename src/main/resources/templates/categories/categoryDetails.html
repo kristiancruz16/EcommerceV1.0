@@ -28,9 +28,9 @@
                 </thead>
                 <tr th:each="product : ${category.products}">
                     <td>
-                        <a th:href="@{/products/__${product.id}__}" th:text="${product.sku}"></a>
+                        <a style="width: 200px" th:href="@{/products/__${product.id}__}" th:text="${product.sku}"></a>
                     </td>
-                    <td th:text="${product.name}"></td>
+                    <td style="width: 200px" th:text="${product.name}"></td>
                     <td th:text="${product.productDescription}"></td>
                     <td th:text="${product.productPrice}"></td>
 
