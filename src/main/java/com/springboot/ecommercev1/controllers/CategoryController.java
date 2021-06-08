@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private static final String VIEWS_CREATE_OR_UPDATE_CATEGORY_FORM = "categories/createOrUpdateCategoryForm";
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -39,13 +40,13 @@ public class CategoryController {
     @GetMapping("/new")
     public String initializeNewCategoryForm(Model model){
         model.addAttribute("category", Category.builder().build());
-        return "categories/createOrUpdateCategoryForm";
+        return VIEWS_CREATE_OR_UPDATE_CATEGORY_FORM;
     }
 
     @PostMapping("/new")
     public String processNewCategoryForm(Category category, BindingResult result) {
         if(result.hasErrors()){
-            return "categories/createOrUpdateCategoryForm";
+            return VIEWS_CREATE_OR_UPDATE_CATEGORY_FORM;
         } else {
             Category savedCategory = categoryService.save(category);
             return "redirect:/categories/" + savedCategory.getId();
