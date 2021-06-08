@@ -17,6 +17,16 @@
             <td th:text="*{name}"> Alpha Alpha Alpha</td>
         </tr>
         <tr>
+            <td>
+            <a th:href="@{/categories/{id}/edit(id=*{id})}">
+            <input type="submit" value="Edit Category" />
+            </a>
+            </td>
+           <!-- <button>
+                <a class="btn btn-default" th:href="@{/categories/{id}/edit(id=*{id})}">Edit Category</a>
+            </button>-->
+        </tr>
+        <tr>
             <table class="table table-striped" >
                 <thead>
                 <tr>
@@ -40,6 +50,8 @@
     </table>
     <br/>
     <br/>
+
+
 
 
 

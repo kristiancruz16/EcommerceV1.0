@@ -62,13 +62,13 @@ public class CategoryController {
     }
 
     @PostMapping("/{categoryId}/edit")
-    public String processUpdateCategoryForm(@PathVariable Long categoryId, @Valid Category category, BindingResult result) {
+    public String processUpdateCategoryForm(@PathVariable Long categoryId, Category category, BindingResult result) {
         if (result.hasErrors()) {
             return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
         } else {
             category.setId(categoryId);
             Category savedCategory = categoryService.save(category);
-            return "redirect:categories/"+savedCategory.getId();
+            return "redirect:/categories/"+savedCategory.getId();
         }
     }
 
