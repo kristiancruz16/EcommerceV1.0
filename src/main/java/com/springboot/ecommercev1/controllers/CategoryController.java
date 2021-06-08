@@ -4,8 +4,10 @@ import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.services.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -39,5 +41,7 @@ public class CategoryController {
         model.addAttribute("category", Category.builder().build());
         return "categories/createOrUpdateCategoryForm";
     }
+
+
 
 }
