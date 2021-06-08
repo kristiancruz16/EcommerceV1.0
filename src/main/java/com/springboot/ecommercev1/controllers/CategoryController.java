@@ -1,5 +1,6 @@
 package com.springboot.ecommercev1.controllers;
 
+import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.services.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,4 +33,11 @@ public class CategoryController {
         model.addAttribute("category",categoryService.findById(categoryId));
         return "categories/categoryDetails";
     }
+
+    @GetMapping("/new")
+    public String initializeNewCategoryForm(Model model){
+        model.addAttribute("category", Category.builder().build());
+        return "categories/createOrUpdateCategoryForm";
+    }
+
 }
