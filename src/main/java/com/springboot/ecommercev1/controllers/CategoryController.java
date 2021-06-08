@@ -42,6 +42,17 @@ public class CategoryController {
         return "categories/createOrUpdateCategoryForm";
     }
 
+    @PostMapping("/new")
+    public String processNewCategoryForm(Category category, BindingResult result) {
+        if(result.hasErrors()){
+            return "categories/createOrUpdateCategoryForm";
+        } else {
+            Category savedCategory = categoryService.save(category);
+            return "redirect:/categories/" + savedCategory.getId();
+        }
+
+    }
+
 
 
 }

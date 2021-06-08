@@ -81,4 +81,5 @@ class CategoryControllerTest {
                 .andExpect(model().attributeExists("category"));
         verifyNoInteractions(categoryService);
     }
+
 }
