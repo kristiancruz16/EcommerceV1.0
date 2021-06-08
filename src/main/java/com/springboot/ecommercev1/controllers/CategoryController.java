@@ -1,6 +1,5 @@
 package com.springboot.ecommercev1.controllers;
 
-import com.springboot.ecommercev1.repositories.CategoryRepository;
 import com.springboot.ecommercev1.services.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,7 @@ public class CategoryController {
     @GetMapping
     public String showAllCategory(Model model){
         model.addAttribute("categories",categoryService.findAll());
-        return "/categories/showAllCategory";
+        return "allCategory";
     }
 
     @GetMapping("/{categoryId}")

@@ -27,7 +27,7 @@ public class ProductController {
     @GetMapping
     public String showAllProducts(Model model){
         model.addAttribute("products",productService.findAll());
-        return "/products/findProduct";
+        return "showAllProducts";
     }
 
     @GetMapping("/{productId}")
