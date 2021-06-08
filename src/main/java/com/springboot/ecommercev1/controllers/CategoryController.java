@@ -24,12 +24,12 @@ public class CategoryController {
     @GetMapping
     public String showAllCategory(Model model){
         model.addAttribute("categories",categoryService.findAll());
-        return "allCategory";
+        return "categories/allCategories";
     }
 
     @GetMapping("/{categoryId}")
     public String showCategoryDetails (@PathVariable Long categoryId, Model model) {
         model.addAttribute("category",categoryService.findById(categoryId));
-        return "/categories/categoryDetails";
+        return "categories/categoryDetails";
     }
 }

@@ -11,7 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
@@ -55,12 +58,18 @@ class CategoryControllerTest {
 
         mockMvc.perform(get("/categories"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("allCategory"))
+                .andExpect(view().name("categories/allCategories"))
                 .andExpect(model().attribute("categories",hasSize(2)));
 
     }
 
     @Test
-    void showCategoryDetails() {
+    void showCategoryDetails() throws Exception {
+        when(categoryService.findById(anyLong())).thenReturn(Category.builder().id(1L).build());
+
+        mockMvc.perform(get("/categories/145"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("categories/categoryDetails"))
+                .andExpect(model().attribute("category",hasProperty("id",is(1L))));
     }
 }
