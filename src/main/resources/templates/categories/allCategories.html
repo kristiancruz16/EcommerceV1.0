@@ -5,24 +5,29 @@
     <title>Category List</title>
 </head>
 <body>
-<h2 th:text="'Category List'">Category List</h2>
+    <h2 th:text="'Category List'">Category List</h2>
 
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th style="width: 150px;">Category Code</th>
-        <th style="width: 200px;">Category Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="category:${categories}">
-        <td>
-            <a th:href="@{/categories/__${category.id}__}" th:text="${category.categoryCode}"></a>
-        </td >
-        <td th:text="${category.name}"/>
-    </tr>
-    </tbody>
-</table>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width: 150px;">Category Code</th>
+                <th style="width: 200px;">Category Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="category:${categories}">
+                <td>
+                    <a th:href="@{/categories/__${category.id}__}" th:text="${category.categoryCode}"></a>
+                </td>
+                <td th:text="${category.name}"/>
+            </tr>
+        </tbody>
+    </table>
 
+    <br/>
+    <br/>
+    <button>
+        <a class="btn btn-default" th:href="@{/categories/new}">New Category</a>
+    </button>
 </body>
 </html>
