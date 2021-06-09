@@ -63,4 +63,10 @@ public class ProductController {
         return "redirect:/categories/" +categoryId;
     }
 
+    @GetMapping("/{categoryId}/products/{productId}/edit")
+    public String initializeUpdateProductForm(@PathVariable Long productId, Model model) {
+        model.addAttribute("product",productService.findById(productId));
+        return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
+    }
+
 }

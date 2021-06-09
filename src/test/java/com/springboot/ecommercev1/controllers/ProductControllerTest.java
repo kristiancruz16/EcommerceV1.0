@@ -115,9 +115,9 @@ class ProductControllerTest {
 
         when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
 
-        mockMvc.perform(get("categories/1/products/1/edit"))
+        mockMvc.perform(get("/categories/1/products/1/edit"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("products/createOrUpdateForm"))
+                .andExpect(view().name("products/createOrUpdateProductForm"))
                 .andExpect(model().attributeExists("product"));
     }
 }

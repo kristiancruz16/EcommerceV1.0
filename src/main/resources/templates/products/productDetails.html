@@ -28,10 +28,11 @@
         </table>
     </tr>
 </table>
-
 <br/>
 <br/>
-
+<a th:href="@{/categories/{categoryId}/products/{productId}/edit(categoryId=*{category.id},productId=*{id})}">
+    <input type="submit" value="Edit Category" />
+</a>
 
 
 </body>
