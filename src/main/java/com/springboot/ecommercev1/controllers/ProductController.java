@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 6/5/2021
  */
 @Controller
-@RequestMapping("/products")
+@RequestMapping("/categories")
 public class ProductController {
 
     private final ProductService productService;
@@ -26,19 +26,19 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping("/products/showall")
     public String showAllProducts(Model model){
         model.addAttribute("products",productService.findAll());
         return "products/allProducts";
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{categoryId}/products/{productId}")
     public String showProductDetails(@PathVariable Long productId, Model model){
         model.addAttribute("product",productService.findById(productId));
         return "products/productDetails";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/{categoryId}/products/new")
     public String initializeNewProductForm (Category category, Model model) {
         Product product = new Product();
         category.getProducts().add(product);
@@ -46,5 +46,8 @@ public class ProductController {
         model.addAttribute("product",product);
         return "products/createOrUpdateProductForm";
     }
+
+  /*  @PostMapping("/new")
+    public String processNewProductForm()*/
 
 }

@@ -38,7 +38,7 @@
                 </thead>
                 <tr th:each="product : ${category.products}">
                     <td>
-                        <a style="width: 200px" th:href="@{/products/__${product.id}__}" th:text="${product.sku}"></a>
+                        <a style="width: 200px" th:href="@{/categories/__${category.id}__/products/__${product.id}__}" th:text="${product.sku}"></a>
                     </td>
                     <td style="width: 200px" th:text="${product.name}"></td>
                     <td th:text="${product.productDescription}"></td>
@@ -50,7 +50,7 @@
     </table>
     <br/>
     <br/>
-    <a th:href="@{/products/new}">
+    <a th:href="@{/categories/__${category.id}__/products/new}">
         <input type="submit" value="New Product" />
     </a>
 
