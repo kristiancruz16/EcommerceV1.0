@@ -60,13 +60,28 @@ public class ProductController {
         product.setCategory(currentCategory);
         currentCategory.getProducts().add(product);
         productService.save(product);
-        return "redirect:/categories/" +categoryId;
+        return "redirect:/categories/" +currentCategory.getId();
     }
 
     @GetMapping("/{categoryId}/products/{productId}/edit")
     public String initializeUpdateProductForm(@PathVariable Long productId, Model model) {
         model.addAttribute("product",productService.findById(productId));
         return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
+    }
+
+    @PostMapping("/{categoryId}/products/{productId}/edit")
+    public String processUpdateProductFrom (@PathVariable Long productId, @PathVariable Long categoryId, Product product, BindingResult result) {
+        if(result.hasErrors()){
+            return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
+        }else {
+            Category category = categoryService.findById(categoryId);
+            product.setId(productId);
+            product.setCategory(category);
+            Product savedProduct = productService.save(product);
+            String redirectURL = "redirect:/categories/" +category.getId()+ "/products/" +savedProduct.getId();
+            return redirectURL;
+        }
+
     }
 
 }

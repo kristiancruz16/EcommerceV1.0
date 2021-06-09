@@ -124,8 +124,9 @@ class ProductControllerTest {
     void processUpdateProductFrom () throws Exception {
 
         when(productService.save(any())).thenReturn(Product.builder().id(1L).build());
+        when(categoryService.findById(anyLong())).thenReturn(category);
 
-        mockMvc.perform(post("categories/1/products/1/edit"))
+        mockMvc.perform(post("/categories/1/products/1/edit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/categories/1/products/1"))
                 .andExpect(model().attributeExists("product"));
