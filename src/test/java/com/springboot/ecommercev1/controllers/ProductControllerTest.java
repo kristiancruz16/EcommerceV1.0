@@ -7,6 +7,7 @@ import com.springboot.ecommercev1.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,9 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -31,9 +35,6 @@ class ProductControllerTest {
 
     @Mock
     ProductService productService;
-
-    @Mock
-    CategoryService categoryService;
 
     @InjectMocks
     ProductController controller;
@@ -84,5 +85,17 @@ class ProductControllerTest {
                 .andExpect(view().name("products/createOrUpdateProductForm"))
                 .andExpect(model().attributeExists("product"))
                 .andExpect(model().attributeExists("category"));
+    }
+
+    @Test
+    void processNewProductForm() throws Exception {
+        when(productService.save(any())).thenReturn(Product.builder().id(1L).build());
+
+        mockMvc.perform(post("/products/new"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/products/1"))
+                .andExpect(model().attributeExists("product"));
+
+        verify(productService).save(any());
     }
 }
