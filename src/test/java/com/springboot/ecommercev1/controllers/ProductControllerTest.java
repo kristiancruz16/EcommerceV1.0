@@ -66,4 +66,12 @@ class ProductControllerTest {
                 .andExpect(view().name("products/productDetails"))
                 .andExpect(model().attribute("product",hasProperty("id",is(1L))));
     }
+
+    @Test
+    void initializeNewProductForm () throws Exception {
+        mockMvc.perform(get("/products/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("products/createOrUpdateProductForm"))
+                .andExpect(model().attributeExists("product"));
+    }
 }

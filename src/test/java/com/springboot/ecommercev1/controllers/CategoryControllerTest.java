@@ -108,7 +108,7 @@ class CategoryControllerTest {
 
         mockMvc.perform(post("/categories/1/edit"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:categories/1"))
+                .andExpect(view().name("redirect:/categories/1"))
                 .andExpect(model().attributeExists("category"));
 
         verify(categoryService).save(any());

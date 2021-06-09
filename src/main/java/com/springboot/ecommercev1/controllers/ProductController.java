@@ -1,6 +1,5 @@
 package com.springboot.ecommercev1.controllers;
 
-import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
