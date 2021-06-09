@@ -6,8 +6,10 @@ import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -20,6 +22,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private static final String CREATE_OR_UPDATE_PRODUCT_FORM_VIEW = "products/createOrUpdateProductForm";
 
     public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
@@ -39,15 +42,25 @@ public class ProductController {
     }
 
     @GetMapping("/{categoryId}/products/new")
-    public String initializeNewProductForm (Category category, Model model) {
+    public String initializeNewProductForm (@PathVariable Long categoryId, Model model) {
+        Category category = categoryService.findById(categoryId);
         Product product = new Product();
         category.getProducts().add(product);
         product.setCategory(category);
         model.addAttribute("product",product);
-        return "products/createOrUpdateProductForm";
+        return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
     }
 
-  /*  @PostMapping("/new")
-    public String processNewProductForm()*/
+    @PostMapping("/{categoryId}/products/new")
+    public String processNewProductForm(@PathVariable Long categoryId, Product product,  BindingResult result) {
+        if(result.hasErrors()){
+            return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
+        }
+        Category currentCategory = categoryService.findById(categoryId);
+        product.setCategory(currentCategory);
+        currentCategory.getProducts().add(product);
+        productService.save(product);
+        return "redirect:/categories/" +categoryId;
+    }
 
 }

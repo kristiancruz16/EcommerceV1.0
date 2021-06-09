@@ -15,9 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -36,6 +39,9 @@ class ProductControllerTest {
     @Mock
     ProductService productService;
 
+    @Mock
+    CategoryService categoryService;
+
     @InjectMocks
     ProductController controller;
 
@@ -48,11 +54,13 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
 
-        category = Category.builder().id(1L).build();
-
         productList = new ArrayList<>();
         productList.add(Product.builder().id(1L).build());
         productList.add(Product.builder().id(2L).build());
+
+        Set<Product> productSet = new HashSet<>();
+        productList.forEach(productSet::add);
+        category = Category.builder().id(1L).products(productSet).build();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -71,7 +79,7 @@ class ProductControllerTest {
     void showProductDetails() throws Exception {
         when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
 
-        mockMvc.perform(get("/products/123"))
+        mockMvc.perform(get("/categories/1/products/123"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/productDetails"))
                 .andExpect(model().attribute("product",hasProperty("id",is(1L))));
@@ -79,21 +87,22 @@ class ProductControllerTest {
 
     @Test
     void initializeNewProductForm () throws Exception {
+        when(categoryService.findById(anyLong())).thenReturn(category);
 
-        mockMvc.perform(get("/products/new"))
+        mockMvc.perform(get("/categories/1/products/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/createOrUpdateProductForm"))
-                .andExpect(model().attributeExists("product"))
-                .andExpect(model().attributeExists("category"));
+                .andExpect(model().attributeExists("product"));
     }
 
     @Test
     void processNewProductForm() throws Exception {
-        when(productService.save(any())).thenReturn(Product.builder().id(1L).build());
+        Product productMock = Product.builder().id(1L).category(category).build();
+        when(productService.save(any())).thenReturn(productMock);
 
-        mockMvc.perform(post("/products/new"))
+        mockMvc.perform(post("/categories/1/products/new"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/products/1"))
+                .andExpect(view().name("redirect:/categories/1"))
                 .andExpect(model().attributeExists("product"));
 
         verify(productService).save(any());
