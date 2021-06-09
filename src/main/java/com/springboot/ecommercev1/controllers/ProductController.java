@@ -1,5 +1,8 @@
 package com.springboot.ecommercev1.controllers;
 
+import com.springboot.ecommercev1.domain.Category;
+import com.springboot.ecommercev1.domain.Product;
+import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -33,5 +38,13 @@ public class ProductController {
         return "products/productDetails";
     }
 
+    @GetMapping("/new")
+    public String initializeNewProductForm (Category category, Model model) {
+        Product product = new Product();
+        category.getProducts().add(product);
+        product.setCategory(category);
+        model.addAttribute("product",product);
+        return "products/createOrUpdateProductForm";
+    }
 
 }

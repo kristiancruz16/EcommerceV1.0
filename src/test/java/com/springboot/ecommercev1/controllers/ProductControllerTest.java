@@ -1,6 +1,8 @@
 package com.springboot.ecommercev1.controllers;
 
+import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.domain.Product;
+import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,15 +32,22 @@ class ProductControllerTest {
     @Mock
     ProductService productService;
 
+    @Mock
+    CategoryService categoryService;
+
     @InjectMocks
     ProductController controller;
 
     List<Product> productList;
 
+    Category category;
+
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
+
+        category = Category.builder().id(1L).build();
 
         productList = new ArrayList<>();
         productList.add(Product.builder().id(1L).build());
@@ -69,9 +78,11 @@ class ProductControllerTest {
 
     @Test
     void initializeNewProductForm () throws Exception {
+
         mockMvc.perform(get("/products/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/createOrUpdateProductForm"))
-                .andExpect(model().attributeExists("product"));
+                .andExpect(model().attributeExists("product"))
+                .andExpect(model().attributeExists("category"));
     }
 }
