@@ -23,9 +23,8 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -119,5 +118,18 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/createOrUpdateProductForm"))
                 .andExpect(model().attributeExists("product"));
+    }
+
+    @Test
+    void processUpdateProductFrom () throws Exception {
+
+        when(productService.save(any())).thenReturn(Product.builder().id(1L).build());
+
+        mockMvc.perform(post("categories/1/products/1/edit"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/categories/1/products/1"))
+                .andExpect(model().attributeExists("product"));
+
+        verify(productService).save(any());
     }
 }
