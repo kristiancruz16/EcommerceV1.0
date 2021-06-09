@@ -53,14 +53,15 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-
         productList = new ArrayList<>();
         productList.add(Product.builder().id(1L).build());
         productList.add(Product.builder().id(2L).build());
 
-        Set<Product> productSet = new HashSet<>();
-        productList.forEach(productSet::add);
-        category = Category.builder().id(1L).products(productSet).build();
+        Set<Product> convertProductToSet = new HashSet<>();
+
+        productList.forEach(convertProductToSet::add);
+
+        category = Category.builder().id(1L).products(convertProductToSet).build();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -69,7 +70,7 @@ class ProductControllerTest {
     void showAllProducts() throws Exception {
         when(productService.findAll()).thenReturn(productList);
 
-        mockMvc.perform(get("/products"))
+        mockMvc.perform(get("/categories/products/showall"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/allProducts"))
                 .andExpect(model().attribute("products",hasSize(2)));
@@ -97,8 +98,9 @@ class ProductControllerTest {
 
     @Test
     void processNewProductForm() throws Exception {
-        Product productMock = Product.builder().id(1L).category(category).build();
-        when(productService.save(any())).thenReturn(productMock);
+        Product product = Product.builder().id(1L).category(category).build();
+        when(categoryService.findById(anyLong())).thenReturn(category);
+        when(productService.save(any())).thenReturn(product);
 
         mockMvc.perform(post("/categories/1/products/new"))
                 .andExpect(status().is3xxRedirection())
@@ -106,5 +108,16 @@ class ProductControllerTest {
                 .andExpect(model().attributeExists("product"));
 
         verify(productService).save(any());
+    }
+
+    @Test
+    void initializeUpdateProductForm () throws Exception {
+
+        when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
+
+        mockMvc.perform(get("categories/1/products/1/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("products/createOrUpdateForm"))
+                .andExpect(model().attributeExists("product"));
     }
 }
