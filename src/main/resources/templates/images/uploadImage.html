@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body th:object="${product}">
+<form  action="http:\\localhost" method="post" enctype="multipart/form-data"
+       th:action="@{'/categories/'+*{category.id}+'/products/'+*{id}+ '/imagenew'}">
+    <label class="control-label">Select File</label>
+    <input id="imagefile" name="imagefile" type="file" class="file">
+    <br/>
+    <input type="submit" value="Save Image"/>
+</form>
 
 </body>
 </html>
