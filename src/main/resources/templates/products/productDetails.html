@@ -10,8 +10,10 @@
 
 <table class="table table-striped">
     <tr>
+        <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+${product.id}+'/productimage'}" target="_blank">
         <img th:src="@{'/categories/' + *{category.id} + '/products' + ${product.id} + '/productimage'}"
              width="200" height="200">
+        </a>
     </tr>
     <tr>
         <td>

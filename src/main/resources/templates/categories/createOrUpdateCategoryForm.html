@@ -8,11 +8,14 @@
     <h2>Create or Update Category Form</h2>
 
     <form th:object="${category}" method="post" >
+
         <label>Category Code: </label>
         <input type="text" th:field="*{categoryCode}">
         <br/>
+        <br/>
         <label>Name: </label>
         <input type="text" th:field="*{name}">
+        <br/>
         <br/>
         <input type="submit" value="Save Category"/>
     </form>
