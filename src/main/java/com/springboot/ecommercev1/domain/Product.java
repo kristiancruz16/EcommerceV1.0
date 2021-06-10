@@ -32,7 +32,7 @@ public class Product extends BaseEntity{
     private Long sku;
     private String productDescription;
     private Double productPrice;
-    private byte [] image;
+    private Byte [] image;
 
     @ManyToOne
     @JoinColumn( name = "category_id")
