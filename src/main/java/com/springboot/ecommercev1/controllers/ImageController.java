@@ -37,9 +37,10 @@ public class ImageController {
     }
 
     @PostMapping("/{productId}/imagenew")
-    public String processUploadImageForm(@PathVariable Long productId, @RequestParam("imagefile")MultipartFile file) {
+    public String processUploadImageForm(@PathVariable Long productId,@PathVariable Long categoryId, @RequestParam("imagefile")MultipartFile file) {
         imageService.saveImageFile(productId,file);
-        return "redirect:/categories/{categoryId}/products/" + productId;
+        String redirectUrl = "redirect:/categories/" +categoryId+"/products/" + productId;
+        return redirectUrl;
 
     }
 
