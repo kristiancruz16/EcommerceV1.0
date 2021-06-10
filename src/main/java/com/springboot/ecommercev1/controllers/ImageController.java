@@ -30,13 +30,13 @@ public class ImageController {
         this.productService = productService;
     }
 
-    @GetMapping("/{productId}/imagenew")
+    @GetMapping("/{productId}/image")
     public String showUploadImageForm(@PathVariable Long productId, Model model){
         model.addAttribute("product", productService.findById(productId));
         return "images/uploadImage";
     }
 
-    @PostMapping("/{productId}/imagenew")
+    @PostMapping("/{productId}/image")
     public String processUploadImageForm(@PathVariable Long productId,@PathVariable Long categoryId, @RequestParam("imagefile")MultipartFile file) {
         imageService.saveImageFile(productId,file);
         String redirectUrl = "redirect:/categories/" +categoryId+"/products/" + productId;
@@ -44,7 +44,7 @@ public class ImageController {
 
     }
 
-    @GetMapping("/{productId}/productimage")
+    @GetMapping("/{productId}/productImage")
     public void renderImageFromDatabase(@PathVariable Long productId, HttpServletResponse response) throws IOException {
         Product product = productService.findById(productId);
 

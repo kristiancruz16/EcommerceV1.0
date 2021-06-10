@@ -10,16 +10,10 @@
 
 <table class="table table-striped">
     <tr>
-        <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+${product.id}+'/productimage'}" target="_blank">
-        <img th:src="@{'/categories/' + *{category.id} + '/products' + ${product.id} + '/productimage'}"
+        <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+${product.id}+'/productImage'}" target="_blank">
+        <img th:src="@{'/categories/' + *{category.id} + '/products/' + ${product.id} + '/productImage'}"
              width="200" height="200">
         </a>
-    </tr>
-    <tr>
-        <td>
-            <a><input type="submit" value="Change Image" />
-            </a>
-        </td>
     </tr>
     <tr>
         <th>SKU:</th>

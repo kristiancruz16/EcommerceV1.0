@@ -22,9 +22,6 @@
             <input type="submit" value="Edit Category" />
             </a>
             </td>
-           <!-- <button>
-                <a class="btn btn-default" th:href="@{/categories/{id}/edit(id=*{id})}">Edit Category</a>
-            </button>-->
         </tr>
         <tr>
             <table class="table table-striped" >
@@ -43,7 +40,7 @@
                     <td>
                         <a style="width: 200px" th:href="@{/categories/__${category.id}__/products/__${product.id}__}" th:text="${product.sku}"></a>
                     </td>
-                    <td><img th:src="@{'/categories/' + ${category.id} + '/products' + ${product.id} + '/productimage'}"
+                    <td><img th:src="@{'/categories/' + ${category.id} + '/products/' + ${product.id} + '/productImage'}"
                              width="200" height="200"> </td>
                     <td style="width: 200px" th:text="${product.name}"></td>
                     <td th:text="${product.productDescription}"></td>

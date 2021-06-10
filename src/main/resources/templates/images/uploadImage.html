@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body th:object="${product}">
+<body>
+<!--/*@thymesVar id="product" type="com.springboot.ecommercev1.domain.Product"*/-->
 <form  action="http:\\localhost" method="post" enctype="multipart/form-data"
-       th:action="@{'/categories/'+*{category.id}+'/products/'+*{id}+ '/imagenew'}">
+    th:action="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id} + '/image'} ">
     <label class="control-label">Select File</label>
     <input id="imagefile" name="imagefile" type="file" class="file">
     <br/>

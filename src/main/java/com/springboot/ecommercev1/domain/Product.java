@@ -2,10 +2,7 @@ package com.springboot.ecommercev1.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author KMCruz
@@ -32,6 +29,8 @@ public class Product extends BaseEntity{
     private Long sku;
     private String productDescription;
     private Double productPrice;
+
+    @Lob
     private Byte [] image;
 
     @ManyToOne

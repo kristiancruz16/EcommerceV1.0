@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 /**
  * @author KMCruz
  * 6/5/2021
