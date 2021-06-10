@@ -10,6 +10,16 @@
 
 <table class="table table-striped">
     <tr>
+        <img th:src="@{'/categories/' + *{category.id} + '/products' + ${product.id} + '/productimage'}"
+             width="200" height="200">
+    </tr>
+    <tr>
+        <td>
+            <a><input type="submit" value="Change Image" />
+            </a>
+        </td>
+    </tr>
+    <tr>
         <th>SKU:</th>
         <td th:text="*{sku}">12345678</td>
     </tr>
@@ -31,7 +41,7 @@
 <br/>
 <br/>
 <a th:href="@{/categories/{categoryId}/products/{productId}/edit(categoryId=*{category.id},productId=*{id})}">
-    <input type="submit" value="Edit Category" />
+    <input type="submit" value="Edit Product" />
 </a>
 
 
