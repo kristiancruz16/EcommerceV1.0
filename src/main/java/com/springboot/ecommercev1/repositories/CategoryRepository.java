@@ -16,4 +16,8 @@ public interface CategoryRepository extends CrudRepository<Category,Long> {
 
     List<Category> findAllByNameLikeIgnoreCase(String name);
 
+    boolean existsByCategoryCodeIgnoreCase(String categoryCode);
+
+    boolean existsByNameIgnoreCase(String name);
+
 }

@@ -3,11 +3,8 @@ package com.springboot.ecommercev1.services;
 import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.repositories.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,10 +26,10 @@ class CategoryServiceImplTest {
     private final static String NAME = "ALPHA ALPHA ALPHA";
 
     @Mock
-    CategoryRepository categoryRepositoryMock;
+    CategoryRepository categoryRepository;
 
     @InjectMocks
-    CategoryServiceImpl categoryServiceImplMock;
+    CategoryServiceImpl categoryService;
 
     Category returnCategory;
 
@@ -43,23 +40,60 @@ class CategoryServiceImplTest {
 
     @Test
     void findByCategoryCode() {
-        when(categoryRepositoryMock.findByCategoryCode(any())).thenReturn(returnCategory);
+        when(categoryRepository.findByCategoryCode(any())).thenReturn(returnCategory);
 
-        Category foundCategory = categoryServiceImplMock.findByCategoryCode(CODE);
+        Category foundCategory = categoryService.findByCategoryCode(CODE);
 
         assertEquals(CODE,foundCategory.getCategoryCode());
-        verify(categoryRepositoryMock).findByCategoryCode(any());
+        verify(categoryRepository).findByCategoryCode(any());
     }
 
     @Test
     void findAllByNameLikeIgnoreCase() {
-        when(categoryRepositoryMock.findAllByNameLikeIgnoreCase(any())).thenReturn(Arrays.asList(returnCategory));
+        when(categoryRepository.findAllByNameLikeIgnoreCase(any())).thenReturn(Arrays.asList(returnCategory));
 
-        List <Category> foundCategoryList = categoryServiceImplMock.findAllByNameLikeIgnoreCase("alpha");
+        List <Category> foundCategoryList = categoryService.findAllByNameLikeIgnoreCase("alpha");
 
         assertEquals(NAME,foundCategoryList.get(0).getName());
-        verify(categoryRepositoryMock).findAllByNameLikeIgnoreCase(any());
+        verify(categoryRepository).findAllByNameLikeIgnoreCase(any());
 
+    }
+
+    @Test
+    void existsByCategoryCode() {
+        when(categoryRepository.existsByCategoryCodeIgnoreCase(anyString())).thenReturn(Optional.of(returnCategory).isPresent());
+
+        boolean result = categoryService.existsByCategoryCodeIgnoreCase("ABC");
+
+        assertTrue(result);
+
+    }
+    @Test
+    void existsByCategoryCodeNotFound() {
+        when(categoryRepository.existsByCategoryCodeIgnoreCase(anyString())).thenReturn(Optional.empty().isPresent());
+
+        boolean result = categoryService.existsByCategoryCodeIgnoreCase("ABC");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void existsByName() {
+        when(categoryRepository.existsByNameIgnoreCase(anyString())).thenReturn(Optional.of(returnCategory).isPresent());
+
+        boolean result = categoryService.existsByNameIgnoreCase("Alpha Beta Charlie");
+
+        assertTrue(result);
+
+    }
+
+    @Test
+    void existsByNameNotFound () {
+        when(categoryRepository.existsByNameIgnoreCase(anyString())).thenReturn(Optional.empty().isPresent());
+
+        boolean result = categoryService.existsByNameIgnoreCase("Alpha Beta Charlie");
+
+        assertFalse(result);
     }
 
     @Test
@@ -67,9 +101,9 @@ class CategoryServiceImplTest {
         List<Category> categoryList = new ArrayList<>();
         categoryList.add(Category.builder().id(1L).build());
         categoryList.add(Category.builder().id(2L).build());
-        when(categoryRepositoryMock.findAll()).thenReturn(categoryList);
+        when(categoryRepository.findAll()).thenReturn(categoryList);
 
-        List <Category> foundAllCategoryList = categoryServiceImplMock.findAll();
+        List <Category> foundAllCategoryList = categoryService.findAll();
 
         assertNotNull(foundAllCategoryList);
         assertEquals(2,foundAllCategoryList.size());
@@ -77,18 +111,18 @@ class CategoryServiceImplTest {
 
     @Test
     void findById() {
-        when(categoryRepositoryMock.findById(anyLong())).thenReturn(Optional.of(returnCategory));
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(returnCategory));
 
-        Category foundByIdCategory = categoryServiceImplMock.findById(1L);
+        Category foundByIdCategory = categoryService.findById(1L);
 
         assertNotNull(foundByIdCategory);
     }
 
     @Test
     void findByIdNotFound () {
-        when(categoryRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Category nullValueCategory = categoryServiceImplMock.findById(1L);
+        Category nullValueCategory = categoryService.findById(1L);
 
         assertNull(nullValueCategory);
     }
@@ -97,25 +131,25 @@ class CategoryServiceImplTest {
     @Test
     void save() {
         Category categoryToSave = Category.builder().id(1L).build();
-        when(categoryRepositoryMock.save(any())).thenReturn(returnCategory);
+        when(categoryRepository.save(any())).thenReturn(returnCategory);
 
-        Category savedCategory = categoryServiceImplMock.save(categoryToSave);
+        Category savedCategory = categoryService.save(categoryToSave);
 
         assertNotNull(savedCategory);
-        verify(categoryRepositoryMock).save(any());
+        verify(categoryRepository).save(any());
     }
 
     @Test
     void delete() {
-        categoryServiceImplMock.delete(returnCategory);
+        categoryService.delete(returnCategory);
 
-        verify(categoryRepositoryMock,times(1)).delete(any());
+        verify(categoryRepository,times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
-        categoryServiceImplMock.deleteById(1L);
+        categoryService.deleteById(1L);
 
-        verify(categoryRepositoryMock,times(1)).deleteById(anyLong());
+        verify(categoryRepository,times(1)).deleteById(anyLong());
     }
 }   

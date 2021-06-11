@@ -13,4 +13,8 @@ public interface CategoryService extends CrudService<Category,Long>{
     Category findByCategoryCode(String categoryCode);
 
     List<Category> findAllByNameLikeIgnoreCase(String name);
+
+    boolean existsByCategoryCodeIgnoreCase(String categoryCode);
+
+    boolean existsByNameIgnoreCase(String name);
 }

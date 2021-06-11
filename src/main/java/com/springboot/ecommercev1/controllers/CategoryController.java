@@ -48,6 +48,12 @@ public class CategoryController {
 
     @PostMapping("/new")
     public String processNewCategoryForm(Category category, BindingResult result) {
+        if(categoryService.existsByCategoryCodeIgnoreCase(category.getCategoryCode())){
+            result.rejectValue("categoryCode","duplicate","already exists");
+        } if (categoryService.existsByNameIgnoreCase(category.getName())) {
+            result.rejectValue("name","duplicate","already exists");
+        }
+
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
         } else {

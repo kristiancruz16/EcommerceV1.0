@@ -34,6 +34,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public boolean existsByCategoryCodeIgnoreCase(String categoryCode) {
+        return categoryRepository.existsByCategoryCodeIgnoreCase(categoryCode);
+    }
+
+    @Override
+    public boolean existsByNameIgnoreCase(String name) {
+        return categoryRepository.existsByNameIgnoreCase(name);
+    }
+
+    @Override
     public List <Category> findAll() {
         List<Category> categoryList = new ArrayList<>();
         categoryRepository.findAll().forEach(categoryList::add);

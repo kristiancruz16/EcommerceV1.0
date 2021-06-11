@@ -11,10 +11,12 @@
 
         <label>Category Code: </label>
         <input type="text" th:field="*{categoryCode}">
+        <span th:if="${#fields.hasErrors('categoryCode')}" th:errors="*{categoryCode}">Duplicate</span>
         <br/>
         <br/>
         <label>Name: </label>
         <input type="text" th:field="*{name}">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Duplicate</span>
         <br/>
         <br/>
         <input type="submit" value="Save Category"/>
