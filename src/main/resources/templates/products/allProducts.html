@@ -11,6 +11,7 @@
     <thead>
     <tr>
         <th style="width: 150px;">SKU</th>
+        <th style="width: 150px;">Image</th>
         <th style="width: 150px;">Product Name</th>
         <th style="width: 150px;">Description</th>
         <th style="width: 150px;">Price</th>
@@ -19,7 +20,13 @@
     <tbody>
     <tr th:each="product:${products}">
         <td>
-            <a th:href="@{/products/__${product.id}__}" th:text="${product.sku}"/></a>
+            <a th:href="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id}}" th:text="${product.sku}"/></a>
+        </td>
+        <td>
+            <a href=# th:href="@{'/categories/'+${product.category.id}+'/products/'+${product.id}+'/productImage'}" target="_blank">
+                <img th:src="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id} + '/productImage'}"
+                    width="200" height="200">
+            </a>
         </td>
         <td th:text="${product.name}" >Nike</td>
         <td th:text="${product.productDescription}">One Size Fits All/White/Caps</td>
