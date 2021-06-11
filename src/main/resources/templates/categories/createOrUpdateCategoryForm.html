@@ -11,7 +11,7 @@
 
         <label>Category Code: </label>
         <input type="text" th:field="*{categoryCode}">
-        <span th:if="${#fields.hasErrors('categoryCode')}" th:errors="*{categoryCode}">Duplicate</span>
+        <span class="validationError" th:if="${#fields.hasErrors('categoryCode')}" th:errors="*{categoryCode}">Duplicate</span>
         <br/>
         <br/>
         <label>Name: </label>

@@ -5,11 +5,11 @@ import com.springboot.ecommercev1.services.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -48,6 +48,7 @@ public class CategoryController {
 
     @PostMapping("/new")
     public String processNewCategoryForm(Category category, BindingResult result) {
+
         if(categoryService.existsByCategoryCodeIgnoreCase(category.getCategoryCode())){
             result.rejectValue("categoryCode","duplicate","already exists");
         } if (categoryService.existsByNameIgnoreCase(category.getName())) {
@@ -69,7 +70,13 @@ public class CategoryController {
     }
 
     @PostMapping("/{categoryId}/edit")
-    public String processUpdateCategoryForm(@PathVariable Long categoryId, Category category, BindingResult result) {
+    public String processUpdateCategoryForm(@PathVariable Long categoryId, @Valid Category category, BindingResult result) {
+        if(categoryService.existsByCategoryCodeIgnoreCase(category.getCategoryCode())){
+            result.rejectValue("categoryCode","duplicate","already exists");
+        }
+        if (categoryService.existsByNameIgnoreCase(category.getName())) {
+            result.rejectValue("name","duplicate","already exists");
+        }
         if (result.hasErrors()) {
             return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
         } else {
