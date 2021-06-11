@@ -57,6 +57,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product findBySku(Long sku) {
+        return productRepository.findBySku(sku);
+    }
+
+    @Override
     public List<Product> findAllByNameLikeIgnoreCase(String name) {
         return productRepository.findAllByNameLikeIgnoreCase(name);
     }

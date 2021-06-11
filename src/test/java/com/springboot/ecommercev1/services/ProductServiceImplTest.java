@@ -30,10 +30,10 @@ class ProductServiceImplTest {
     public static final String NAME = "NIKE";
 
     @Mock
-    ProductRepository productRepositoryMock;
+    ProductRepository productRepository;
 
     @InjectMocks
-    ProductServiceImpl productServiceMock;
+    ProductServiceImpl productService;
 
     @Captor
     ArgumentCaptor<Product> productArgumentCaptor;
@@ -42,7 +42,7 @@ class ProductServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnProduct = Product.builder().id(1L).name(NAME).sku(12345678L).build();
+        returnProduct = Product.builder().id(1L).sku(1234L).name(NAME).sku(12345678L).build();
     }
 
     @Test
@@ -51,9 +51,9 @@ class ProductServiceImplTest {
         productList.add(Product.builder().id(1L).build());
         productList.add(Product.builder().id(2L).build());
 
-        when(productRepositoryMock.findAll()).thenReturn(productList);
+        when(productRepository.findAll()).thenReturn(productList);
 
-        List <Product> products = productServiceMock.findAll();
+        List <Product> products = productService.findAll();
         assertNotNull(products);
         assertEquals(2,products.size());
 
@@ -61,15 +61,15 @@ class ProductServiceImplTest {
 
     @Test
     void findById() {
-        when(productRepositoryMock.findById(anyLong())).thenReturn(Optional.of(returnProduct));
-        Product product = productServiceMock.findById(1L);
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(returnProduct));
+        Product product = productService.findById(1L);
         assertNotNull(product);
     }
 
     @Test
     void findByIdNotFound() {
-        when(productRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
-        Product product = productServiceMock.findById(1L);
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+        Product product = productService.findById(1L);
         assertNull(product);
     }
 
@@ -77,9 +77,9 @@ class ProductServiceImplTest {
     void save() {
         Product productToSave = Product.builder().id(1L).build();
 
-        productServiceMock.save(productToSave);
+        productService.save(productToSave);
 
-        then(productRepositoryMock).should().save(productArgumentCaptor.capture());
+        then(productRepository).should().save(productArgumentCaptor.capture());
         Product productArgumentCaptorValue = productArgumentCaptor.getValue();
         assertEquals(productArgumentCaptorValue,productToSave);
 
@@ -87,28 +87,43 @@ class ProductServiceImplTest {
 
     @Test
     void delete() {
-        productServiceMock.delete(returnProduct);
-        verify(productRepositoryMock,times(1)).delete(any());
+        productService.delete(returnProduct);
+        verify(productRepository,times(1)).delete(any());
     }
 
     @Test
     void deleteById() {
-        productServiceMock.deleteById(1L);
-        verify(productRepositoryMock,times(1)).deleteById(anyLong());
+        productService.deleteById(1L);
+        verify(productRepository,times(1)).deleteById(anyLong());
     }
 
     @Test
     void findAllBySkuLike() {
-        when(productRepositoryMock.findAllBySkuLike(anyLong())).thenReturn(Arrays.asList(returnProduct));
-        List <Product> productList = productServiceMock.findAllBySkuLike(12L);
+        when(productRepository.findAllBySkuLike(anyLong())).thenReturn(List.of(returnProduct));
+        List <Product> productList = productService.findAllBySkuLike(12L);
         assertEquals(returnProduct,productList.get(0));
-        verify(productRepositoryMock).findAllBySkuLike(anyLong());
+        verify(productRepository).findAllBySkuLike(anyLong());
     }
 
     @Test
+    void findBySku () {
+        when(productRepository.findBySku(anyLong())).thenReturn(returnProduct);
+        Product product = productService.findBySku(1L);
+        assertNotNull(product);
+    }
+
+    @Test
+    void findBySkuReturnNull () {
+        when(productRepository.findBySku(anyLong())).thenReturn(null);
+        Product product = productService.findBySku(6543L);
+        assertNull(product);
+    }
+
+
+    @Test
     void findAllByNameLikeIgnoreCase() {
-        when(productRepositoryMock.findAllByNameLikeIgnoreCase(any())).thenReturn(Arrays.asList(returnProduct));
-        List<Product> productList = productServiceMock.findAllByNameLikeIgnoreCase("ni");
+        when(productRepository.findAllByNameLikeIgnoreCase(any())).thenReturn(Arrays.asList(returnProduct));
+        List<Product> productList = productService.findAllByNameLikeIgnoreCase("ni");
         assertEquals(NAME,productList.get(0).getName());
     }
 }
