@@ -16,6 +16,13 @@
         </a>
     </tr>
     <tr>
+        <td>
+            <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+*{id}+'/image'}" >
+                <input type="button" value="Upload Image" />
+            </a>
+        </td>
+    </tr>
+    <tr>
         <th>SKU:</th>
         <td th:text="*{sku}">12345678</td>
     </tr>

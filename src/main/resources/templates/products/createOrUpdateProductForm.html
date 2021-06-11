@@ -7,16 +7,6 @@
 <body>
 <h2>Create or Update Product Form</h2>
 <form th:object="${product}" method="post" >
-    <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+*{id}+'/image'}" >
-        <img th:src="@{'/categories/' + *{category.id} + '/products/' + ${product.id} + '/productImage'}"
-             width="200" height="200">
-    </a>
-    <br/>
-    <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+*{id}+'/image'}" >
-        <input type="button" value="Upload Image" />
-    </a>
-    <br/>
-    <br/>
     <label>SKU: </label>
     <input type="text" th:field="*{sku}">
     <br/>
