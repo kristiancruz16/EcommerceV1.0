@@ -9,6 +9,7 @@
 <form th:object="${product}" method="post" >
     <label>SKU: </label>
     <input type="text" th:field="*{sku}">
+    <span th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}">Duplicate</span>
     <br/>
     <br/>
     <label>Name: </label>

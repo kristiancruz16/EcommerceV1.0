@@ -13,7 +13,7 @@ public interface ProductService extends CrudService<Product,Long>{
 
     List<Product> findAllBySkuLike(Long sku);
 
-    Product findBySku(Long sku);
+    boolean existsProductBySku(Long sku);
 
     List <Product> findAllByNameLikeIgnoreCase(String name);
 }

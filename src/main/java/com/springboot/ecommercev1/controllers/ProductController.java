@@ -56,6 +56,9 @@ public class ProductController {
 
     @PostMapping("/{categoryId}/products/new")
     public String processNewProductForm(@PathVariable Long categoryId, Product product,  BindingResult result) {
+        if(productService.existsProductBySku(product.getSku())) {
+            result.rejectValue("sku", "duplicate", "already exists");
+        }
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
         }
@@ -74,6 +77,8 @@ public class ProductController {
 
     @PostMapping("/{categoryId}/products/{productId}/edit")
     public String processUpdateProductFrom (@PathVariable Long productId, @PathVariable Long categoryId, Product product, BindingResult result) {
+
+
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
         }else {

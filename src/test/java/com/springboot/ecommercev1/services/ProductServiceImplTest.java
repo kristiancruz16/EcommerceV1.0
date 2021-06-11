@@ -106,17 +106,22 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findBySku () {
-        when(productRepository.findBySku(anyLong())).thenReturn(returnProduct);
-        Product product = productService.findBySku(1L);
-        assertNotNull(product);
+    void existsProductBySku () {
+        when(productRepository.existsProductBySku(any())).thenReturn(Optional.of(returnProduct).isPresent());
+
+        boolean result = productService.existsProductBySku(1L);
+
+        assertEquals(true,result);
+
     }
 
     @Test
-    void findBySkuReturnNull () {
-        when(productRepository.findBySku(anyLong())).thenReturn(null);
-        Product product = productService.findBySku(6543L);
-        assertNull(product);
+    void existsProductBySkuNotFound () {
+        when(productRepository.existsProductBySku(any())).thenReturn(Optional.empty().isPresent());
+
+        boolean result = productService.existsProductBySku(1L);
+
+        assertEquals(false,result);
     }
 
 

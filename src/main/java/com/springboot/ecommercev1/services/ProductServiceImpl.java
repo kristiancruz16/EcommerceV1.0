@@ -57,8 +57,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findBySku(Long sku) {
-        return productRepository.findBySku(sku);
+    public boolean existsProductBySku(Long sku) {
+        return productRepository.existsProductBySku(sku);
     }
 
     @Override
