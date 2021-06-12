@@ -13,11 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,6 +48,7 @@ class ProductControllerTest {
 
     MockMvc mockMvc;
 
+
     @BeforeEach
     void setUp() {
         productList = new ArrayList<>();
@@ -57,12 +56,14 @@ class ProductControllerTest {
         productList.add(Product.builder().id(2L).build());
 
         Set<Product> convertProductToSet = new HashSet<>();
-
         productList.forEach(convertProductToSet::add);
 
         category = Category.builder().id(1L).products(convertProductToSet).build();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+
+
     }
 
     @Test
@@ -101,7 +102,11 @@ class ProductControllerTest {
         when(categoryService.findById(anyLong())).thenReturn(category);
         when(productService.save(any())).thenReturn(product);
 
-        mockMvc.perform(post("/categories/1/products/new"))
+        mockMvc.perform(post("/categories/1/products/new")
+                    .param("sku","12345")
+                    .param("name","ABC Shoes")
+                    .param("productDescription","ABC Description")
+                    .param("productPrice","1234.00"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/categories/1"))
                 .andExpect(model().attributeExists("product"));
@@ -126,11 +131,51 @@ class ProductControllerTest {
         when(productService.save(any())).thenReturn(Product.builder().id(1L).build());
         when(categoryService.findById(anyLong())).thenReturn(category);
 
-        mockMvc.perform(post("/categories/1/products/1/edit"))
+        mockMvc.perform(post("/categories/1/products/1/edit")
+                    .param("sku","12345")
+                    .param("name","ABC Shoes")
+                    .param("productDescription","ABC Description")
+                    .param("productPrice","1234.00"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/categories/1/products/1"))
                 .andExpect(model().attributeExists("product"));
 
         verify(productService).save(any());
+    }
+
+    @Test
+    void createProductReturnErrorInSkuWithBlankValue () throws Exception {
+        mockMvc.perform(post("/categories/1/products/new")
+                    .param("sku",""))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("product","sku"))
+                .andExpect(view().name("products/createOrUpdateProductForm"));
+    }
+
+    @Test
+    void createProductReturnErrorInSkuWithLessThanOneValue () throws Exception {
+        mockMvc.perform(post("/categories/1/products/new")
+                .param("sku","0"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("product","sku"))
+                .andExpect(view().name("products/createOrUpdateProductForm"));
+    }
+
+    @Test
+    void createProductReturnErrorInProductDescriptionWithBlankValue () throws Exception {
+        mockMvc.perform(post("/categories/1/products/new")
+                .param("productDescription",""))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("product","productDescription"))
+                .andExpect(view().name("products/createOrUpdateProductForm"));
+    }
+
+    @Test
+    void createProductReturnErrorInProductPriceWithOutsideScopeValue () throws Exception {
+        mockMvc.perform(post("/categories/1/products/new")
+                .param("productPrice","123456.123"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("product","productPrice"))
+                .andExpect(view().name("products/createOrUpdateProductForm"));
     }
 }

@@ -130,9 +130,8 @@ class CategoryServiceImplTest {
 
     @Test
     void save() {
-        Category categoryToSave = Category.builder().id(1L).build();
+        Category categoryToSave = Category.builder().id(1L).categoryCode("ABC").build();
         when(categoryRepository.save(any())).thenReturn(returnCategory);
-
         Category savedCategory = categoryService.save(categoryToSave);
 
         assertNotNull(savedCategory);

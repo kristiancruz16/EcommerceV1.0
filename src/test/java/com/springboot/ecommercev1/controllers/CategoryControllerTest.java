@@ -62,7 +62,6 @@ class CategoryControllerTest {
         paramsMap.put("categoryCode",List.of("ABC"));
 
         paramsMultiValueMap = new MultiValueMapAdapter<>(paramsMap);
-
     }
 
     @Test
@@ -128,7 +127,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void processCategoryFormReturnNameWithBlankValue () throws Exception {
+    void updateReturnErrorInNameWithBlankValue () throws Exception {
         mockMvc.perform(post("/categories/1/edit").param("name",""))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasErrors("category"))
@@ -138,7 +137,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void processCategoryFormReturnCategoryCodeWithBlankValue () throws Exception {
+    void updateReturnErrorInCategoryCodeWithBlankValue () throws Exception {
         mockMvc.perform(post("/categories/1/edit").param("categoryCode",""))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasErrors("category"))
@@ -147,7 +146,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void processCategoryFormReturnCategoryCodeWithValueLessThanMin () throws Exception {
+    void updateReturnErrorInCategoryCodeWithValueLessThanMin () throws Exception {
         mockMvc.perform(post("/categories/1/edit").param("categoryCode","AB"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasErrors("category"))
@@ -156,14 +155,12 @@ class CategoryControllerTest {
     }
 
     @Test
-    void processCategoryFormReturnCategoryCodeWithValueGreaterThanMax () throws Exception {
+    void updateReturnErrorInCategoryCodeWithValueGreaterThanMax () throws Exception {
         mockMvc.perform(post("/categories/1/edit").param("categoryCode","ABCDEF"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasErrors("category"))
                 .andExpect(model().attributeHasFieldErrors("category","categoryCode"))
                 .andExpect(view().name("categories/createOrUpdateCategoryForm"));
     }
-
-
 
 }
