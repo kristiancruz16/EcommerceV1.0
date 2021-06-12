@@ -3,6 +3,9 @@ package com.springboot.ecommercev1.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author KMCruz
@@ -26,8 +29,13 @@ public class Product extends BaseEntity{
         this.category = category;
     }
 
+    @NotNull(message = "required")
     private Long sku;
+
+    @NotBlank(message = "required")
     private String productDescription;
+
+    @Digits(integer = 5, fraction = 2, message="Invalid input")
     private Double productPrice;
 
     @Lob

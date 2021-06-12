@@ -14,14 +14,17 @@
     <br/>
     <label>Name: </label>
     <input type="text" th:field="*{name}">
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Duplicate</span>
     <br/>
     <br/>
     <label>Description: </label>
     <input type="text" th:field="*{productDescription}">
+    <span th:if="${#fields.hasErrors('productDescription')}" th:errors="*{productDescription}">Duplicate</span>
     <br/>
     <br/>
     <label>Price: </label>
     <input type="text" th:field="*{productPrice}">
+    <span th:if="${#fields.hasErrors('productPrice')}" th:errors="*{productPrice}">Duplicate</span>
     <br/>
     <br/>
     <input type="submit" value="Save Product"/>

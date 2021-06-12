@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+
 
 /**
  * @author KMCruz
@@ -53,7 +55,7 @@ public class ProductController {
     }
 
     @PostMapping("/{categoryId}/products/new")
-    public String processNewProductForm(@PathVariable Long categoryId, Product product,  BindingResult result) {
+    public String processNewProductForm(@PathVariable Long categoryId, @Valid Product product, BindingResult result) {
         if(productService.existsProductBySku(product.getSku())) {
             result.rejectValue("sku", "duplicate", "already exists");
         }
@@ -74,7 +76,7 @@ public class ProductController {
     }
 
     @PostMapping("/{categoryId}/products/{productId}/edit")
-    public String processUpdateProductFrom (@PathVariable Long productId, @PathVariable Long categoryId, Product product, BindingResult result) {
+    public String processUpdateProductFrom (@PathVariable Long productId, @PathVariable Long categoryId, @Valid Product product, BindingResult result) {
         if(productService.existsProductBySku(product.getSku())) {
             result.rejectValue("sku", "duplicate", "already exists");
         }
