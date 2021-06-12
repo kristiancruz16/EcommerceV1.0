@@ -5,7 +5,6 @@ import com.springboot.ecommercev1.services.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +46,7 @@ public class CategoryController {
     }
 
     @PostMapping("/new")
-    public String processNewCategoryForm(Category category, BindingResult result) {
+    public String processNewCategoryForm(@Valid Category category, BindingResult result) {
 
         if(categoryService.existsByCategoryCodeIgnoreCase(category.getCategoryCode())){
             result.rejectValue("categoryCode","duplicate","already exists");

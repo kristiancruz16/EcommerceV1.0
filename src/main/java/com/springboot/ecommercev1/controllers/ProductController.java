@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  * @author KMCruz
@@ -77,7 +75,9 @@ public class ProductController {
 
     @PostMapping("/{categoryId}/products/{productId}/edit")
     public String processUpdateProductFrom (@PathVariable Long productId, @PathVariable Long categoryId, Product product, BindingResult result) {
-
+        if(productService.existsProductBySku(product.getSku())) {
+            result.rejectValue("sku", "duplicate", "already exists");
+        }
 
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
