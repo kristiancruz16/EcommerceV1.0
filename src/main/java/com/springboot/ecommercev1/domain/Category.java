@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ public class Category extends BaseEntity{
     }
 
     @NotBlank(message = "required")
+    @Size(min = 3, max = 5, message = "Category should be at least 3 characters and not exceed 5 characters")
     private String categoryCode;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")

@@ -57,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category save(Category category) {
-
+        category.setCategoryCode(category.getCategoryCode().toUpperCase());
         return categoryRepository.save(category);
     }
 
