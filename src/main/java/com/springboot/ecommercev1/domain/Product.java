@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -30,6 +31,7 @@ public class Product extends BaseEntity{
     }
 
     @NotNull(message = "required")
+    @Min(value = 1)
     private Long sku;
 
     @NotBlank(message = "required")
