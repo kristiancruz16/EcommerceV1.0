@@ -51,7 +51,7 @@ class ImageControllerTest {
     void showUploadImageForm() throws Exception {
         when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
 
-        mockMvc.perform(get("/categories/1/products/1/imagenew"))
+        mockMvc.perform(get("/categories/1/products/1/image"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("images/uploadImage"))
                 .andExpect(model().attributeExists("product"));
@@ -65,7 +65,7 @@ class ImageControllerTest {
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile","image.jpg","image/jpg",
                 "image".getBytes());
 
-        mockMvc.perform(multipart("/categories/1/products/1/imagenew").file(multipartFile))
+        mockMvc.perform(multipart("/categories/1/products/1/image").file(multipartFile))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/categories/1/products/1"));
 
@@ -90,7 +90,7 @@ class ImageControllerTest {
         product.setImage(fileByteObject);
         when(productService.findById(anyLong())).thenReturn(product);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/categories/1/products/1/productimage"))
+        MockHttpServletResponse response = mockMvc.perform(get("/categories/1/products/1/productImage"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
