@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * 6/13/2021
  */
 @ExtendWith(MockitoExtension.class)
-class ShoppingStoreControllerTest {
+class StoreControllerTest {
 
     @Mock
     CategoryService categoryService;
@@ -37,7 +36,7 @@ class ShoppingStoreControllerTest {
     ProductService productService;
 
     @InjectMocks
-    ShoppingStoreController controller;
+    StoreController controller;
 
     MockMvc mockMvc;
 
@@ -68,7 +67,7 @@ class ShoppingStoreControllerTest {
         mockMvc.perform(get("/home"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("products"))
-                .andExpect(view().name("shoppingStore/homePage"));
+                .andExpect(view().name("store/homePage"));
     }
 
     @Test
@@ -78,7 +77,7 @@ class ShoppingStoreControllerTest {
         mockMvc.perform(get("/code/products/name"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("product"))
-                .andExpect(view().name("shoppingStore/productDetails"));
+                .andExpect(view().name("store/productDetails"));
     }
 
     @Test
@@ -88,7 +87,7 @@ class ShoppingStoreControllerTest {
         mockMvc.perform(get("/  code"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("category"))
-                .andExpect(view().name("shoppingStore/categoryDetails"));
+                .andExpect(view().name("store/categoryDetails"));
 
     }
 }

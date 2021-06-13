@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping
-public class ShoppingStoreController {
+public class StoreController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
 
-    public ShoppingStoreController(CategoryService categoryService, ProductService productService) {
+    public StoreController(CategoryService categoryService, ProductService productService) {
         this.categoryService = categoryService;
         this.productService = productService;
     }
@@ -28,18 +28,18 @@ public class ShoppingStoreController {
     @GetMapping({"","/home","/"})
     public String displayHomePage (Model model) {
         model.addAttribute("products",productService.findAll());
-        return "shoppingStore/homePage";
+        return "store/homePage";
     }
 
     @GetMapping("/{categoryCode}/products/{productName}")
     public String showProductDetails(@PathVariable String productName, Model model) {
         model.addAttribute("product",productService.findAllByNameLikeIgnoreCase(productName));
-        return "shoppingStore/productDetails";
+        return "store/productDetails";
     }
 
     @GetMapping("/{categoryCode}")
     public String filerProductsByCategory (@PathVariable String categoryCode, Model model) {
         model.addAttribute("category",categoryService.findByCategoryCode(categoryCode));
-        return "shoppingStore/categoryDetails";
+        return "store/categoryDetails";
     }
 }
