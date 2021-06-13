@@ -36,4 +36,10 @@ public class ShoppingStoreController {
         model.addAttribute("product",productService.findAllByNameLikeIgnoreCase(productName));
         return "shoppingStore/productDetails";
     }
+
+    @GetMapping("/{categoryCode}")
+    public String filerProductsByCategory (@PathVariable String categoryCode, Model model) {
+        model.addAttribute("category",categoryService.findByCategoryCode(categoryCode));
+        return null;
+    }
 }
