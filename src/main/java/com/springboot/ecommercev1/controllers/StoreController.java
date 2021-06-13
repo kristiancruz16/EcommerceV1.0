@@ -31,15 +31,15 @@ public class StoreController {
         return "store/homePage";
     }
 
-    @GetMapping("/{categoryCode}/products/{productName}")
-    public String showProductDetails(@PathVariable String productName, Model model) {
-        model.addAttribute("product",productService.findAllByNameLikeIgnoreCase(productName));
+    @GetMapping("/{categoryId}/products/{productId}")
+    public String showProductDetails(@PathVariable Long productId, Model model) {
+        model.addAttribute("product",productService.findById(productId));
         return "store/productDetails";
     }
 
-    @GetMapping("/{categoryCode}")
-    public String filerProductsByCategory (@PathVariable String categoryCode, Model model) {
-        model.addAttribute("category",categoryService.findByCategoryCode(categoryCode));
+    @GetMapping("/{categoryId}")
+    public String filerProductsByCategory (@PathVariable Long categoryId, Model model) {
+        model.addAttribute("category",categoryService.findById(categoryId));
         return "store/categoryDetails";
     }
 }

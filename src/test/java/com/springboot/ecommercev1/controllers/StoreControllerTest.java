@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.when;
@@ -72,9 +73,9 @@ class StoreControllerTest {
 
     @Test
     void showProductDetails() throws Exception {
-        when(productService.findAllByNameLikeIgnoreCase(anyString())).thenReturn(productList);
+        when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
 
-        mockMvc.perform(get("/code/products/name"))
+        mockMvc.perform(get("/1/products/1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("product"))
                 .andExpect(view().name("store/productDetails"));
@@ -82,9 +83,9 @@ class StoreControllerTest {
 
     @Test
     void filterProductsByCategory() throws Exception {
-        when(categoryService.findByCategoryCode(anyString())).thenReturn(category);
+        when(categoryService.findById(anyLong())).thenReturn(category);
 
-        mockMvc.perform(get("/  code"))
+        mockMvc.perform(get("/1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("category"))
                 .andExpect(view().name("store/categoryDetails"));

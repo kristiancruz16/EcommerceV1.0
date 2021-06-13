@@ -8,11 +8,12 @@
     <table>
         <tr>
             <td th:each="product:${products}">
-                <img th:src="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id} + '/productImage'}"
-                     width="200" height="200">
+                <a th:href="@{${product.category.id} + '/products/' + ${product.id}}">
+                    <img th:src="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id} + '/productImage'}"
+                         width="200" height="200">
                 </a>
                 <br/>
-                <label th:text="${product.name}">Product Name</label>
+                <a th:href="@{${product.category.id} + '/products/' + ${product.id}}" th:text="${product.name}"/>
                 <br/>
                 <label th:text="${product.productDescription}">Product Description</label>
                 <br/>
