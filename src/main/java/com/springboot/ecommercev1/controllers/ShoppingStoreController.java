@@ -40,6 +40,6 @@ public class ShoppingStoreController {
     @GetMapping("/{categoryCode}")
     public String filerProductsByCategory (@PathVariable String categoryCode, Model model) {
         model.addAttribute("category",categoryService.findByCategoryCode(categoryCode));
-        return null;
+        return "shoppingStore/categoryDetails";
     }
 }
