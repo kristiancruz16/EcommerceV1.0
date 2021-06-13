@@ -64,6 +64,7 @@ class StoreControllerTest {
     @Test
     void displayHomePage() throws Exception {
         when(productService.findAll()).thenReturn(productList);
+        when(categoryService.findAll()).thenReturn(List.of(category));
 
         mockMvc.perform(get("/home"))
                 .andExpect(status().isOk())

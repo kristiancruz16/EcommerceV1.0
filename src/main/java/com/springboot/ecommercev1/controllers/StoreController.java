@@ -28,6 +28,7 @@ public class StoreController {
     @GetMapping({"","/home","/"})
     public String displayHomePage (Model model) {
         model.addAttribute("products",productService.findAll());
+        model.addAttribute("categories",categoryService.findAll());
         return "store/homePage";
     }
 
