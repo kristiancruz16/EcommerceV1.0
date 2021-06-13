@@ -5,6 +5,7 @@ import com.springboot.ecommercev1.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -28,5 +29,11 @@ public class ShoppingStoreController {
     public String displayHomePage (Model model) {
         model.addAttribute("products",productService.findAll());
         return "shoppingStore/homePage";
+    }
+
+    @GetMapping("/{categoryCode}/products/{productName}")
+    public String showProductDetails(@PathVariable String productName, Model model) {
+        model.addAttribute("product",productService.findAllByNameLikeIgnoreCase(productName));
+        return "shoppingStore/productDetails";
     }
 }
