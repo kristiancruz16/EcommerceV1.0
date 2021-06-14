@@ -2,8 +2,7 @@ package com.springboot.ecommercev1.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author KMCruz
@@ -27,9 +26,11 @@ public class ShoppingCartLineItems extends BaseEntity{
     }
 
     private Integer quantity;
-    
+
     private Double lineAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     private ShoppingCart shoppingCart;

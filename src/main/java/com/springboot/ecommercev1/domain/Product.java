@@ -7,6 +7,8 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author KMCruz
@@ -51,4 +53,6 @@ public class Product extends BaseEntity{
     @JoinColumn( name = "category_id")
     private Category category;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private List<ShoppingCartLineItems> shoppingCartLineItems = new ArrayList<>();
 }
