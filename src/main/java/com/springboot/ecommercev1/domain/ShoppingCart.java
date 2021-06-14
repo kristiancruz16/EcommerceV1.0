@@ -18,5 +18,5 @@ import javax.persistence.Table;
 @Table(name = "shopping_cart")
 public class ShoppingCart extends BaseEntity{
 
-    
+
 }
