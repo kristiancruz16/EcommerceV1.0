@@ -55,6 +55,6 @@ public class Product extends BaseEntity{
     @JoinColumn( name = "category_id")
     private Category category;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToMany(mappedBy = "product")
     private List<ShoppingCartLineItems> shoppingCartLineItems = new ArrayList<>();
 }

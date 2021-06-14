@@ -24,7 +24,7 @@ public class ShoppingCart extends BaseEntity{
         this.shoppingCartList = shoppingCartList;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="shoppingCart")
+    @OneToMany(mappedBy="shoppingCart")
     private List<ShoppingCartLineItems> shoppingCartList = new ArrayList<>();
 
 }

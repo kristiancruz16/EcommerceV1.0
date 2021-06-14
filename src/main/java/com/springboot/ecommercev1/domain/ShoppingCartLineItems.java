@@ -10,32 +10,27 @@ import javax.persistence.*;
  */
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "shopping_cart_line_items")
-public class ShoppingCartLineItems extends BaseEntity{
+public class ShoppingCartLineItems{
 
-    @Builder
-    public ShoppingCartLineItems(Long id, Integer quantity, Double lineAmount, Product product, ShoppingCart shoppingCart) {
-        super(id);
-        this.quantity = quantity;
-        this.lineAmount = lineAmount;
-        this.product = product;
-        this.shoppingCart = shoppingCart;
-    }
-
-
-    private Integer quantity;
-
-    private Double lineAmount;
+    @EmbeddedId
+    private ShoppingCartLineItemId id;
 
     @ManyToOne
+    @MapsId("productId")
     @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "shopping_cart_id")
+    @MapsId("shoppingCartId")
+    @JoinColumn
     private ShoppingCart shoppingCart;
+
+    private Integer quantity;
+
+    private Double lineAmount;
 
 }
