@@ -87,5 +87,7 @@ public class DataLoader implements CommandLineRunner {
             ladiesRunningShoes.getProducts().add(rebookRunningShoes);
             productService.save(rebookRunningShoes);
 
+
+
         }
 }

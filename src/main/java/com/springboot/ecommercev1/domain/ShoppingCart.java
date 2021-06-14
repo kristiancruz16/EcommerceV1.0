@@ -28,5 +28,4 @@ public class ShoppingCart extends BaseEntity{
     @OneToMany(mappedBy="shoppingCart")
     private List<ShoppingCartLineItem> shoppingCartList = new ArrayList<>();
 
-
 }
