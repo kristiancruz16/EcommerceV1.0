@@ -10,7 +10,7 @@
             <tr>
                 <td th:each="product:${category.products}">
                     <a th:href="@{*{id} + '/products/' + ${product.id}}">
-                        <img th:src="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id} + '/productImage'}"
+                        <img th:src="@{${product.category.id} + '/products/' + ${product.id} + '/image'}"
                              width="200" height="200">
                     </a>
                     <br/>
