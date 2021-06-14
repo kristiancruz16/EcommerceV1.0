@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -20,7 +17,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class ShoppingCartLineItemId implements Serializable {
+public class ShoppingCartLineItemKey implements Serializable {
 
     @Column(name = "product_id")
     private Long productId;

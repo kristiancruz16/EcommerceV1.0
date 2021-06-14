@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,12 +20,13 @@ import java.util.List;
 @Table(name = "shopping_cart")
 public class ShoppingCart extends BaseEntity{
     @Builder
-    public ShoppingCart(Long id, List<ShoppingCartLineItems> shoppingCartList) {
+    public ShoppingCart(Long id, List<ShoppingCartLineItem> shoppingCartList) {
         super(id);
         this.shoppingCartList = shoppingCartList;
     }
 
     @OneToMany(mappedBy="shoppingCart")
-    private List<ShoppingCartLineItems> shoppingCartList = new ArrayList<>();
+    private List<ShoppingCartLineItem> shoppingCartList = new ArrayList<>();
+
 
 }

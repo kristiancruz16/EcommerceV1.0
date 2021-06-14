@@ -25,7 +25,7 @@ public class Product extends BaseEntity{
 
     @Builder
     public Product(Long id, String name, Long sku, String productDescription, Double productPrice, Category category,
-                   List<ShoppingCartLineItems> shoppingCartLineItems) {
+                   List<ShoppingCartLineItem> shoppingCartLineItems) {
         super(id);
         this.sku = sku;
         this.name = name;
@@ -56,5 +56,5 @@ public class Product extends BaseEntity{
     private Category category;
 
     @OneToMany(mappedBy = "product")
-    private List<ShoppingCartLineItems> shoppingCartLineItems = new ArrayList<>();
+    private List<ShoppingCartLineItem> shoppingCartLineItems = new ArrayList<>();
 }

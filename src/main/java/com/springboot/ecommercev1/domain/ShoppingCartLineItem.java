@@ -14,10 +14,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "shopping_cart_line_items")
-public class ShoppingCartLineItems{
+public class ShoppingCartLineItem {
 
     @EmbeddedId
-    private ShoppingCartLineItemId id;
+    private ShoppingCartLineItemKey id;
 
     @ManyToOne
     @MapsId("productId")
