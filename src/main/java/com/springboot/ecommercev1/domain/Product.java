@@ -24,13 +24,15 @@ import java.util.List;
 public class Product extends BaseEntity{
 
     @Builder
-    public Product(Long id, String name, Long sku, String productDescription, Double productPrice, Category category) {
+    public Product(Long id, String name, Long sku, String productDescription, Double productPrice, Category category,
+                   List<ShoppingCartLineItems> shoppingCartLineItems) {
         super(id);
         this.sku = sku;
         this.name = name;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.category = category;
+        this.shoppingCartLineItems = shoppingCartLineItems;
     }
 
     @NotBlank(message = "required")

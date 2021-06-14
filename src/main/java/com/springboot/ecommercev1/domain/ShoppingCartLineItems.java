@@ -25,6 +25,7 @@ public class ShoppingCartLineItems extends BaseEntity{
         this.shoppingCart = shoppingCart;
     }
 
+
     private Integer quantity;
 
     private Double lineAmount;
@@ -33,6 +34,8 @@ public class ShoppingCartLineItems extends BaseEntity{
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart shoppingCart;
 
 }
