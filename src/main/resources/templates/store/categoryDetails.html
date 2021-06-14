@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="icon" th:href="@{/resources/images/favicon.png}">
 </head>
 <body th:object="${category}">
     <h2 th:text="*{categoryCode+ ' ' +name}">Code Name</h2>

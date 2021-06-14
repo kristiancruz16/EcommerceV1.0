@@ -23,12 +23,16 @@ public class Product extends BaseEntity{
 
     @Builder
     public Product(Long id, String name, Long sku, String productDescription, Double productPrice, Category category) {
-        super(id, name);
+        super(id);
         this.sku = sku;
+        this.name = name;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.category = category;
     }
+
+    @NotBlank(message = "required")
+    private String name;
 
     @NotNull(message = "required")
     @Min(value = 1)

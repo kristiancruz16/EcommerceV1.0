@@ -28,10 +28,14 @@ public class Category extends BaseEntity{
 
     @Builder
     public Category(Long id, String name, String categoryCode, Set<Product> products) {
-        super(id, name);
+        super(id);
+        this.name = name;
         this.categoryCode = categoryCode;
         this.products = products;
     }
+
+    @NotBlank(message = "required")
+    private String name;
 
     @NotBlank(message = "required")
     @Size(min = 3, max = 5, message = "Category should be at least 3 characters and not exceed 5 characters")
