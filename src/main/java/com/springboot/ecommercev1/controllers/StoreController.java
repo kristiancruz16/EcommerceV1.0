@@ -1,9 +1,13 @@
 package com.springboot.ecommercev1.controllers;
 
 import com.springboot.ecommercev1.domain.Product;
+import com.springboot.ecommercev1.domain.ShoppingCart;
+import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
+import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
 import com.springboot.ecommercev1.services.CategoryService;
-import com.springboot.ecommercev1.services.ImageService;
 import com.springboot.ecommercev1.services.ProductService;
+import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
+import com.springboot.ecommercev1.services.ShoppingCartService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +33,16 @@ public class StoreController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
+    private final ShoppingCartLineItemService shoppingCartLineItemService;
+    private final ShoppingCartService shoppingCartService;
 
-    public StoreController(CategoryService categoryService, ProductService productService) {
+    public StoreController(CategoryService categoryService, ProductService productService,
+                           ShoppingCartLineItemService shoppingCartLineItemService,
+                           ShoppingCartService shoppingCartService) {
         this.categoryService = categoryService;
         this.productService = productService;
+        this.shoppingCartLineItemService = shoppingCartLineItemService;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @GetMapping({""})
@@ -78,4 +88,26 @@ public class StoreController {
         }
     }
 
+    @PostMapping("/{categoryId}/products/{productId}")
+    public String addToCart(HttpSession session, @PathVariable Long productId) {
+        Product product = productService.findById(productId);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setId(session.getId());
+        shoppingCartService.save(shoppingCart);
+
+        ShoppingCartLineItemKey shoppingCartLineItemKey = ShoppingCartLineItemKey.builder()
+                .shoppingCartId(shoppingCart.getId())
+                .productId(product.getId())
+                .build();
+
+        ShoppingCartLineItem shoppingCartLineItem = ShoppingCartLineItem.builder()
+                .id(shoppingCartLineItemKey)
+                .product(product)
+                .shoppingCart(shoppingCart).build();
+        shoppingCartLineItem.setQuantity(1);
+        shoppingCartLineItem.setLineAmount(shoppingCartLineItem.getQuantity()*product.getProductPrice());
+
+        shoppingCartLineItemService.save(shoppingCartLineItem);
+        return "redirect:/" + product.getCategory().getId() + "/products/" +product.getId();
+    }
 }

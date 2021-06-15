@@ -1,9 +1,6 @@
 package com.springboot.ecommercev1.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +11,6 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
 public class ShoppingCartLineItemKey implements Serializable {
@@ -24,4 +20,9 @@ public class ShoppingCartLineItemKey implements Serializable {
 
     @Column(name = "shopping_cart_id")
     private String shoppingCartId;
+    @Builder
+    public ShoppingCartLineItemKey(Long productId, String shoppingCartId) {
+        this.productId = productId;
+        this.shoppingCartId = shoppingCartId;
+    }
 }
