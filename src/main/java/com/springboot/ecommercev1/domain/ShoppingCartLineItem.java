@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "shopping_cart_line_items")
 public class ShoppingCartLineItem {
@@ -33,4 +32,12 @@ public class ShoppingCartLineItem {
 
     private Double lineAmount;
 
+    @Builder
+    public ShoppingCartLineItem(ShoppingCartLineItemKey id, Product product, ShoppingCart shoppingCart, Integer quantity, Double lineAmount) {
+        this.id = id;
+        this.product = product;
+        this.shoppingCart = shoppingCart;
+        this.quantity = quantity;
+        this.lineAmount = lineAmount;
+    }
 }
