@@ -28,7 +28,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCart findById(Long id) {
+    public ShoppingCart findById(String id) {
 
         return shoppingCartRepository.findById(id).orElse(null);
     }
@@ -45,7 +45,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         shoppingCartRepository.deleteById(id);
     }
 }

@@ -34,7 +34,7 @@ class ShoppingCartServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnShoppingCart =ShoppingCart.builder().id(1L).build();
+        returnShoppingCart =ShoppingCart.builder().id("BC012").build();
     }
 
     @Test
@@ -49,18 +49,18 @@ class ShoppingCartServiceImplTest {
 
     @Test
     void findById() {
-        when(shoppingCartRepository.findById(anyLong())).thenReturn(Optional.of(returnShoppingCart));
+        when(shoppingCartRepository.findById(anyString())).thenReturn(Optional.of(returnShoppingCart));
 
-        ShoppingCart  shoppingCart = shoppingCartService.findById(1L);
+        ShoppingCart  shoppingCart = shoppingCartService.findById("1L");
 
         assertNotNull(shoppingCart);
     }
 
     @Test
     void findByIdNotFound () {
-        when(shoppingCartRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(shoppingCartRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        ShoppingCart shoppingCart = shoppingCartService.findById(1L);
+        ShoppingCart shoppingCart = shoppingCartService.findById("1L");
 
         assertNull(shoppingCart);
     }
@@ -84,8 +84,8 @@ class ShoppingCartServiceImplTest {
 
     @Test
     void deleteById() {
-        shoppingCartService.deleteById(1L);
+        shoppingCartService.deleteById("1L");
 
-        verify(shoppingCartRepository,times(1)).deleteById(anyLong());
+        verify(shoppingCartRepository,times(1)).deleteById(anyString());
     }
 }

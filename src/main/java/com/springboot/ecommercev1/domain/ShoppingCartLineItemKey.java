@@ -23,5 +23,5 @@ public class ShoppingCartLineItemKey implements Serializable {
     private Long productId;
 
     @Column(name = "shopping_cart_id")
-    private Long shoppingCartId;
+    private String shoppingCartId;
 }

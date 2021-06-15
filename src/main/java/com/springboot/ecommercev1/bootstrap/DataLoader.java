@@ -7,6 +7,8 @@ import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
 import com.springboot.ecommercev1.services.ShoppingCartService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.servlet.mvc.condition.RequestConditionHolder;
 
 /**
  * @author KMCruz
@@ -93,6 +95,7 @@ public class DataLoader implements CommandLineRunner {
             Product savedRebookRunningShoes = productService.save(rebookRunningShoes);
 
             ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.setId("ABC");
             ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCart);
 
 

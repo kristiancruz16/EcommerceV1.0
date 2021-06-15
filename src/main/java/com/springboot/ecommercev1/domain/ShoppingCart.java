@@ -15,15 +15,18 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "shopping_cart")
-public class ShoppingCart extends BaseEntity{
+public class ShoppingCart{
+
     @Builder
-    public ShoppingCart(Long id, List<ShoppingCartLineItem> shoppingCartList) {
-        super(id);
+    public ShoppingCart(String id, List<ShoppingCartLineItem> shoppingCartList) {
+        this.id = id;
         this.shoppingCartList = shoppingCartList;
     }
+
+    @Id
+    private String id;
 
     @OneToMany(mappedBy="shoppingCart")
     private List<ShoppingCartLineItem> shoppingCartList = new ArrayList<>();
