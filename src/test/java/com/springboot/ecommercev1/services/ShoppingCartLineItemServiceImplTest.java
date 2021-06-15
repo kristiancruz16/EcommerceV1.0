@@ -33,7 +33,7 @@ class ShoppingCartLineItemServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnShoppingCartLineItem = ShoppingCartLineItem.builder().build();
+        returnShoppingCartLineItem = new ShoppingCartLineItem();
     }
 
     @Test

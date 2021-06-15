@@ -1,9 +1,10 @@
 package com.springboot.ecommercev1.bootstrap;
 
-import com.springboot.ecommercev1.domain.Category;
-import com.springboot.ecommercev1.domain.Product;
+import com.springboot.ecommercev1.domain.*;
 import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
+import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
+import com.springboot.ecommercev1.services.ShoppingCartService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,14 @@ public class DataLoader implements CommandLineRunner {
 
         private final ProductService productService;
         private final CategoryService categoryService;
+        private final ShoppingCartService shoppingCartService;
+        private final ShoppingCartLineItemService shoppingCartLineItemService;
 
-        public DataLoader(ProductService productService, CategoryService categoryService) {
+        public DataLoader(ProductService productService, CategoryService categoryService, ShoppingCartService shoppingCartService, ShoppingCartLineItemService shoppingCartLineItemService) {
             this.productService = productService;
             this.categoryService = categoryService;
+            this.shoppingCartService = shoppingCartService;
+            this.shoppingCartLineItemService = shoppingCartLineItemService;
         }
 
         @Override
@@ -85,9 +90,25 @@ public class DataLoader implements CommandLineRunner {
             rebookRunningShoes.setProductPrice(2500.00);
             rebookRunningShoes.setCategory(savedLadiesRunningShoes);
             ladiesRunningShoes.getProducts().add(rebookRunningShoes);
-            productService.save(rebookRunningShoes);
+            Product savedRebookRunningShoes = productService.save(rebookRunningShoes);
+
+            ShoppingCart shoppingCart = new ShoppingCart();
+            ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCart);
 
 
+            ShoppingCartLineItemKey shoppingCartLineItemKey = new ShoppingCartLineItemKey();
+            shoppingCartLineItemKey.setProductId(savedRebookRunningShoes.getId());
+            shoppingCartLineItemKey.setShoppingCartId(savedShoppingCart.getId());
 
+            ShoppingCartLineItem shoppingCartLineItem = new ShoppingCartLineItem();
+
+            shoppingCartLineItem.setId(shoppingCartLineItemKey);
+            shoppingCartLineItem.setProduct(savedRebookRunningShoes);
+            shoppingCartLineItem.setShoppingCart(savedShoppingCart);
+            shoppingCartLineItem.setQuantity(1);
+            shoppingCartLineItem.setLineAmount(shoppingCartLineItem.getQuantity()
+                    *savedRebookRunningShoes.getProductPrice());
+
+            shoppingCartLineItemService.save(shoppingCartLineItem);
         }
 }
