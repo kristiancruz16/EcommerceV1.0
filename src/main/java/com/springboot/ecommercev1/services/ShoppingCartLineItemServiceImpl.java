@@ -1,37 +1,35 @@
 package com.springboot.ecommercev1.services;
 
+
 import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
 import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
+import com.springboot.ecommercev1.repositories.ShoppingCartLineItemRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 /**
  * @author KMCruz
  * 6/14/2021
  */
-public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemService {
+@Service
+public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemService<ShoppingCartLineItem,ShoppingCartLineItemKey> {
+
+    private final ShoppingCartLineItemRepository shoppingCartLineItemRepository;
+
+    public ShoppingCartLineItemServiceImpl(ShoppingCartLineItemRepository shoppingCartLineItemRepository) {
+        this.shoppingCartLineItemRepository = shoppingCartLineItemRepository;
+    }
+
+
     @Override
-    public List<ShoppingCartLineItem> findAll() {
-        return null;
+    public ShoppingCartLineItem save(ShoppingCartLineItem shoppingCartLineItem) {
+        return shoppingCartLineItemRepository.save(shoppingCartLineItem);
     }
 
     @Override
-    public ShoppingCartLineItem findById(ShoppingCartLineItemKey shoppingCartLineItemKey) {
-        return null;
-    }
-
-    @Override
-    public ShoppingCartLineItem save(ShoppingCartLineItem object) {
-        return null;
-    }
-
-    @Override
-    public void delete(ShoppingCartLineItem object) {
-
-    }
-
-    @Override
-    public void deleteById(ShoppingCartLineItemKey shoppingCartLineItemKey) {
-
+    public void delete(ShoppingCartLineItem shoppingCartLineItem) {
+        shoppingCartLineItemRepository.delete(shoppingCartLineItem);
     }
 }
