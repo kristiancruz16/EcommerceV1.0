@@ -6,8 +6,6 @@ import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
 import com.springboot.ecommercev1.repositories.ShoppingCartLineItemRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 
 /**
  * @author KMCruz
@@ -32,4 +30,11 @@ public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemServ
     public void delete(ShoppingCartLineItem shoppingCartLineItem) {
         shoppingCartLineItemRepository.delete(shoppingCartLineItem);
     }
+
+    @Override
+    public ShoppingCartLineItem findByID(ShoppingCartLineItemKey shoppingCartLineItemKey) {
+        return shoppingCartLineItemRepository.findById(shoppingCartLineItemKey).orElse(null);
+    }
+
+
 }

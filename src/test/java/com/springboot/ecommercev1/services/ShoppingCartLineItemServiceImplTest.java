@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -50,5 +52,15 @@ class ShoppingCartLineItemServiceImplTest {
     void delete() {
         shoppingCartLineItemService.delete(returnShoppingCartLineItem);
         verify(shoppingCartLineItemRepository,times(1)).delete(any());
+    }
+
+    @Test
+    void findById() {
+        when(shoppingCartLineItemRepository.findById(any()))
+                .thenReturn(Optional.of(ShoppingCartLineItem.builder().id(ShoppingCartLineItemKey.builder().build()).build()));
+
+        ShoppingCartLineItem shoppingCartLineItem = shoppingCartLineItemService.findByID(ShoppingCartLineItemKey.builder().build());
+
+        assertNotNull(shoppingCartLineItem);
     }
 }

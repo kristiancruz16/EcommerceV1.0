@@ -93,21 +93,40 @@ public class StoreController {
         Product product = productService.findById(productId);
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(session.getId());
-        shoppingCartService.save(shoppingCart);
+        ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCart);
 
         ShoppingCartLineItemKey shoppingCartLineItemKey = ShoppingCartLineItemKey.builder()
-                .shoppingCartId(shoppingCart.getId())
+                .shoppingCartId(savedShoppingCart.getId())
                 .productId(product.getId())
                 .build();
 
-        ShoppingCartLineItem shoppingCartLineItem = ShoppingCartLineItem.builder()
-                .id(shoppingCartLineItemKey)
-                .product(product)
-                .shoppingCart(shoppingCart).build();
-        shoppingCartLineItem.setQuantity(1);
-        shoppingCartLineItem.setLineAmount(shoppingCartLineItem.getQuantity()*product.getProductPrice());
+         ShoppingCartLineItem shoppingCartLineItem = new ShoppingCartLineItem();
+        shoppingCartLineItem = shoppingCartLineItemService.findByID(shoppingCartLineItemKey);
 
-        shoppingCartLineItemService.save(shoppingCartLineItem);
+        if(shoppingCartLineItem!=null){
+            int totalQuantity = shoppingCartLineItem.getQuantity() + 1;
+            double totalLineAmount = product.getProductPrice() * totalQuantity;
+            shoppingCartLineItem.setId(shoppingCartLineItemKey);
+            shoppingCartLineItem.setProduct(product);
+            shoppingCartLineItem.setShoppingCart(savedShoppingCart);
+            shoppingCartLineItem.setQuantity(totalQuantity);
+            shoppingCartLineItem.setLineAmount(totalLineAmount);
+            shoppingCartLineItemService.save(shoppingCartLineItem);
+
+        }else {
+            int productInitialQuantity = 1;
+            double lineAmount = product.getProductPrice() * productInitialQuantity;
+
+            ShoppingCartLineItem newShoppingCartLineItem = new ShoppingCartLineItem();
+            newShoppingCartLineItem.setId(shoppingCartLineItemKey);
+            newShoppingCartLineItem.setProduct(product);
+            newShoppingCartLineItem.setShoppingCart(savedShoppingCart);
+            newShoppingCartLineItem.setQuantity(productInitialQuantity);
+            newShoppingCartLineItem.setLineAmount(lineAmount);
+            shoppingCartLineItemService.save(newShoppingCartLineItem);
+        }
+
+
         return "redirect:/" + product.getCategory().getId() + "/products/" +product.getId();
     }
 }
