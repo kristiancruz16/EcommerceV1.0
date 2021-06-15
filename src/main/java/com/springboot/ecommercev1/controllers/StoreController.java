@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,8 +35,9 @@ public class StoreController {
         this.productService = productService;
     }
 
-    @GetMapping({"","/home","/"})
-    public String displayHomePage (Model model) {
+    @GetMapping({""})
+    public String displayHomePage (Model model, HttpSession session) {
+        System.out.println(session.getId());
         model.addAttribute("products",productService.findAll());
         model.addAttribute("categories",categoryService.findAll());
         return "store/homePage";
@@ -73,6 +76,6 @@ public class StoreController {
             IOUtils.copy(inputStream,response.getOutputStream());
 
         }
-
     }
+
 }
