@@ -2,8 +2,10 @@ package com.springboot.ecommercev1.controllers;
 
 import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.domain.Product;
+import com.springboot.ecommercev1.domain.ShoppingCart;
 import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
+import com.springboot.ecommercev1.services.ShoppingCartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,6 +36,9 @@ class StoreControllerTest {
 
     @Mock
     ProductService productService;
+
+    @Mock
+    ShoppingCartService shoppingCartService;
 
     @InjectMocks
     StoreController controller;
@@ -92,4 +96,17 @@ class StoreControllerTest {
                 .andExpect(view().name("store/categoryDetails"));
 
     }
+/*
+    @Test
+    void addToCart () {
+        when(productService.findById(anyLong())).thenReturn(productList.get(0));
+
+        ShoppingCart shoppingCartToSave = ShoppingCart.builder().build();
+
+        when(shoppingCartService.save(any())).thenReturn(shoppingCartToSave);
+
+        ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCartToSave);
+        savedShoppingCart.addShoppingCartLineItem(productList.get(0));
+
+    }*/
 }

@@ -1,10 +1,13 @@
 package com.springboot.ecommercev1.services;
 
 
+import com.springboot.ecommercev1.domain.ShoppingCart;
 import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
 import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
 import com.springboot.ecommercev1.repositories.ShoppingCartLineItemRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**

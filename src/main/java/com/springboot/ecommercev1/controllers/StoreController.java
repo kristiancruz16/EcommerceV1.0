@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.Option;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 /**
  * @author KMCruz
@@ -91,41 +93,12 @@ public class StoreController {
     @PostMapping("/{categoryId}/products/{productId}")
     public String addToCart(HttpSession session, @PathVariable Long productId) {
         Product product = productService.findById(productId);
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setId(session.getId());
-        ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCart);
+        ShoppingCart shoppingCartToSave = new ShoppingCart();
+        shoppingCartToSave.setId(session.getId());
+        ShoppingCart savedCart = shoppingCartService.save(shoppingCartToSave);
 
-        ShoppingCartLineItemKey shoppingCartLineItemKey = ShoppingCartLineItemKey.builder()
-                .shoppingCartId(savedShoppingCart.getId())
-                .productId(product.getId())
-                .build();
-
-         ShoppingCartLineItem shoppingCartLineItem = new ShoppingCartLineItem();
-        shoppingCartLineItem = shoppingCartLineItemService.findByID(shoppingCartLineItemKey);
-
-        if(shoppingCartLineItem!=null){
-            int totalQuantity = shoppingCartLineItem.getQuantity() + 1;
-            double totalLineAmount = product.getProductPrice() * totalQuantity;
-            shoppingCartLineItem.setId(shoppingCartLineItemKey);
-            shoppingCartLineItem.setProduct(product);
-            shoppingCartLineItem.setShoppingCart(savedShoppingCart);
-            shoppingCartLineItem.setQuantity(totalQuantity);
-            shoppingCartLineItem.setLineAmount(totalLineAmount);
-            shoppingCartLineItemService.save(shoppingCartLineItem);
-
-        }else {
-            int productInitialQuantity = 1;
-            double lineAmount = product.getProductPrice() * productInitialQuantity;
-
-            ShoppingCartLineItem newShoppingCartLineItem = new ShoppingCartLineItem();
-            newShoppingCartLineItem.setId(shoppingCartLineItemKey);
-            newShoppingCartLineItem.setProduct(product);
-            newShoppingCartLineItem.setShoppingCart(savedShoppingCart);
-            newShoppingCartLineItem.setQuantity(productInitialQuantity);
-            newShoppingCartLineItem.setLineAmount(lineAmount);
-            shoppingCartLineItemService.save(newShoppingCartLineItem);
-        }
-
+        ShoppingCartLineItem cartLineItem = savedCart.addShoppingCartLineItem(product);
+        shoppingCartLineItemService.save(cartLineItem);
 
         return "redirect:/" + product.getCategory().getId() + "/products/" +product.getId();
     }
