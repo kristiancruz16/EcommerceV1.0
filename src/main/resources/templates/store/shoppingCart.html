@@ -7,9 +7,16 @@
 </head>
 <body>
 <table>
-    <tr>
-        <td>
-
+    <tr th:each="cartLineItem:${cartLineItems}">
+        <td th:object="${cartLineItem.product}">
+            <img th:src="@{'/'+ *{category.id} + '/products/' + *{id} + '/image'}"
+                 width="200" height="200">
+            <br/>
+            <label th:text="*{name}">Product Name</label>
+            <br/>
+            <label th:text="*{productDescription}">Product Description</label>
+            <br/>
+            <label th:text="*{productPrice}">Product Price</label>
         </td>
     </tr>
 </table>

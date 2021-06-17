@@ -25,7 +25,7 @@ public class ShoppingCartController {
     @GetMapping
     public String showShoppingCart(HttpSession session, Model model) {
         ShoppingCart shoppingCart = shoppingCartService.findById(session.getId());
-        model.addAttribute("shoppingCart", shoppingCart);
+        model.addAttribute("cartLineItems", shoppingCart.getShoppingCartList());
         return "store/shoppingCart";
     }
 }
