@@ -21,6 +21,9 @@
                     <br/>
                     <label th:text="${product.productPrice}">Product Price</label>
                     <br/>
+                    <a th:href="@{${product.category.id} + '/products/' + ${product.id}}" >
+                        <input type="button" value="Add to Cart"/>
+                    </a>
                 </td>
             </tr>
         </table>
