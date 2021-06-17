@@ -1,10 +1,9 @@
 package com.springboot.ecommercev1.controllers;
 
-import com.springboot.ecommercev1.domain.Category;
-import com.springboot.ecommercev1.domain.Product;
-import com.springboot.ecommercev1.domain.ShoppingCart;
+import com.springboot.ecommercev1.domain.*;
 import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
+import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
 import com.springboot.ecommercev1.services.ShoppingCartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
@@ -20,8 +20,10 @@ import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -39,6 +41,9 @@ class StoreControllerTest {
 
     @Mock
     ShoppingCartService shoppingCartService;
+
+    @Mock
+    ShoppingCartLineItemService shoppingCartLineItemService;
 
     @InjectMocks
     StoreController controller;
@@ -96,17 +101,20 @@ class StoreControllerTest {
                 .andExpect(view().name("store/categoryDetails"));
 
     }
-/*
     @Test
-    void addToCart () {
-        when(productService.findById(anyLong())).thenReturn(productList.get(0));
+    void addToCart () throws Exception {
 
-        ShoppingCart shoppingCartToSave = ShoppingCart.builder().build();
+       when(productService.findById(anyLong())).thenReturn(new Product());
+       when(shoppingCartService.save(any())).thenReturn(new ShoppingCart());
+       when(shoppingCartLineItemService.save(any())).thenReturn(new ShoppingCartLineItem());
 
-        when(shoppingCartService.save(any())).thenReturn(shoppingCartToSave);
+       mockMvc.perform(post("/1/products/1"))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(view().name("redirect:/1/products/1"));
 
-        ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCartToSave);
-        savedShoppingCart.addShoppingCartLineItem(productList.get(0));
+       verify(shoppingCartLineItemService).save(any());
 
-    }*/
+    }
+
+
 }

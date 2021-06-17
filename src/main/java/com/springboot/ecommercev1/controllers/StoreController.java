@@ -91,7 +91,7 @@ public class StoreController {
     }
 
     @PostMapping("/{categoryId}/products/{productId}")
-    public String addToCart(HttpSession session, @PathVariable Long productId) {
+    public String addToCart(HttpSession session, @PathVariable Long productId, @PathVariable Long categoryId) {
         Product product = productService.findById(productId);
         ShoppingCart cartToSave = new ShoppingCart();
         cartToSave.setId(session.getId());
@@ -106,6 +106,6 @@ public class StoreController {
 
         shoppingCartLineItemService.save(cartLineItem);
 
-        return "redirect:/" + product.getCategory().getId() + "/products/" +product.getId();
+        return "redirect:/" + categoryId + "/products/" +productId;
     }
 }
