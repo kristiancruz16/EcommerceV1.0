@@ -6,22 +6,28 @@
     <link rel="icon" th:href="@{/resources/images/favicon.ico}">
 </head>
 <body>
-<table>
-    <tr th:each="cartLineItem:${cartLineItems}">
-        <td th:object="${cartLineItem.product}">
+<div th:if="${cartLineItems.size()!=0}">
+    <div th:each="cartLineItem:${cartLineItems}" th:object="${cartLineItem.product}">
+            <div>
             <img th:src="@{'/'+ *{category.id} + '/products/' + *{id} + '/image'}"
                  width="200" height="200">
-            <br/>
+            </div>
+            <div>
             <label th:text="*{name}">Product Name</label>
-            <br/>
+            </div>
+            <div>
             <label th:text="*{productDescription}">Product Description</label>
-            <br/>
+            </div>
+            <div>
             <label th:text="*{productPrice}">Product Price</label>
-            <br/>
+            </div>
+            <div>
             <label th:text="${cartLineItem.quantity}">Quantity</label>
-        </td>
-    </tr>
-</table>
-
+            </div>
+    </div>
+</div>
+<div th:unless="${cartLineItems.size()!=0}">
+    <h3>Shopping Cart is Empty</h3>
+</div>
 </body>
 </html>
