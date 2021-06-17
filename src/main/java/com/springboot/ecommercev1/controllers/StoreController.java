@@ -68,7 +68,6 @@ public class StoreController {
     @GetMapping("/{categoryId}")
     public String filerProductsByCategory (HttpSession session, @PathVariable Long categoryId, Model model) {
         String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
-
         model.addAttribute("category",categoryService.findById(categoryId));
         model.addAttribute("cart",cartQuantity);
         return "store/categoryDetails";
@@ -83,13 +82,10 @@ public class StoreController {
             Byte [] imageByteObject = product.getImage();
 
             byte [] imageBytePrimitive = new byte[imageByteObject.length];
-
             int i=0;
-
             for(Byte productImageByte : imageByteObject) {
                 imageBytePrimitive[i++] = productImageByte;
             }
-
             response.setContentType("image/jpg");
             InputStream inputStream = new ByteArrayInputStream(imageBytePrimitive);
             IOUtils.copy(inputStream,response.getOutputStream());

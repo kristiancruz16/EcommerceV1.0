@@ -35,7 +35,12 @@ class ShoppingCartLineItemServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnShoppingCartLineItem = new ShoppingCartLineItem();
+        returnShoppingCartLineItem = ShoppingCartLineItem.builder()
+                .id(ShoppingCartLineItemKey.builder().build())
+                .product(Product.builder().build())
+                .shoppingCart(ShoppingCart.builder().build())
+                .build();
+
     }
 
     @Test
@@ -62,6 +67,15 @@ class ShoppingCartLineItemServiceImplTest {
         ShoppingCartLineItem shoppingCartLineItem = shoppingCartLineItemService.findByID(ShoppingCartLineItemKey.builder().build());
 
         assertNotNull(shoppingCartLineItem);
+    }
+
+    @Test
+    void totalQuantityByShoppingCartID () {
+        when(shoppingCartLineItemRepository.totalQuantityByShoppingCartID(anyString())).thenReturn(Optional.of("5"));
+
+        String quantity = shoppingCartLineItemService.totalQuantityByShoppingCartID("5");
+
+        assertNotNull(quantity);
     }
 
 }

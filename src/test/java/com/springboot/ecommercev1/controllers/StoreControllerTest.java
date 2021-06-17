@@ -11,14 +11,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -74,8 +74,9 @@ class StoreControllerTest {
     void displayHomePage() throws Exception {
         when(productService.findAll()).thenReturn(productList);
         when(categoryService.findAll()).thenReturn(List.of(category));
+        when(shoppingCartLineItemService.totalQuantityByShoppingCartID(anyString())).thenReturn("5");
 
-        mockMvc.perform(get("/home"))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("products"))
                 .andExpect(view().name("store/homePage"));
@@ -84,6 +85,7 @@ class StoreControllerTest {
     @Test
     void showProductDetails() throws Exception {
         when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
+        when(shoppingCartLineItemService.totalQuantityByShoppingCartID(anyString())).thenReturn("5");
 
         mockMvc.perform(get("/1/products/1"))
                 .andExpect(status().isOk())
@@ -94,11 +96,39 @@ class StoreControllerTest {
     @Test
     void filterProductsByCategory() throws Exception {
         when(categoryService.findById(anyLong())).thenReturn(category);
+        when(shoppingCartLineItemService.totalQuantityByShoppingCartID(anyString())).thenReturn("5");
 
         mockMvc.perform(get("/1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("category"))
                 .andExpect(view().name("store/categoryDetails"));
+
+    }
+    @Test
+    void renderImageFromDatabase() throws Exception {
+
+        Product product = Product.builder().id(1L).build();
+
+        String mockFile = "This is a mock file";
+
+        Byte [] fileByteObject = new Byte[mockFile.getBytes().length];
+
+        int i = 0;
+
+        for (byte primitiveByte : mockFile.getBytes()) {
+            fileByteObject[i++] = primitiveByte;
+        }
+
+        product.setImage(fileByteObject);
+        when(productService.findById(anyLong())).thenReturn(product);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/1/products/1/image"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        byte [] responseByte = response.getContentAsByteArray();
+
+        assertTrue(Arrays.equals(mockFile.getBytes(),responseByte));
 
     }
     @Test
