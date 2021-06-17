@@ -63,4 +63,5 @@ class ShoppingCartLineItemServiceImplTest {
 
         assertNotNull(shoppingCartLineItem);
     }
+
 }

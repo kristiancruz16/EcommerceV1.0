@@ -26,4 +26,5 @@ public class ShoppingCartLineItemKey implements Serializable {
         this.productId = productId;
         this.shoppingCartId = shoppingCartId;
     }
+
 }

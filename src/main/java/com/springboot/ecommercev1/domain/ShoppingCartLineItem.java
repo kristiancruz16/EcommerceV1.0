@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "shopping_cart_line_items")
-public class ShoppingCartLineItem {
+public class ShoppingCartLineItem{
 
     @Builder
     public ShoppingCartLineItem(ShoppingCartLineItemKey id, Product product,
@@ -42,5 +42,17 @@ public class ShoppingCartLineItem {
     private Integer quantity;
 
     private Double lineAmount;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShoppingCartLineItem)) return false;
+
+        ShoppingCartLineItem that = (ShoppingCartLineItem) o;
+
+        if (!id.getProductId().equals(that.getId().getProductId())) return  false;
+        return id.getShoppingCartId().equals(that.id.getShoppingCartId());
+    }
+
 
 }

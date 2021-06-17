@@ -31,22 +31,4 @@ public class ShoppingCart{
     @OneToMany(mappedBy="shoppingCart")
     private List<ShoppingCartLineItem> shoppingCartList = new ArrayList<>();
 
-    public ShoppingCartLineItem addShoppingCartLineItem(Product product) {
-
-        for(ShoppingCartLineItem cartLineItem : this.getShoppingCartList()){
-            if(cartLineItem.getProduct().equals(product)) {
-                cartLineItem.setQuantity(cartLineItem.getQuantity()+1);
-                cartLineItem.setLineAmount(cartLineItem.getQuantity()*product.getProductPrice());
-                return cartLineItem;
-            }
-        }
-        ShoppingCartLineItem shoppingCartLineItem =new ShoppingCartLineItem();
-        shoppingCartLineItem.setId(ShoppingCartLineItemKey.builder().shoppingCartId(this.getId()).productId(product.getId()).build());
-        shoppingCartLineItem.setShoppingCart(this);
-        shoppingCartLineItem.setProduct(product);
-        shoppingCartLineItem.setQuantity(1);
-        shoppingCartLineItem.setLineAmount(shoppingCartLineItem.getQuantity() * product.getProductPrice());
-        this.getShoppingCartList().add(shoppingCartLineItem);
-        return shoppingCartLineItem;
-    }
 }
