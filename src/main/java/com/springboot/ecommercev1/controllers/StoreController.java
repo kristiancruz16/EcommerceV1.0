@@ -16,15 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.Option;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Optional;
 
 /**
  * @author KMCruz
@@ -40,6 +36,7 @@ public class StoreController {
     private final ShoppingCartLineItemService shoppingCartLineItemService;
     private final ShoppingCartService shoppingCartService;
 
+
     public StoreController(CategoryService categoryService, ProductService productService,
                            ShoppingCartLineItemService shoppingCartLineItemService,
                            ShoppingCartService shoppingCartService) {
@@ -51,21 +48,29 @@ public class StoreController {
 
     @GetMapping({""})
     public String displayHomePage (Model model, HttpSession session) {
-        System.out.println(session.getId());
+        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
         model.addAttribute("products",productService.findAll());
         model.addAttribute("categories",categoryService.findAll());
+        model.addAttribute("cart",cartQuantity);
         return "store/homePage";
     }
 
     @GetMapping("/{categoryId}/products/{productId}")
-    public String showProductDetails(@PathVariable Long productId, Model model) {
-        model.addAttribute("product",productService.findById(productId));
+    public String showProductDetails(HttpSession session,@PathVariable Long productId, Model model) {
+        Product product = productService.findById(productId);
+        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
+
+        model.addAttribute("product",product);
+        model.addAttribute("cart",cartQuantity);
         return "store/productDetails";
     }
 
     @GetMapping("/{categoryId}")
-    public String filerProductsByCategory (@PathVariable Long categoryId, Model model) {
+    public String filerProductsByCategory (HttpSession session, @PathVariable Long categoryId, Model model) {
+        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
+
         model.addAttribute("category",categoryService.findById(categoryId));
+        model.addAttribute("cart",cartQuantity);
         return "store/categoryDetails";
     }
 

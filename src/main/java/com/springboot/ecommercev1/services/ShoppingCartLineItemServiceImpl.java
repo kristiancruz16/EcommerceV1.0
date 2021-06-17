@@ -14,7 +14,7 @@ import java.util.List;
  * 6/14/2021
  */
 @Service
-public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemService<ShoppingCartLineItem,ShoppingCartLineItemKey> {
+public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemService<ShoppingCartLineItem, ShoppingCartLineItemKey> {
 
     private final ShoppingCartLineItemRepository shoppingCartLineItemRepository;
 
@@ -56,6 +56,11 @@ public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemServ
     @Override
     public ShoppingCartLineItem findByID(ShoppingCartLineItemKey shoppingCartLineItemKey) {
         return shoppingCartLineItemRepository.findById(shoppingCartLineItemKey).orElse(null);
+    }
+
+    @Override
+    public String totalQuantityByShoppingCartID(String id) {
+        return shoppingCartLineItemRepository.totalQuantityByShoppingCartID(id).orElse("");
     }
 
 
