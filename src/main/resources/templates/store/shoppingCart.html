@@ -17,6 +17,8 @@
             <label th:text="*{productDescription}">Product Description</label>
             <br/>
             <label th:text="*{productPrice}">Product Price</label>
+            <br/>
+            <label th:text="${cartLineItem.quantity}">Quantity</label>
         </td>
     </tr>
 </table>
