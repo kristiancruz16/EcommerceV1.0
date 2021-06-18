@@ -21,8 +21,13 @@
         <div>
             <label th:text="${cartLineItem.product.productPrice}">Product Price</label>
         </div>
-        <div>
+        <div >
             <label th:text="${cartLineItem.quantity}">Quantity</label>
+            <form th:action="@{/shoppingcart/delete}" method="post">
+                <input type="hidden" name="cartId" th:value="${cartLineItem.shoppingCart.id}">
+                <input type=""hidden name="productId" th:value="${cartLineItem.product.id}">
+                <input type="submit" value="-">
+            </form>
             <form th:action="@{/shoppingcart/add}" method="post">
                 <input type="hidden" name="cartId" th:value="${cartLineItem.shoppingCart.id}">
                 <input type=""hidden name="productId" th:value="${cartLineItem.product.id}">

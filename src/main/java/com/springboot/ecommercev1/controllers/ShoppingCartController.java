@@ -47,7 +47,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/add")
-    public String updateLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
+    public String addLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
 
         ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
                 .shoppingCartId(cartId).productId(productId).build();
@@ -58,5 +58,24 @@ public class ShoppingCartController {
         return "redirect:/shoppingcart";
     }
 
+    @PostMapping("/delete")
+    public String deleteLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
+
+        ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
+                .shoppingCartId(cartId).productId(productId).build();
+
+        ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
+
+        Integer lineItemQuantity = cartLineItem.getQuantity() - 1;
+        cartLineItem.setQuantity(lineItemQuantity);
+
+        if (lineItemQuantity==0) {
+            shoppingCartLineItemService.delete(cartLineItem);
+        }
+        else {
+            shoppingCartLineItemService.save(cartLineItem);
+        }
+        return "redirect:/shoppingcart";
+    }
 
 }
