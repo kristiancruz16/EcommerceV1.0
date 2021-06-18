@@ -8,6 +8,7 @@ import com.springboot.ecommercev1.repositories.ShoppingCartLineItemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author KMCruz
@@ -25,25 +26,6 @@ public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemServ
 
     @Override
     public ShoppingCartLineItem save(ShoppingCartLineItem cartLineItem) {
-
-        ShoppingCart currentShoppingCart = cartLineItem.getShoppingCart();
-        List<ShoppingCartLineItem> currentCartListDetails = currentShoppingCart.getShoppingCartList();
-
-        for(ShoppingCartLineItem lineItemDetail : currentCartListDetails) {
-            if(lineItemDetail.equals(cartLineItem)) {
-                int getLineItemQuantity = lineItemDetail.getQuantity();
-                int addedItemQuantity = ++getLineItemQuantity;
-                double productPrice =  lineItemDetail.getProduct().getProductPrice();
-                double lineAmountTotal = addedItemQuantity * productPrice;
-
-                cartLineItem.setQuantity(addedItemQuantity);
-                cartLineItem.setLineAmount(lineAmountTotal);
-                return shoppingCartLineItemRepository.save(cartLineItem);
-            }
-        }
-
-        cartLineItem.setQuantity(1);
-        cartLineItem.setLineAmount(cartLineItem.getQuantity()*cartLineItem.getProduct().getProductPrice());
         return shoppingCartLineItemRepository.save(cartLineItem);
 
     }

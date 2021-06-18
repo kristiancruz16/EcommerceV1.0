@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author KMCruz
@@ -35,15 +36,17 @@ public class StoreController {
     private final ProductService productService;
     private final ShoppingCartLineItemService shoppingCartLineItemService;
     private final ShoppingCartService shoppingCartService;
+    private final HttpSession session;
 
 
     public StoreController(CategoryService categoryService, ProductService productService,
                            ShoppingCartLineItemService shoppingCartLineItemService,
-                           ShoppingCartService shoppingCartService) {
+                           ShoppingCartService shoppingCartService, HttpSession session) {
         this.categoryService = categoryService;
         this.productService = productService;
         this.shoppingCartLineItemService = shoppingCartLineItemService;
         this.shoppingCartService = shoppingCartService;
+        this.session = session;
     }
 
     @GetMapping({""})
@@ -53,16 +56,6 @@ public class StoreController {
         model.addAttribute("categories",categoryService.findAll());
         model.addAttribute("cart",cartQuantity);
         return "store/homePage";
-    }
-
-    @GetMapping("/{categoryId}/products/{productId}")
-    public String showProductDetails(HttpSession session,@PathVariable Long productId, Model model) {
-        Product product = productService.findById(productId);
-        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
-
-        model.addAttribute("product",product);
-        model.addAttribute("cart",cartQuantity);
-        return "store/productDetails";
     }
 
     @GetMapping("/{categoryId}")
@@ -92,6 +85,15 @@ public class StoreController {
 
         }
     }
+    @GetMapping("/{categoryId}/products/{productId}")
+    public String showProductDetails(HttpSession session,@PathVariable Long productId, Model model) {
+        Product product = productService.findById(productId);
+        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
+
+        model.addAttribute("product",product);
+        model.addAttribute("cart",cartQuantity);
+        return "store/productDetails";
+    }
 
     @PostMapping("/{categoryId}/products/{productId}")
     public String addToCart(HttpSession session, @PathVariable Long productId, @PathVariable Long categoryId) {
@@ -107,9 +109,26 @@ public class StoreController {
                 .id(compositePrimaryKey).shoppingCart(savedCart)
                 .product(product).build();
 
+
+        ShoppingCart currentShoppingCart = cartLineItem.getShoppingCart();
+        List<ShoppingCartLineItem> currentCartListDetails = currentShoppingCart.getShoppingCartList();
+        Integer lineItemQuantity = 0;
+
+        for(ShoppingCartLineItem lineItemDetail : currentCartListDetails) {
+            if(lineItemDetail.equals(cartLineItem)) {
+                lineItemQuantity = lineItemDetail.getQuantity();
+            }
+        }
+        Integer newLineItemQuantity = ++lineItemQuantity;
+        double lineAmount = cartLineItem.getProduct().getProductPrice() * newLineItemQuantity;
+
+        cartLineItem.setQuantity(newLineItemQuantity);
+        cartLineItem.setLineAmount(lineAmount);
+
         shoppingCartLineItemService.save(cartLineItem);
 
-        return "redirect:/" + categoryId + "/products/" + productId;
+        return "redirect:/" + categoryId + "/products/" + productId ;
     }
+
 
 }
