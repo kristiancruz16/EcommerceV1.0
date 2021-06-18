@@ -7,27 +7,33 @@
 </head>
 <body>
 <div th:if="${cartLineItems.size()!=0}">
-    <div th:each="cartLineItem:${cartLineItems}" th:object="${cartLineItem.product}">
-            <div>
-            <img th:src="@{'/'+ *{category.id} + '/products/' + *{id} + '/image'}"
+    <div th:each="cartLineItem:${cartLineItems}">
+        <div>
+            <img th:src="@{'/'+ ${cartLineItem.product.category.id} + '/products/' + ${cartLineItem.product.id} + '/image'}"
                  width="200" height="200">
-            </div>
-            <div>
-            <label th:text="*{name}">Product Name</label>
-            </div>
-            <div>
-            <label th:text="*{productDescription}">Product Description</label>
-            </div>
-            <div>
-            <label th:text="*{productPrice}">Product Price</label>
-            </div>
-            <div>
+        </div>
+        <div>
+            <label th:text="${cartLineItem.product.id}">Product Name</label>
+        </div>
+        <div>
+            <label th:text="${cartLineItem.product.productDescription}">Product Description</label>
+        </div>
+        <div>
+            <label th:text="${cartLineItem.product.productPrice}">Product Price</label>
+        </div>
+        <div>
             <label th:text="${cartLineItem.quantity}">Quantity</label>
-            </div>
+            <form th:action="@{/shoppingcart/add}" method="post">
+                <input type="hidden" name="cartId" th:value="${cartLineItem.shoppingCart.id}">
+                <input type=""hidden name="productId" th:value="${cartLineItem.product.id}">
+                <input type="submit" value="+">
+            </form>
+        </div>
     </div>
 </div>
 <div th:unless="${cartLineItems.size()!=0}">
     <h3>Shopping Cart is Empty</h3>
 </div>
+</form>
 </body>
 </html>

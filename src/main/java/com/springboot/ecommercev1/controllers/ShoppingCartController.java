@@ -9,10 +9,7 @@ import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
 import com.springboot.ecommercev1.services.ShoppingCartService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -39,9 +36,26 @@ public class ShoppingCartController {
     @GetMapping
     public String showShoppingCart(HttpSession session, Model model) {
         ShoppingCart shoppingCart = Optional.ofNullable(shoppingCartService.findById(session.getId())).orElse(new ShoppingCart());
-        System.out.println(shoppingCart.getShoppingCartList().size());
         model.addAttribute("cartLineItems", shoppingCart.getShoppingCartList());
         return "store/shoppingCart";
+    }
+
+    @PostMapping
+    public String updateShoppingCart(ShoppingCartLineItem shoppingCart) {
+        System.out.println(shoppingCart.getId());
+        return "redirect:/shoppingcart";
+    }
+
+    @PostMapping("/add")
+    public String updateLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
+
+        ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
+                .shoppingCartId(cartId).productId(productId).build();
+
+        ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
+        cartLineItem.setQuantity(cartLineItem.getQuantity()+1);
+        shoppingCartLineItemService.save(cartLineItem);
+        return "redirect:/shoppingcart";
     }
 
 

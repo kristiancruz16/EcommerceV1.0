@@ -103,11 +103,15 @@ public class StoreController {
         ShoppingCart savedCart = shoppingCartService.save(cartToSave);
 
         ShoppingCartLineItemKey compositePrimaryKey = ShoppingCartLineItemKey.builder()
-                .productId(product.getId()).shoppingCartId(savedCart.getId()).build();
+                .productId(product.getId())
+                .shoppingCartId(savedCart.getId())
+                .build();
 
         ShoppingCartLineItem cartLineItem = ShoppingCartLineItem.builder()
-                .id(compositePrimaryKey).shoppingCart(savedCart)
-                .product(product).build();
+                .id(compositePrimaryKey)
+                .shoppingCart(savedCart)
+                .product(product)
+                .build();
 
 
         ShoppingCart currentShoppingCart = cartLineItem.getShoppingCart();
@@ -119,6 +123,7 @@ public class StoreController {
                 lineItemQuantity = lineItemDetail.getQuantity();
             }
         }
+
         Integer newLineItemQuantity = ++lineItemQuantity;
         double lineAmount = cartLineItem.getProduct().getProductPrice() * newLineItemQuantity;
 
