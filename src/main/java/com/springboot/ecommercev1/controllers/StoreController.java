@@ -112,25 +112,9 @@ public class StoreController {
                 .shoppingCart(savedCart)
                 .product(product)
                 .build();
+        ShoppingCartLineItem cartLineItemToSave = cartLineItem.addCartLineItem();
 
-
-        ShoppingCart currentShoppingCart = cartLineItem.getShoppingCart();
-        List<ShoppingCartLineItem> currentCartListDetails = currentShoppingCart.getShoppingCartList();
-        Integer lineItemQuantity = 0;
-
-        for(ShoppingCartLineItem lineItemDetail : currentCartListDetails) {
-            if(lineItemDetail.equals(cartLineItem)) {
-                lineItemQuantity = lineItemDetail.getQuantity();
-            }
-        }
-
-        Integer newLineItemQuantity = ++lineItemQuantity;
-        double lineAmount = cartLineItem.getProduct().getProductPrice() * newLineItemQuantity;
-
-        cartLineItem.setQuantity(newLineItemQuantity);
-        cartLineItem.setLineAmount(lineAmount);
-
-        shoppingCartLineItemService.save(cartLineItem);
+        shoppingCartLineItemService.save(cartLineItemToSave);
 
         return "redirect:/" + categoryId + "/products/" + productId ;
     }

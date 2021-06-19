@@ -3,6 +3,7 @@ package com.springboot.ecommercev1.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author KMCruz
@@ -54,5 +55,25 @@ public class ShoppingCartLineItem{
         return id.getShoppingCartId().equals(that.id.getShoppingCartId());
     }
 
+    public ShoppingCartLineItem addCartLineItem() {
+
+        ShoppingCart currentShoppingCart = this.getShoppingCart();
+        List<ShoppingCartLineItem> currentCartLineItems = currentShoppingCart.getShoppingCartList();
+        Integer lineItemQuantity = 0;
+
+        for(ShoppingCartLineItem lineItemDetail : currentCartLineItems) {
+            if(lineItemDetail.equals(this)) {
+                lineItemQuantity = lineItemDetail.getQuantity();
+            }
+        }
+
+        Integer newLineItemQuantity = ++lineItemQuantity;
+        double lineAmount = this.getProduct().getProductPrice() * newLineItemQuantity;
+
+        this.setQuantity(newLineItemQuantity);
+        this.setLineAmount(lineAmount);
+
+        return this;
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.springboot.ecommercev1.controllers;
 
-import com.springboot.ecommercev1.domain.Product;
+
 import com.springboot.ecommercev1.domain.ShoppingCart;
 import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
 import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,11 +39,6 @@ public class ShoppingCartController {
         return "store/shoppingCart";
     }
 
-    @PostMapping
-    public String updateShoppingCart(ShoppingCartLineItem shoppingCart) {
-        System.out.println(shoppingCart.getId());
-        return "redirect:/shoppingcart";
-    }
 
     @PostMapping("/add")
     public String addLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
@@ -77,5 +71,7 @@ public class ShoppingCartController {
         }
         return "redirect:/shoppingcart";
     }
+
+
 
 }
