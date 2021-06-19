@@ -27,7 +27,10 @@
                 <br/>
                 <label th:text="${product.productPrice}">Product Price</label>
                 <br/>
-
+                <form method="post">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+                    <input type="submit" value="Add to cart" />
+                </form>
             </td>
         </tr>
     </table>

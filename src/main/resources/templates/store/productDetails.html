@@ -18,6 +18,7 @@
         <label th:text="${product.productPrice}">Product Price</label>
         <br/>
         <br/>
+        <input type="hidden" name="productId" th:value="*{id}">
         <input type="submit" value="Add to cart" />
     </form>
     <a th:href="@{'/shoppingcart'}">

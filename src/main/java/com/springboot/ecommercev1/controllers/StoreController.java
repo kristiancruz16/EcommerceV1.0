@@ -11,11 +11,9 @@ import com.springboot.ecommercev1.services.ShoppingCartService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
@@ -46,7 +44,7 @@ public class StoreController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    @GetMapping({""})
+    @GetMapping("")
     public String displayHomePage (Model model, HttpSession session) {
         String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
         model.addAttribute("products",productService.findAll());
@@ -92,8 +90,9 @@ public class StoreController {
         return "store/productDetails";
     }
 
-    @PostMapping("/{categoryId}/products/{productId}")
-    public String addToCart(HttpSession session, @PathVariable Long productId, @PathVariable Long categoryId) {
+    @PostMapping({"","/{categoryId}","/{categoryId}/products/{productId}"})
+    public String addToCart(@RequestParam Long productId, HttpSession session, HttpServletRequest request) {
+        String url = request.getRequestURI();
         Product product = productService.findById(productId);
         ShoppingCart cartToSave = new ShoppingCart();
         cartToSave.setId(session.getId());
@@ -113,7 +112,7 @@ public class StoreController {
 
         shoppingCartLineItemService.save(cartLineItemToSave);
 
-        return "redirect:/" + categoryId + "/products/" + productId ;
+        return "redirect:" + url ;
     }
 
 
