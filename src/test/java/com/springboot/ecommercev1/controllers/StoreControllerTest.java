@@ -133,10 +133,13 @@ class StoreControllerTest {
     }
     @Test
     void addToCart () throws Exception {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        Product product = Product.builder().productPrice(3d).build();
+        ShoppingCartLineItem cartLineItem = new ShoppingCartLineItem();
 
-       when(productService.findById(anyLong())).thenReturn(new Product());
-       when(shoppingCartService.save(any())).thenReturn(new ShoppingCart());
-       when(shoppingCartLineItemService.save(any())).thenReturn(new ShoppingCartLineItem());
+       when(productService.findById(anyLong())).thenReturn(product);
+       when(shoppingCartService.save(any())).thenReturn(shoppingCart);
+       when(shoppingCartLineItemService.save(any())).thenReturn(cartLineItem);
 
        mockMvc.perform(post("/1/products/1"))
                .andExpect(status().is3xxRedirection())

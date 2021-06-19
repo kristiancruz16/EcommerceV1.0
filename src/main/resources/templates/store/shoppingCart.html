@@ -35,6 +35,9 @@
             </form>
         </div>
     </div>
+    <form th:action="@{/shoppingcart/deleteAll}" method="post">
+        <input type="submit" value="Delete All Items">
+    </form>
 </div>
 <div th:unless="${cartLineItems.size()!=0}">
     <h3>Shopping Cart is Empty</h3>

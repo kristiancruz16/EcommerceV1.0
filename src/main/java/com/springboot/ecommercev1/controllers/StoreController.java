@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 /**
  * @author KMCruz
@@ -36,7 +35,6 @@ public class StoreController {
     private final ProductService productService;
     private final ShoppingCartLineItemService shoppingCartLineItemService;
     private final ShoppingCartService shoppingCartService;
-    private final HttpSession session;
 
 
     public StoreController(CategoryService categoryService, ProductService productService,
@@ -46,7 +44,6 @@ public class StoreController {
         this.productService = productService;
         this.shoppingCartLineItemService = shoppingCartLineItemService;
         this.shoppingCartService = shoppingCartService;
-        this.session = session;
     }
 
     @GetMapping({""})

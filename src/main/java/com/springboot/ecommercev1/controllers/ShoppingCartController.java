@@ -45,10 +45,10 @@ public class ShoppingCartController {
 
         ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
                 .shoppingCartId(cartId).productId(productId).build();
-
         ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
-        cartLineItem.setQuantity(cartLineItem.getQuantity()+1);
-        shoppingCartLineItemService.save(cartLineItem);
+        ShoppingCartLineItem cartLineItemToSave = cartLineItem.addCartLineItem();
+        shoppingCartLineItemService.save(cartLineItemToSave);
+
         return "redirect:/shoppingcart";
     }
 
@@ -57,7 +57,6 @@ public class ShoppingCartController {
 
         ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
                 .shoppingCartId(cartId).productId(productId).build();
-
         ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
 
         Integer lineItemQuantity = cartLineItem.getQuantity() - 1;
@@ -72,6 +71,15 @@ public class ShoppingCartController {
         return "redirect:/shoppingcart";
     }
 
+    @PostMapping("deleteAll")
+    public String deleteAllLineItems (HttpSession session) {
+        ShoppingCart shoppingCart = shoppingCartService.findById(session.getId());
 
+        shoppingCart.getShoppingCartList().stream()
+                .forEach(shoppingCartLineItemService::delete);
+
+        return "redirect:/shoppingcart";
+
+    }
 
 }
