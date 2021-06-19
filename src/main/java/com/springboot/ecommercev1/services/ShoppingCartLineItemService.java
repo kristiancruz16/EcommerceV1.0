@@ -1,9 +1,7 @@
 package com.springboot.ecommercev1.services;
 
 import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
-import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
 
 /**
  * @author KMCruz

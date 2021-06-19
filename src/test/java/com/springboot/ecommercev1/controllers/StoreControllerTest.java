@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
@@ -141,9 +142,10 @@ class StoreControllerTest {
        when(shoppingCartService.save(any())).thenReturn(shoppingCart);
        when(shoppingCartLineItemService.save(any())).thenReturn(cartLineItem);
 
-       mockMvc.perform(post("/1/products/1"))
+        mockMvc.perform(post("/1/products/1")
+                    .param("productId","1"))
                .andExpect(status().is3xxRedirection())
-               .andExpect(view().name("redirect:/1/products/1"));
+               .andExpect(view().name("redirect:/1/products/1" ));
 
        verify(shoppingCartLineItemService).save(any());
 

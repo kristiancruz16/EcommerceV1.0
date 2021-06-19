@@ -22,19 +22,18 @@ import java.util.Optional;
 @RequestMapping("/shoppingcart")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
-    private final ProductService productService;
     private final ShoppingCartLineItemService shoppingCartLineItemService;
 
-    public ShoppingCartController(ShoppingCartService shoppingCartService, ProductService productService,
+    public ShoppingCartController(ShoppingCartService shoppingCartService,
                                   ShoppingCartLineItemService shoppingCartLineItemService) {
         this.shoppingCartService = shoppingCartService;
-        this.productService = productService;
         this.shoppingCartLineItemService = shoppingCartLineItemService;
     }
 
     @GetMapping
     public String showShoppingCart(HttpSession session, Model model) {
-        ShoppingCart shoppingCart = Optional.ofNullable(shoppingCartService.findById(session.getId())).orElse(new ShoppingCart());
+        ShoppingCart shoppingCart = Optional.ofNullable(shoppingCartService.findById(session.getId()))
+                                            .orElse(new ShoppingCart());
         model.addAttribute("cartLineItems", shoppingCart.getShoppingCartList());
         return "store/shoppingCart";
     }
@@ -48,38 +47,30 @@ public class ShoppingCartController {
         ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
         ShoppingCartLineItem cartLineItemToSave = cartLineItem.addCartLineItem();
         shoppingCartLineItemService.save(cartLineItemToSave);
-
         return "redirect:/shoppingcart";
     }
 
     @PostMapping("/delete")
     public String deleteLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
-
         ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
                 .shoppingCartId(cartId).productId(productId).build();
         ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
-
         Integer lineItemQuantity = cartLineItem.getQuantity() - 1;
         cartLineItem.setQuantity(lineItemQuantity);
 
-        if (lineItemQuantity==0) {
+        if (lineItemQuantity==0)
             shoppingCartLineItemService.delete(cartLineItem);
-        }
-        else {
+        else
             shoppingCartLineItemService.save(cartLineItem);
-        }
+        
         return "redirect:/shoppingcart";
     }
 
-    @PostMapping("deleteAll")
+    @PostMapping("/deleteAll")
     public String deleteAllLineItems (HttpSession session) {
         ShoppingCart shoppingCart = shoppingCartService.findById(session.getId());
-
         shoppingCart.getShoppingCartList().stream()
                 .forEach(shoppingCartLineItemService::delete);
-
         return "redirect:/shoppingcart";
-
     }
-
 }
