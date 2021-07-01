@@ -62,7 +62,7 @@ public class ShoppingCartController {
             shoppingCartLineItemService.delete(cartLineItem);
         else
             shoppingCartLineItemService.save(cartLineItem);
-        
+
         return "redirect:/shoppingcart";
     }
 
@@ -72,5 +72,13 @@ public class ShoppingCartController {
         shoppingCart.getShoppingCartList().stream()
                 .forEach(shoppingCartLineItemService::delete);
         return "redirect:/shoppingcart";
+    }
+
+    @GetMapping("/sample")
+    public String Sample(@RequestParam("id") String id){
+        System.out.println("HelloWorld");
+        if(id == "1" )
+            return "Hello";
+        return "World";
     }
 }

@@ -19,6 +19,9 @@
         <br/>
         <br/>
         <input type="hidden" name="productId" th:value="*{id}">
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
         <input type="submit" value="Add to cart" />
     </form>
     <a th:href="@{'/shoppingcart'}">
