@@ -1,6 +1,8 @@
 package com.springboot.security.controllers;
 
 import com.springboot.security.dto.UserDto;
+import com.springboot.security.models.User;
+import com.springboot.security.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,12 @@ public class RegistrationController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
+    private final UserService userService;
+
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping
     public ModelAndView showRegistrationForm(ModelMap model){
         UserDto userDto = new UserDto();
@@ -49,6 +57,12 @@ public class RegistrationController {
             listObjectError.stream().forEach(e->errorList.add(e.getDefaultMessage()));
             mav.addObject("message",errorList);
             return mav;
+        }
+        try{
+            User registeredUser = userService.registerNewUser(userDto);
+
+        }catch (Exception e){
+
         }
         return new ModelAndView("security/registration");
     }

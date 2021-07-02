@@ -77,10 +77,10 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-      <!--  <dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.passay</groupId>
             <artifactId>passay</artifactId>
