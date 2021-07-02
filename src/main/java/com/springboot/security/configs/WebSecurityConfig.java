@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 /**
  * @author KMCruz
  * 7/2/2021
@@ -33,7 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .anyRequest()
-                .permitAll();
+                .permitAll()
+                .and()
+                .formLogin()
+                    .loginPage("/login");
     }
 
     @Bean

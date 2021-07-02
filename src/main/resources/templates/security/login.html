@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <title th:utext="#{label.pages.home.title}">Title</title>
+        <script th:inline="javascript">
+            function validate() {
+                if (document.f.username.value == "" && document.f.password.value == "") {
+                    alert(/*[[#{message.username} + #{message.password}]]*/);
+                    document.f.username.focus();
+                    return false;
+                }
+                if (document.f.username.value == "") {
+                    alert(/*[[#{message.username}]]*/);
+                    document.f.username.focus();
+                    return false;
+                }
+                if (document.f.password.value == "") {
+                    alert(/*[[#{message.password}]]*/);
+                    document.f.password.focus();
+                    return false;
+                }
+            }
+
+        </script>
+        <style type="text/css">
+            .wrapper{width:500px;margin-left:auto;margin-right:auto}
+            label{padding-left:0 !important}
+
+        </style>
+</head>
+<body>
+<div th:if="${message!= null}" class="alert alert-info" th:text="${message}">message</div>
+
+<div th:if="${error!=null}" class="alert alert-danger" th:utext="${error}"
+     >error</div>
+
+<div class="container">
+    <div class="row wrapper">
+        <h1 th:utext="#{label.form.loginTitle}">Header</h1>
+        <a href="?lang=en" th:utext="#{label.form.loginEnglish}">login</a> |
+        <a href="?lang=es_ES" th:utext="#{label.form.loginSpanish}">login</a>
+        <br/><br/>
+
+        <form name='f' action="login" method='POST' onsubmit="return validate();">
+            <span id="welcometext">&nbsp;</span>
+            <input id="username" class="form-control input-lg" type='text' name='username' value='' th:placeholder="#{label.form.loginEmail}"/>
+            <br/>
+            <input class="form-control input-lg" type='password' name='password' th:placeholder="#{label.form.loginPass}"/>
+            <br/>
+            <input class="btn btn-primary  btn-lg  btn-block" name="submit" type="submit" th:value="#{label.form.login}" />
+            <br/>
+        </form>
+        <p style="text-align: center"><a th:href="@{/login}" th:text="#{message.forgetPassword}"> Forget Password?</a></p>
+        <hr width="80%">
+        <p style="text-align: center">
+        <a class="btn btn-success" name="signup"  th:text="#{label.form.loginSignUp}"
+           th:href="@{/login/registration}" style="width: 300px">Sign Up</a></p>
+    </div>
+
+</div>
+
+</body>
+</html>
