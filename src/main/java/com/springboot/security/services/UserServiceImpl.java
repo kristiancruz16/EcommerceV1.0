@@ -4,6 +4,7 @@ import com.springboot.security.dto.UserDto;
 import com.springboot.security.exceptions.UserAlreadyExistsException;
 import com.springboot.security.models.User;
 import com.springboot.security.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
+
+
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -29,10 +33,16 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPassword(userDto.getPassword());
+        user.setPassword(userDto.getPassword());
+        user.setRole("USER");
         return userRepository.save(user);
     }
 
     private boolean isEmailExists(String email) {
         return userRepository.findByEmail(email)!=null;
     }
+/*    @Bean
+    public PasswordEncoder encoder(){
+        return new BCryptPasswordEncoder(10);
+    }*/
 }

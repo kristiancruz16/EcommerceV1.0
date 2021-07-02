@@ -1,14 +1,18 @@
 package com.springboot.security.controllers;
 
 import com.springboot.security.dto.UserDto;
+import com.springboot.security.events.RegistrationEvent;
+import com.springboot.security.exceptions.UserAlreadyExistsException;
 import com.springboot.security.models.User;
+import com.springboot.security.models.VerificationToken;
+import com.springboot.security.repositories.VerificationTokenRepository;
 import com.springboot.security.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author KMCruz
@@ -32,9 +37,16 @@ public class RegistrationController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     private final UserService userService;
+    private final ApplicationEventPublisher publisher;
+    private final MessageSource messageSource;
+    private final VerificationTokenRepository vTokenRepository;
 
-    public RegistrationController(UserService userService) {
+
+    public RegistrationController(UserService userService, ApplicationEventPublisher publisher, MessageSource messageSource, VerificationTokenRepository vTokenRepository) {
         this.userService = userService;
+        this.publisher = publisher;
+        this.messageSource = messageSource;
+        this.vTokenRepository = vTokenRepository;
     }
 
     @GetMapping
@@ -48,9 +60,9 @@ public class RegistrationController {
     public ModelAndView processRegistrationForm(HttpServletRequest request, @Valid UserDto userDto,
                                                 Errors errors){
         LOGGER.info("Processing Registration");
-
+        Locale locale = request.getLocale();
         if(errors.hasErrors()) {
-            LOGGER.info("Forms has Errors");
+            LOGGER.warn("Error in submitted form");
             ModelAndView mav = new ModelAndView("security/registration");
             List<ObjectError> listObjectError = errors.getAllErrors();
             List<String> errorList = new ArrayList<>();
@@ -58,12 +70,21 @@ public class RegistrationController {
             mav.addObject("message",errorList);
             return mav;
         }
+        User registeredUser;
         try{
-            User registeredUser = userService.registerNewUser(userDto);
-
-        }catch (Exception e){
-
+            registeredUser = userService.registerNewUser(userDto);
+            String appUrl = request.getContextPath();
+            publisher.publishEvent(new RegistrationEvent(registeredUser,appUrl,locale));
+        }catch (UserAlreadyExistsException userExistsException){
+            LOGGER.warn("Email already exists");
+            ModelAndView mav = new ModelAndView("security/registration");
+            String error = messageSource.getMessage("message.regError",null,locale);
+            mav.addObject("message",error);
+            return mav;
+        }catch (RuntimeException ex) {
+            throw new RuntimeException("Runtime Exception");
         }
-        return new ModelAndView("security/registration");
+        VerificationToken vToken = vTokenRepository.findByUser(registeredUser);
+        return new ModelAndView("security/registration","token",vToken.getRegToken());
     }
 }
