@@ -9,4 +9,6 @@ import com.springboot.security.models.User;
  */
 public interface UserService {
     User registerNewUser(UserDto userDto);
+
+    User savedRegisteredUser(User user);
 }

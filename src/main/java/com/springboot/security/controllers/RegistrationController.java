@@ -18,11 +18,13 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,7 +86,36 @@ public class RegistrationController {
         }catch (RuntimeException ex) {
             throw new RuntimeException("Runtime Exception");
         }
-        VerificationToken vToken = vTokenRepository.findByUser(registeredUser);
-        return new ModelAndView("security/registration","token",vToken.getRegToken());
+        VerificationToken vToken = registeredUser.getVToken();
+        String registrationToken = vToken.getRegistrationToken();
+        return new ModelAndView("security/registration","token",registrationToken);
+    }
+
+    @GetMapping("/login/registerConfirm")
+    public ModelAndView processRegistrationConfirmation(HttpServletRequest request, ModelMap model, @RequestParam String token){
+        Locale locale = request.getLocale();
+        VerificationToken vToken = vTokenRepository.findVerificationTokenByRegistrationToken(token);
+        if (vToken==null){
+            String message = messageSource.getMessage("auth.message.invalidToken",null,locale);
+            model.addAttribute("error",message);
+            return new ModelAndView("redirect:/login",model);
+        }
+        User user = vToken.getUser();
+        Calendar cal = Calendar.getInstance();
+        Long tokenExpiry = vToken.getExpiryDate().getTime();
+        Long timeNow = cal.getTime().getTime();
+        Long timeRemainingToExpire = tokenExpiry - timeNow;
+        if(timeRemainingToExpire<=0){
+            String message = messageSource.getMessage("auth.message.expired",null,locale);
+            model.addAttribute("expired",true);
+            model.addAttribute("error",message);
+            return new ModelAndView("redirect:/login",model);
+        }
+        user.setEnabled(true);
+        userService.savedRegisteredUser(user);
+        vTokenRepository.delete(vToken);
+        String message = messageSource.getMessage("message.accountVerified",null,locale);
+        model.addAttribute("message",message);
+        return new ModelAndView("redirect:/login",model);
     }
 }

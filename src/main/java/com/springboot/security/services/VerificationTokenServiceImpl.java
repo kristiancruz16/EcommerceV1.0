@@ -32,9 +32,10 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public VerificationToken findByUser(User user) {
-        return verificationTokenRepository.findByUser(user);
+    public VerificationToken findVerificationTokenByRegistrationToken(String token) {
+        return verificationTokenRepository.findVerificationTokenByRegistrationToken(token);
     }
+
 
     private boolean hasVToken(VerificationToken vToken) {
         return vToken!=null;

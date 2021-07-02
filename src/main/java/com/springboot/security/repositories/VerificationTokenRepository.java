@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 7/2/2021
  */
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken,Long> {
-    VerificationToken findByUser(User user);
+    VerificationToken findVerificationTokenByRegistrationToken(String token);
 }

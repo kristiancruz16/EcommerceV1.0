@@ -21,7 +21,7 @@ public class VerificationToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    private String regToken;
+    private String registrationToken;
 
     private Date expiryDate;
 
@@ -29,8 +29,8 @@ public class VerificationToken {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 
-    public VerificationToken createOrUpdateVerificationToken(User user, String regToken) {
-        this.regToken = regToken;
+    public VerificationToken createOrUpdateVerificationToken(User user, String registrationToken) {
+        this.registrationToken = registrationToken;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
         return this;

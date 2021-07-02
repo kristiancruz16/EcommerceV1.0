@@ -10,5 +10,6 @@ import com.springboot.security.models.VerificationToken;
 public interface VerificationTokenService {
     void createVerificationToken(User user, String token);
 
-    VerificationToken findByUser(User user);
+    VerificationToken findVerificationTokenByRegistrationToken(String token);
+
 }
