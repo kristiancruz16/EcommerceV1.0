@@ -7,6 +7,8 @@ import com.springboot.security.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.springboot.security.models.Role.*;
+
 /**
  * @author KMCruz
  * 7/2/2021
@@ -15,11 +17,13 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -32,17 +36,12 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
-        user.setPassword(userDto.getPassword());
-        user.setPassword(userDto.getPassword());
-        user.setRole("USER");
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRole(USER);
         return userRepository.save(user);
     }
 
     private boolean isEmailExists(String email) {
         return userRepository.findByEmail(email)!=null;
     }
-/*    @Bean
-    public PasswordEncoder encoder(){
-        return new BCryptPasswordEncoder(10);
-    }*/
 }
