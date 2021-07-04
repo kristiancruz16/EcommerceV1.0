@@ -3,6 +3,7 @@ package com.springboot.security.services;
 import com.springboot.security.dto.UserDto;
 import com.springboot.security.exceptions.UserAlreadyExistsException;
 import com.springboot.security.models.User;
+import com.springboot.security.models.VerificationToken;
 import com.springboot.security.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User savedRegisteredUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public User findUserByVerificationToken(VerificationToken vToken) {
+        return userRepository.findUserByVerificationToken(vToken);
     }
 
     private boolean isEmailExists(String email) {

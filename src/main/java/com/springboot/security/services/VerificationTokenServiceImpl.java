@@ -21,8 +21,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Override
     public void createVerificationToken(User user, String regToken) {
         VerificationToken vToken = new VerificationToken();
-        if(hasVToken(user.getVToken())) {
-            vToken = user.getVToken();
+        if(hasVToken(user.getVerificationToken())) {
+            vToken = user.getVerificationToken();
             vToken = vToken.createOrUpdateVerificationToken(user, regToken);
         } else {
             vToken = vToken.createOrUpdateVerificationToken(user, regToken);
@@ -34,6 +34,11 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Override
     public VerificationToken findVerificationTokenByRegistrationToken(String token) {
         return verificationTokenRepository.findVerificationTokenByRegistrationToken(token);
+    }
+
+    @Override
+    public VerificationToken findVerificationTokenByUser(User user) {
+        return verificationTokenRepository.findVerificationTokenByUser(user);
     }
 
 

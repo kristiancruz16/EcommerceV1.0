@@ -33,7 +33,7 @@ import java.util.Locale;
  * 7/1/2021
  */
 @Controller
-@RequestMapping("/login/registration")
+@RequestMapping("/login")
 public class RegistrationController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
@@ -51,26 +51,25 @@ public class RegistrationController {
         this.vTokenRepository = vTokenRepository;
     }
 
-    @GetMapping
+    @GetMapping("/registration")
     public ModelAndView showRegistrationForm(ModelMap model){
         UserDto userDto = new UserDto();
         model.addAttribute("user",userDto);
         return new ModelAndView("security/registration",model);
     }
 
-    @PostMapping
-    public ModelAndView processRegistrationForm(HttpServletRequest request, @Valid UserDto userDto,
+    @PostMapping("/registration")
+    public ModelAndView processRegistrationForm(HttpServletRequest request, ModelMap model, @Valid UserDto userDto,
                                                 Errors errors){
         LOGGER.info("Processing Registration");
         Locale locale = request.getLocale();
         if(errors.hasErrors()) {
             LOGGER.warn("Error in submitted form");
-            ModelAndView mav = new ModelAndView("security/registration");
             List<ObjectError> listObjectError = errors.getAllErrors();
             List<String> errorList = new ArrayList<>();
             listObjectError.stream().forEach(e->errorList.add(e.getDefaultMessage()));
-            mav.addObject("message",errorList);
-            return mav;
+            model.addAttribute("message",errorList);
+            return new ModelAndView("security/registration",model);
         }
         User registeredUser;
         try{
@@ -79,20 +78,23 @@ public class RegistrationController {
             publisher.publishEvent(new RegistrationEvent(registeredUser,appUrl,locale));
         }catch (UserAlreadyExistsException userExistsException){
             LOGGER.warn("Email already exists");
-            ModelAndView mav = new ModelAndView("security/registration");
             String error = messageSource.getMessage("message.regError",null,locale);
-            mav.addObject("message",error);
-            return mav;
+            model.addAttribute("message",error);
+            return new ModelAndView("security/registration",model);
         }catch (RuntimeException ex) {
             throw new RuntimeException("Runtime Exception");
         }
-        VerificationToken vToken = registeredUser.getVToken();
+        VerificationToken vToken = vTokenRepository.findVerificationTokenByUser(registeredUser);
         String registrationToken = vToken.getRegistrationToken();
-        return new ModelAndView("security/registration","token",registrationToken);
+        String message = messageSource.getMessage("message.registrationSuccess",null,locale);
+        model.addAttribute("message",message);
+        model.addAttribute("token",registrationToken);
+        return new ModelAndView("redirect:/login",model);
     }
 
-    @GetMapping("/login/registerConfirm")
+    @GetMapping("/registerConfirm")
     public ModelAndView processRegistrationConfirmation(HttpServletRequest request, ModelMap model, @RequestParam String token){
+        LOGGER.info("Processing Registration Confirmation");
         Locale locale = request.getLocale();
         VerificationToken vToken = vTokenRepository.findVerificationTokenByRegistrationToken(token);
         if (vToken==null){
@@ -108,6 +110,7 @@ public class RegistrationController {
         if(timeRemainingToExpire<=0){
             String message = messageSource.getMessage("auth.message.expired",null,locale);
             model.addAttribute("expired",true);
+            model.addAttribute("token",token);
             model.addAttribute("error",message);
             return new ModelAndView("redirect:/login",model);
         }

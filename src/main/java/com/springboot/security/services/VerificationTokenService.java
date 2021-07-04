@@ -12,4 +12,6 @@ public interface VerificationTokenService {
 
     VerificationToken findVerificationTokenByRegistrationToken(String token);
 
+    VerificationToken findVerificationTokenByUser (User user);
+
 }

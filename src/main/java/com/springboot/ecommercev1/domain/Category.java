@@ -22,8 +22,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table
 @Entity
-@Table(name = "category")
 public class Category extends BaseEntity{
 
     @Builder

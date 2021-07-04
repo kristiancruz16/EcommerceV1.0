@@ -38,7 +38,7 @@ public class RegistrationListener {
         String recipientEmailAddress = user.getEmail();
         String subject = "Registration Confirmation";
         String confirmationLink = event.getAppUrl() +
-                "/login/registrationConfirm?token=" +token;
+                "/login/registerConfirm?token=" +token;
         String message =messageSource.getMessage("message.registrationSuccessLink",null,event.getLocale());
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();

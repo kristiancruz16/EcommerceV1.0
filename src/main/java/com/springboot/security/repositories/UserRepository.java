@@ -1,6 +1,7 @@
 package com.springboot.security.repositories;
 
 import com.springboot.security.models.User;
+import com.springboot.security.models.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface UserRepository extends JpaRepository<User,Long> {
     User findByEmail (String email);
+
+    User findUserByVerificationToken(VerificationToken vToken);
 }

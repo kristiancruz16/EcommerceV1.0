@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "shopping_cart")
+@Table
 public class ShoppingCart{
 
     @Builder

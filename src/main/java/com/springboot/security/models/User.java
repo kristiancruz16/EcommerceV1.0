@@ -24,7 +24,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     private String firstName;
     private String lastName;
@@ -38,6 +38,6 @@ public class User {
     private boolean enabled;
 
     @OneToOne(mappedBy = "user")
-    private VerificationToken vToken;
+    private VerificationToken verificationToken;
 
 }
