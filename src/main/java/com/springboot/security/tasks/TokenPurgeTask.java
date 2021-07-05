@@ -41,7 +41,6 @@ public class TokenPurgeTask {
         tokenList.stream().forEach(
                 token->{
                     User user = token.getUser();
-                    verificationTokenRepository.delete(token);
                     userRepository.delete(user);
                 });
 

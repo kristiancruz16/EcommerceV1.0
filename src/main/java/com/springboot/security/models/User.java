@@ -37,7 +37,13 @@ public class User {
 
     private boolean enabled;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private VerificationToken verificationToken;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private PasswordResetToken passwordResetToken;
+
+    public boolean hasPasswordResetToken(){
+        return this.getPasswordResetToken()!=null;
+    }
 }

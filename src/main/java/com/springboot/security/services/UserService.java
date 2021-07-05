@@ -13,5 +13,7 @@ public interface UserService {
 
     User savedRegisteredUser(User user);
 
-    User findUserByVerificationToken(VerificationToken vToken);
+    User findUserByEmail(String email);
+
+
 }

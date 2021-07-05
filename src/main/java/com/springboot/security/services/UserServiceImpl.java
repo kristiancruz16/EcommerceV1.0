@@ -5,6 +5,7 @@ import com.springboot.security.exceptions.UserAlreadyExistsException;
 import com.springboot.security.models.User;
 import com.springboot.security.models.VerificationToken;
 import com.springboot.security.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,9 +48,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+
     @Override
-    public User findUserByVerificationToken(VerificationToken vToken) {
-        return userRepository.findUserByVerificationToken(vToken);
+    public User findUserByEmail(String email) {
+        if (!isEmailExists(email)){
+            throw new UsernameNotFoundException("Username does not exists");
+        }
+        return userRepository.findByEmail(email);
     }
 
     private boolean isEmailExists(String email) {

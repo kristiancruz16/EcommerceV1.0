@@ -1,6 +1,8 @@
 package com.springboot.security.validators;
 
+import com.springboot.security.dto.PasswordDto;
 import com.springboot.security.dto.UserDto;
+import com.springboot.security.models.User;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -17,8 +19,14 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
-        UserDto userDto = (UserDto) obj;
-        boolean isEquals = userDto.getPassword().equals(userDto.getMatchingPassword());
+        boolean isEquals = false;
+        if(obj instanceof UserDto) {
+            UserDto userDto = (UserDto) obj;
+            isEquals = userDto.getPassword().equals(userDto.getMatchingPassword());
+        }else if(obj instanceof PasswordDto){
+            PasswordDto passwordDto = (PasswordDto) obj;
+            isEquals = passwordDto.getPassword().equals(passwordDto.getMatchingPassword());
+        }
         return isEquals;
     }
 

@@ -14,4 +14,6 @@ public interface VerificationTokenService {
 
     VerificationToken findVerificationTokenByUser (User user);
 
+    void deleteVerificationToken(VerificationToken vToken);
+
 }

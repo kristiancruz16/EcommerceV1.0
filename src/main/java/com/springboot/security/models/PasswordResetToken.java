@@ -1,9 +1,6 @@
 package com.springboot.security.models;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -12,20 +9,18 @@ import java.util.Date;
 
 /**
  * @author KMCruz
- * 7/2/2021
+ * 7/4/2021
  */
 @Data
-@NoArgsConstructor
 @Entity
-public class VerificationToken {
+public class PasswordResetToken {
 
-    private static final int EXPIRATION = 15;
-
+    private final static int EXPIRATION = 15;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String registrationToken;
+    private String resetToken;
 
     private Date expiryDate;
 
@@ -33,10 +28,10 @@ public class VerificationToken {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 
-    public VerificationToken createOrUpdateVerificationToken(User user, String registrationToken) {
-        this.registrationToken = registrationToken;
-        this.user = user;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+    public PasswordResetToken createPasswordResetToken(User user, String resetToken){
+        this.user=user;
+        this.resetToken=resetToken;
+        this.expiryDate=calculateExpiryDate(EXPIRATION);
         return this;
     }
 
