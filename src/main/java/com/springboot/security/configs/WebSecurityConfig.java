@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 
 /**
@@ -19,9 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final SimpleUrlAuthenticationFailureHandler simpleUrlAuthenticationFailureHandler;
 
-    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService) {
+    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, SimpleUrlAuthenticationFailureHandler simpleUrlAuthenticationFailureHandler) {
         this.customUserDetailsService = customUserDetailsService;
+        this.simpleUrlAuthenticationFailureHandler = simpleUrlAuthenticationFailureHandler;
     }
 
     @Override
@@ -37,7 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .formLogin()
-                    .loginPage("/login");
+                    .loginPage("/login")
+                .failureHandler(simpleUrlAuthenticationFailureHandler);
     }
 
     @Bean
