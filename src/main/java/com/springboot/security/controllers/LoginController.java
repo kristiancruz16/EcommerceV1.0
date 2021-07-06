@@ -6,6 +6,7 @@ import com.springboot.security.events.RegistrationEvent;
 import com.springboot.security.models.PasswordResetToken;
 import com.springboot.security.models.User;
 import com.springboot.security.models.VerificationToken;
+import com.springboot.security.services.LoginAttemptService;
 import com.springboot.security.services.PasswordResetTokenService;
 import com.springboot.security.services.UserService;
 import com.springboot.security.services.VerificationTokenService;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -42,16 +44,18 @@ public class LoginController {
     private final UserService userService;
     private final PasswordResetTokenService passwordResetTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final LoginAttemptService loginAttemptService;
 
     public LoginController(MessageSource messageSource, VerificationTokenService verificationTokenService,
                            ApplicationEventPublisher eventPublisher, UserService userService,
-                           PasswordResetTokenService passwordResetTokenService, PasswordEncoder passwordEncoder) {
+                           PasswordResetTokenService passwordResetTokenService, PasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService) {
         this.messageSource = messageSource;
         this.verificationTokenService = verificationTokenService;
         this.eventPublisher = eventPublisher;
         this.userService = userService;
         this.passwordResetTokenService = passwordResetTokenService;
         this.passwordEncoder = passwordEncoder;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @GetMapping
@@ -151,9 +155,19 @@ public class LoginController {
         user.setPasswordResetToken(null);
         userService.savedRegisteredUser(user);
         passwordResetTokenService.deletePasswordResetToken(passwordResetToken);
+        loginAttemptService.loginOrResetPasswordSuccess(getClientIp(request));
         String message = messageSource.getMessage("message.resetPasswordSuc",null,request.getLocale());
         model.addAttribute("message",message);
         return new ModelAndView("redirect:/login",model);
+    }
+
+    public String getClientIp(HttpServletRequest request){
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if(xfHeader==null){
+            return request.getRemoteAddr();
+        }else{
+            return xfHeader.split(",")[0];
+        }
     }
 
 }

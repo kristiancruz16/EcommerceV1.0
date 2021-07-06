@@ -37,10 +37,11 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
         if(exception.getMessage().equalsIgnoreCase("User is disabled")){
             error = messageSource.getMessage("error.userDisabled",null,locale);
         }
-
+        if(exception.getMessage().equals("User account is blocked")){
+            error = messageSource.getMessage("error.userBlocked",null,locale);
+        }
         setDefaultFailureUrl("/login?error="+error);
         super.onAuthenticationFailure(request, response, exception);
-
 
     }
 }
