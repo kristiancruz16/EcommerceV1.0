@@ -1,6 +1,7 @@
 package com.springboot.ecommercev1.domain;
 
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -35,9 +36,11 @@ public class Product extends BaseEntity{
         this.shoppingCartLineItems = shoppingCartLineItems;
     }
 
+
     @NotBlank(message = "required")
     private String name;
 
+    @Column(unique = true)
     @NotNull(message = "required")
     @Min(value = 1)
     private Long sku;

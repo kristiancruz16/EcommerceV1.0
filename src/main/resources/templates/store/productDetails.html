@@ -6,7 +6,7 @@
     <link rel="icon" th:href="@{/resources/images/favicon.ico}">
 </head>
 <body th:object="${product}">
-    <h2 th:text="*{category.categoryCode + ' ' +category.name}">CategoryCode CategoryName</h2>
+    <h2 th:text="*{category.name}">CategoryName</h2>
     <form method="post">
         <img th:src="@{'/'+ *{category.id} + '/products/' + *{id} + '/image'}"
             width="200" height="200">

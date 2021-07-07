@@ -6,7 +6,7 @@
     <link rel="icon" th:href="@{/resources/images/favicon.ico}">
 </head>
 <body th:object="${category}">
-    <h2 th:text="*{categoryCode+ ' ' +name}">Code Name</h2>
+    <h2 th:text="*{name}">Code Name</h2>
         <table>
             <tr>
                 <td th:each="product:${category.products}">
@@ -21,7 +21,7 @@
                     <br/>
                     <label th:text="${product.productPrice}">Product Price</label>
                     <br/>
-                    <form th:action=""method="post">
+                    <form method="post">
                         <input type="hidden" name="productId" th:value="${product.id}">
                         <input type="submit" value="Add to cart" />
                         <input type="hidden"

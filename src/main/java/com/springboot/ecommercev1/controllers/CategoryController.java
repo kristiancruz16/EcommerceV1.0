@@ -2,13 +2,12 @@ package com.springboot.ecommercev1.controllers;
 
 import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.services.CategoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -17,9 +16,9 @@ import javax.validation.Valid;
  * 6/7/2021
  */
 @Controller
-@RequestMapping("/categories")
+@RequestMapping("/admin/categories")
 public class CategoryController {
-
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final CategoryService categoryService;
     private static final String CREATE_OR_UPDATE_CATEGORY_FORM_VIEW = "categories/createOrUpdateCategoryForm";
 
@@ -33,9 +32,9 @@ public class CategoryController {
         return "categories/allCategories";
     }
 
-    @GetMapping("/{categoryId}")
-    public String showCategoryDetails (@PathVariable Long categoryId, Model model) {
-        model.addAttribute("category",categoryService.findById(categoryId));
+    @GetMapping("/")
+    public String showCategoryDetails (@RequestParam String categoryName, Model model) {
+        model.addAttribute("category",categoryService.findCategoryByName(categoryName));
         return "categories/categoryDetails";
     }
 
@@ -48,41 +47,35 @@ public class CategoryController {
     @PostMapping("/new")
     public String processNewCategoryForm(@Valid Category category, BindingResult result) {
 
-        if(categoryService.existsByCategoryCodeIgnoreCase(category.getCategoryCode())){
-            result.rejectValue("categoryCode","duplicate","already exists");
-        } if (categoryService.existsByNameIgnoreCase(category.getName())) {
+
+        if (categoryService.existsByNameIgnoreCase(category.getName())) {
             result.rejectValue("name","duplicate","already exists");
         }
 
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
-        } else {
-            Category savedCategory = categoryService.save(category);
-            return "redirect:/categories/" + savedCategory.getId();
         }
+        Category savedCategory = categoryService.save(category);
+        return "redirect:/admin/categories/?categoryName=" + savedCategory.getName();
     }
 
-    @GetMapping("/{categoryId}/edit")
-    public String initializeUpdateCategoryForm (@PathVariable Long categoryId, Model model) {
-        model.addAttribute("category",categoryService.findById(categoryId));
+    @GetMapping("/edit")
+    public String initializeUpdateCategoryForm (@RequestParam String categoryName, Model model) {
+        model.addAttribute("category",categoryService.findCategoryByName(categoryName));
         return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
     }
 
-    @PostMapping("/{categoryId}/edit")
-    public String processUpdateCategoryForm(@PathVariable Long categoryId, @Valid Category category, BindingResult result) {
-        if(categoryService.existsByCategoryCodeIgnoreCase(category.getCategoryCode())){
-            result.rejectValue("categoryCode","duplicate","already exists");
-        }
+    @PostMapping("/edit")
+    public String processUpdateCategoryForm(@Valid Category category, BindingResult result) {
         if (categoryService.existsByNameIgnoreCase(category.getName())) {
             result.rejectValue("name","duplicate","already exists");
         }
         if (result.hasErrors()) {
             return CREATE_OR_UPDATE_CATEGORY_FORM_VIEW;
-        } else {
-            category.setId(categoryId);
-            Category savedCategory = categoryService.save(category);
-            return "redirect:/categories/"+savedCategory.getId();
         }
+        Category savedCategory = categoryService.save(category);
+        return "redirect:/admin/categories/?categoryName="+savedCategory.getName();
+
     }
 
 }

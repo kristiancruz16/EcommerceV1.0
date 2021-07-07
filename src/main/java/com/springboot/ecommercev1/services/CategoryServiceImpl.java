@@ -21,11 +21,6 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    @Override
-    public Category findByCategoryCode(String categoryCode) {
-
-        return categoryRepository.findByCategoryCode(categoryCode);
-    }
 
     @Override
     public List<Category> findAllByNameLikeIgnoreCase(String name) {
@@ -34,13 +29,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean existsByCategoryCodeIgnoreCase(String categoryCode) {
-        return categoryRepository.existsByCategoryCodeIgnoreCase(categoryCode);
+    public boolean existsByNameIgnoreCase(String name) {
+        return categoryRepository.existsByNameIgnoreCase(name);
     }
 
     @Override
-    public boolean existsByNameIgnoreCase(String name) {
-        return categoryRepository.existsByNameIgnoreCase(name);
+    public Category findCategoryByName(String name) {
+        return  categoryRepository.findCategoryByName(name);
     }
 
     @Override
@@ -57,7 +52,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category save(Category category) {
-        category.setCategoryCode(category.getCategoryCode().toUpperCase());
         return categoryRepository.save(category);
     }
 

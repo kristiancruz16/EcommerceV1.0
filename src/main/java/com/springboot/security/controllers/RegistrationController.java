@@ -118,7 +118,7 @@ public class RegistrationController {
             return new ModelAndView("redirect:/login",model);
         }
         user.setEnabled(true);
-        user.setVerificationToken(null);
+        user.deleteVerificationToken();
         userService.savedRegisteredUser(user);
         verificationTokenService.deleteVerificationToken(vToken);
         String message = messageSource.getMessage("message.accountVerified",null,locale);

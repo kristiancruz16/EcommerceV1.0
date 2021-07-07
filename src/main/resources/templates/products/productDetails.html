@@ -7,7 +7,7 @@
 </head>
 <body th:object="${product}">
 <h2>Product Details</h2>
-<h3 th:text="*{category.categoryCode + ' ' + category.name}">Category Details</h3>
+<h3 th:text="*{category.name}">Category Details</h3>
 
 <table class="table table-striped">
     <tr>
@@ -44,7 +44,7 @@
 </table>
 <br/>
 <br/>
-<a th:href="@{/categories/{categoryId}/products/{productId}/edit(categoryId=*{category.id},productId=*{id})}">
+<a th:href="@{'/admin/categories/products/edit?productName='+*{name}}">
     <input type="submit" value="Edit Product" />
 </a>
 

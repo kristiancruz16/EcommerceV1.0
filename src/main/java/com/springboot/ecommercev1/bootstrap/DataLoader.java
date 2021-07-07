@@ -33,7 +33,6 @@ public class DataLoader implements CommandLineRunner {
         public void run(String... args) throws Exception {
 
             Category mensBasketballShoes = new Category();
-            mensBasketballShoes.setCategoryCode("MBS");
             mensBasketballShoes.setName("Men's Basketball Shoes");
             Category savedMensBasketballShoes = categoryService.save(mensBasketballShoes);
 
@@ -58,7 +57,6 @@ public class DataLoader implements CommandLineRunner {
 
 
             Category mensRunningShoes = new Category();
-            mensRunningShoes.setCategoryCode("MRS");
             mensRunningShoes.setName("Men's Running Shoes");
             Category savedMensRunningShoes = categoryService.save(mensRunningShoes);
 
@@ -81,7 +79,6 @@ public class DataLoader implements CommandLineRunner {
             productService.save(underArmourRunning);
 
             Category ladiesRunningShoes = new Category();
-            ladiesRunningShoes.setCategoryCode("LRS");
             ladiesRunningShoes.setName("Ladies' Running Shoes");
             Category savedLadiesRunningShoes = categoryService.save(ladiesRunningShoes);
 

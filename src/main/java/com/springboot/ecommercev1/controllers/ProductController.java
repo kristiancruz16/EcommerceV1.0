@@ -4,13 +4,12 @@ import com.springboot.ecommercev1.domain.Category;
 import com.springboot.ecommercev1.domain.Product;
 import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,9 +19,10 @@ import javax.validation.Valid;
  * 6/5/2021
  */
 @Controller
-@RequestMapping("/categories")
+@RequestMapping("/admin/categories")
 public class ProductController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final ProductService productService;
     private final CategoryService categoryService;
     private static final String CREATE_OR_UPDATE_PRODUCT_FORM_VIEW = "products/createOrUpdateProductForm";
@@ -38,15 +38,15 @@ public class ProductController {
         return "products/allProducts";
     }
 
-    @GetMapping("/{categoryId}/products/{productId}")
-    public String showProductDetails(@PathVariable Long productId, Model model){
-        model.addAttribute("product",productService.findById(productId));
+    @GetMapping("/products")
+    public String showProductDetails(@RequestParam String productName, Model model){
+        model.addAttribute("product",productService.findProductByName(productName));
         return "products/productDetails";
     }
 
-    @GetMapping("/{categoryId}/products/new")
-    public String initializeNewProductForm (@PathVariable Long categoryId, Model model) {
-        Category category = categoryService.findById(categoryId);
+    @GetMapping("/products/new")
+    public String initializeNewProductForm (@RequestParam String categoryName, Model model) {
+        Category category = categoryService.findCategoryByName(categoryName);
         Product product = new Product();
         category.getProducts().add(product);
         product.setCategory(category);
@@ -54,44 +54,50 @@ public class ProductController {
         return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
     }
 
-    @PostMapping("/{categoryId}/products/new")
-    public String processNewProductForm(@PathVariable Long categoryId, @Valid Product product, BindingResult result) {
-        if(productService.existsProductBySku(product.getSku())) {
+    @PostMapping("/products/new")
+    public String processNewProductForm(@RequestParam String categoryName,
+                                        @Valid Product product, BindingResult result) {
+        if(productService.existsProductBySku(product)) {
             result.rejectValue("sku", "duplicate", "already exists");
         }
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
         }
-        Category currentCategory = categoryService.findById(categoryId);
+        LOGGER.info(categoryName);
+        Category currentCategory = categoryService.findCategoryByName(categoryName);
         product.setCategory(currentCategory);
         currentCategory.getProducts().add(product);
         productService.save(product);
-        return "redirect:/categories/" +currentCategory.getId();
+        return "redirect:/admin/categories/?categoryName="+currentCategory.getName();
     }
 
-    @GetMapping("/{categoryId}/products/{productId}/edit")
-    public String initializeUpdateProductForm(@PathVariable Long productId, Model model) {
-        model.addAttribute("product",productService.findById(productId));
+    @GetMapping("/products/edit")
+    public String initializeUpdateProductForm(@RequestParam String productName, Model model) {
+        model.addAttribute("product",productService.findProductByName(productName));
         return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
     }
 
-    @PostMapping("/{categoryId}/products/{productId}/edit")
-    public String processUpdateProductFrom (@PathVariable Long productId, @PathVariable Long categoryId, @Valid Product product, BindingResult result) {
-        if(productService.existsProductBySku(product.getSku())) {
-            result.rejectValue("sku", "duplicate", "already exists");
+    @PostMapping("/products/edit")
+    public String processUpdateProductFrom (@Valid Product product, BindingResult result) {
+        Product productToSave = productService.findById(product.getId());
+        if(productService.existsProductBySku(product)) {
+            if(productToSave.getSku()!=product.getSku()) {
+                result.rejectValue("sku", "duplicate", "already exists");
+            }
         }
 
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
-        }else {
-            Category category = categoryService.findById(categoryId);
-            product.setId(productId);
-            product.setCategory(category);
-            Product savedProduct = productService.save(product);
-            String redirectURL = "redirect:/categories/" +category.getId()+ "/products/" +savedProduct.getId();
-            return redirectURL;
         }
+        productToSave.setSku(product.getSku());
+        productToSave.setName(product.getName());
+        productToSave.setProductDescription(product.getProductDescription());
+        productToSave.setProductPrice(product.getProductPrice());
+        Product savedProduct = productService.save(productToSave);
+        return "redirect:/admin/categories/products?productName="+savedProduct.getName();
+
 
     }
+
 
 }

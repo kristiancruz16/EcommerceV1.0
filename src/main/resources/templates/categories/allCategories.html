@@ -11,26 +11,24 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th style="width: 150px;">Category Code</th>
                 <th style="width: 200px;">Category Name</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="category:${categories}">
                 <td>
-                    <a th:href="@{/categories/__${category.id}__}" th:text="${category.categoryCode}"></a>
+                    <a th:href="@{'/admin/categories/?categoryName='+${category.name}}" th:text="${category.name}"></a>
                 </td>
-                <td th:text="${category.name}"/>
             </tr>
         </tbody>
     </table>
 
     <br/>
     <br/>
-    <a th:href="@{/categories/new}">
+    <a th:href="@{/admin/categories/new}">
     <input type="button" value="New Category" />
     </a>
-    <a th:href="@{/categories/products/showall}">
+    <a th:href="@{/admin/categories/products/showall}">
         <input type="button" value="View All Products" />
     </a>
 

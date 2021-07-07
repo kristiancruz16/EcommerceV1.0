@@ -46,4 +46,12 @@ public class User {
     public boolean hasPasswordResetToken(){
         return this.getPasswordResetToken()!=null;
     }
+
+    public void deletePasswordResetToken(){
+        this.passwordResetToken = null;
+    }
+
+    public void deleteVerificationToken(){
+        this.verificationToken=null;
+    }
 }

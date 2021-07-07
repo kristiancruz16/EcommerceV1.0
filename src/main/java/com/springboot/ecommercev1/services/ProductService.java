@@ -13,7 +13,9 @@ public interface ProductService extends CrudService<Product,Long>{
 
     List<Product> findAllBySkuLike(Long sku);
 
-    boolean existsProductBySku(Long sku);
+    boolean existsProductBySku(Product product);
 
     List <Product> findAllByNameLikeIgnoreCase(String name);
+
+    Product findProductByName(String name);
 }

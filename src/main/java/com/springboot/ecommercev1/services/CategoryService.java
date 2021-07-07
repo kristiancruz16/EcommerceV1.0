@@ -10,11 +10,10 @@ import java.util.Set;
  * 6/5/2021
  */
 public interface CategoryService extends CrudService<Category,Long>{
-    Category findByCategoryCode(String categoryCode);
 
     List<Category> findAllByNameLikeIgnoreCase(String name);
 
-    boolean existsByCategoryCodeIgnoreCase(String categoryCode);
-
     boolean existsByNameIgnoreCase(String name);
+
+    Category findCategoryByName(String name);
 }

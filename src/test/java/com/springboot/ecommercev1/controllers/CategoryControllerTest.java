@@ -59,8 +59,6 @@ class CategoryControllerTest {
 
         Map<String,List<String>>  paramsMap = new HashMap<>();
         paramsMap.put("name",List.of("Alpha Beta Charlie"));
-        paramsMap.put("categoryCode",List.of("ABC"));
-
         paramsMultiValueMap = new MultiValueMapAdapter<>(paramsMap);
     }
 
@@ -68,7 +66,7 @@ class CategoryControllerTest {
     void showAllCategory() throws Exception {
         when(categoryService.findAll()).thenReturn(categoryList);
 
-        mockMvc.perform(get("/categories"))
+        mockMvc.perform(get("/admin/categories"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories/allCategories"))
                 .andExpect(model().attribute("categories",hasSize(2)));
@@ -77,17 +75,17 @@ class CategoryControllerTest {
 
     @Test
     void showCategoryDetails() throws Exception {
-        when(categoryService.findById(anyLong())).thenReturn(Category.builder().id(1L).build());
+        when(categoryService.findCategoryByName(anyString())).thenReturn(categoryList.get(0));
 
-        mockMvc.perform(get("/categories/145"))
+        mockMvc.perform(get("/admin/categories/").param("categoryName","Alpha"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories/categoryDetails"))
-                .andExpect(model().attribute("category",hasProperty("id",is(1L))));
+                .andExpect(model().attributeExists("category"));
     }
 
     @Test
     void initializeNewCategoryForm() throws Exception {
-        mockMvc.perform(get("/categories/new"))
+        mockMvc.perform(get("/admin/categories/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories/createOrUpdateCategoryForm"))
                 .andExpect(model().attributeExists("category"));
@@ -96,19 +94,19 @@ class CategoryControllerTest {
 
     @Test
     void processNewCategoryForm() throws Exception {
-        when(categoryService.save(any())).thenReturn(Category.builder().id(1L).build());
+        when(categoryService.save(any())).thenReturn(Category.builder().id(1L).name("Alpha").build());
 
-        mockMvc.perform(post("/categories/new").params(paramsMultiValueMap))
+        mockMvc.perform(post("/admin/categories/new").params(paramsMultiValueMap))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/categories/1"))
+                .andExpect(view().name("redirect:/admin/categories/?categoryName=Alpha"))
                 .andExpect(model().attributeExists("category"));
     }
 
     @Test
     void initializeUpdateCategoryForm () throws Exception {
-        when(categoryService.findById(anyLong())).thenReturn(Category.builder().id(1L).build());
+        when(categoryService.findCategoryByName(anyString())).thenReturn(Category.builder().id(1L).name("Alpha").build());
 
-        mockMvc.perform(get("/categories/145/edit"))
+        mockMvc.perform(get("/admin/categories/edit").param("categoryName","Alpha"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories/createOrUpdateCategoryForm"))
                 .andExpect(model().attributeExists("category"));
@@ -116,11 +114,11 @@ class CategoryControllerTest {
 
     @Test
     void processUpdateCategoryForm() throws Exception {
-        when(categoryService.save(any())).thenReturn(Category.builder().id(1L).name("Alpha Beta").categoryCode("ABC").build());
+        when(categoryService.save(any())).thenReturn(Category.builder().id(1L).name("Alpha Beta").build());
 
-        mockMvc.perform(post("/categories/1/edit").params(paramsMultiValueMap))
+        mockMvc.perform(post("/admin/categories/edit").params(paramsMultiValueMap))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/categories/1"))
+                .andExpect(view().name("redirect:/admin/categories/?categoryName=Alpha Beta"))
                 .andExpect(model().attributeExists("category"));
 
         verify(categoryService).save(any());
@@ -128,39 +126,12 @@ class CategoryControllerTest {
 
     @Test
     void updateReturnErrorInNameWithBlankValue () throws Exception {
-        mockMvc.perform(post("/categories/1/edit").param("name",""))
+        mockMvc.perform(post("/admin/categories/edit").param("name",""))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasErrors("category"))
                 .andExpect(model().attributeHasFieldErrors("category","name"))
                 .andExpect(view().name("categories/createOrUpdateCategoryForm"));
 
-    }
-
-    @Test
-    void updateReturnErrorInCategoryCodeWithBlankValue () throws Exception {
-        mockMvc.perform(post("/categories/1/edit").param("categoryCode",""))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeHasErrors("category"))
-                .andExpect(model().attributeHasFieldErrors("category","categoryCode"))
-                .andExpect(view().name("categories/createOrUpdateCategoryForm"));
-    }
-
-    @Test
-    void updateReturnErrorInCategoryCodeWithValueLessThanMin () throws Exception {
-        mockMvc.perform(post("/categories/1/edit").param("categoryCode","AB"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeHasErrors("category"))
-                .andExpect(model().attributeHasFieldErrors("category","categoryCode"))
-                .andExpect(view().name("categories/createOrUpdateCategoryForm"));
-    }
-
-    @Test
-    void updateReturnErrorInCategoryCodeWithValueGreaterThanMax () throws Exception {
-        mockMvc.perform(post("/categories/1/edit").param("categoryCode","ABCDEF"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeHasErrors("category"))
-                .andExpect(model().attributeHasFieldErrors("category","categoryCode"))
-                .andExpect(view().name("categories/createOrUpdateCategoryForm"));
     }
 
 }

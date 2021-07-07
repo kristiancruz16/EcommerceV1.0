@@ -10,16 +10,12 @@
 
     <table class="table table-striped" th:object="${category}">
         <tr>
-            <th>Category Code:</th>
-            <td th:text="*{categoryCode}">AAA </td>
-        </tr>
-        <tr>
             <th>Category Name: </th>
             <td th:text="*{name}"> Alpha Alpha Alpha</td>
         </tr>
         <tr>
             <td>
-            <a th:href="@{/categories/{id}/edit(id=*{id})}">
+            <a th:href="@{'/admin/categories/edit?categoryName='+*{name}}">
             <input type="submit" value="Edit Category" />
             </a>
             </td>
@@ -39,11 +35,11 @@
                 </thead>
                 <tr th:each="product : ${category.products}">
                     <td>
-                        <a style="width: 200px" th:href="@{/categories/__${category.id}__/products/__${product.id}__}" th:text="${product.sku}"></a>
+                        <a style="width: 200px" th:href="@{'/admin/categories/products?productName='+${product.name}}" th:text="${product.sku}"></a>
                     </td>
                     <td>
-                        <a href=# th:href="@{'/categories/'+${category.id}+'/products/'+${product.id}+'/productImage'}" target="_blank">
-                            <img th:src="@{'/categories/' + ${category.id} + '/products/' + ${product.id} + '/productImage'}"
+                        <a href=# th:href="@{'admin/categories/'+${category.id}+'/products/'+${product.id}+'/productImage'}" target="_blank">
+                            <img th:src="@{'admin/categories/' + ${category.id} + '/products/' + ${product.id} + '/productImage'}"
                                 width="200" height="200">
                         </a>
                     </td>
@@ -57,7 +53,7 @@
     </table>
     <br/>
     <br/>
-    <a th:href="@{/categories/__${category.id}__/products/new}">
+    <a th:href="@{'/admin/categories/products/new?categoryName='+${category.name}}">
         <input type="submit" value="New Product" />
     </a>
 

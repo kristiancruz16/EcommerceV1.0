@@ -3,6 +3,7 @@ package com.springboot.ecommercev1.services;
 import com.springboot.ecommercev1.domain.Product;
 import com.springboot.ecommercev1.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -106,21 +107,26 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void existsProductBySku () {
-        when(productRepository.existsProductBySku(anyLong())).thenReturn(Optional.of(returnProduct).isPresent());
-
-        boolean result = productService.existsProductBySku(1L);
-
+    void checkProductWithSameSkuReturnTrue () {
+        when(productRepository.findProductBySku(any())).thenReturn(returnProduct);
+        Product product = Product.builder().id(2L).sku(1234L).build();
+        boolean result = productService.existsProductBySku(product);
         assertTrue(result);
-
     }
 
+
     @Test
-    void existsProductBySkuNotFound () {
-        when(productRepository.existsProductBySku(anyLong())).thenReturn(Optional.empty().isPresent());
-
-        boolean result = productService.existsProductBySku(1L);
-
+    void checkProductWithSameSkuReturnFalse () {
+        when(productRepository.findProductBySku(any())).thenReturn(returnProduct);
+        Product product = Product.builder().id(1L).sku(4567L).build();
+        boolean result = productService.existsProductBySku(product);
+        assertFalse(result);
+    }
+    @Test
+    void checkProductWithSameSkuReturnNull () {
+        when(productRepository.findProductBySku(any())).thenReturn(null);
+        Product product = Product.builder().id(1L).sku(4567L).build();
+        boolean result = productService.existsProductBySku(product);
         assertFalse(result);
     }
 

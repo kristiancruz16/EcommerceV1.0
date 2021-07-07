@@ -28,6 +28,10 @@
     <span th:if="${#fields.hasErrors('productPrice')}" th:errors="*{productPrice}">Duplicate</span>
     <br/>
     <br/>
+    <input type="hidden" th:field="*{id}">
+    <input type="hidden"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
     <input type="submit" value="Save Product"/>
 </form>
 

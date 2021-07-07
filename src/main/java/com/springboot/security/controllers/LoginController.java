@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -152,7 +151,7 @@ public class LoginController {
             return new ModelAndView("security/changePassword",model);
         }
         user.setPassword(passwordEncoder.encode(passwordDto.getPassword()));
-        user.setPasswordResetToken(null);
+        user.deletePasswordResetToken();
         userService.savedRegisteredUser(user);
         passwordResetTokenService.deletePasswordResetToken(passwordResetToken);
         loginAttemptService.loginOrResetPasswordSuccess(getClientIp(request));

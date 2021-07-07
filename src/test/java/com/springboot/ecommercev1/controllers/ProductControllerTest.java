@@ -51,13 +51,15 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
         productList = new ArrayList<>();
-        productList.add(Product.builder().id(1L).build());
-        productList.add(Product.builder().id(2L).build());
+        productList.add(Product.builder().id(1L).name("ABC").build());
+        productList.add(Product.builder().id(2L).name("DEF").build());
 
         Set<Product> convertProductToSet = new HashSet<>();
         productList.forEach(convertProductToSet::add);
 
-        category = Category.builder().id(1L).products(convertProductToSet).build();
+        category = Category.builder().id(1L)
+                                     .products(convertProductToSet)
+                                     .name("Alpha").build();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -69,7 +71,7 @@ class ProductControllerTest {
     void showAllProducts() throws Exception {
         when(productService.findAll()).thenReturn(productList);
 
-        mockMvc.perform(get("/categories/products/showall"))
+        mockMvc.perform(get("/admin/categories/products/showall"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/allProducts"))
                 .andExpect(model().attribute("products",hasSize(2)));
@@ -77,19 +79,20 @@ class ProductControllerTest {
 
     @Test
     void showProductDetails() throws Exception {
-        when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
+        when(productService.findProductByName(anyString())).thenReturn(Product.builder().id(1L).name("Alpha").build());
 
-        mockMvc.perform(get("/categories/1/products/123"))
+        mockMvc.perform(get("/admin/categories/products").param("productName","Alpha"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/productDetails"))
-                .andExpect(model().attribute("product",hasProperty("id",is(1L))));
+                .andExpect(model().attribute("product",hasProperty("name",is("Alpha"))));
     }
 
     @Test
     void initializeNewProductForm () throws Exception {
-        when(categoryService.findById(anyLong())).thenReturn(category);
+        when(categoryService.findCategoryByName(anyString())).thenReturn(category);
 
-        mockMvc.perform(get("/categories/1/products/new"))
+        mockMvc.perform(get("/admin/categories/products/new").
+                    param("categoryName","ABC"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/createOrUpdateProductForm"))
                 .andExpect(model().attributeExists("product"));
@@ -98,16 +101,18 @@ class ProductControllerTest {
     @Test
     void processNewProductForm() throws Exception {
         Product product = Product.builder().id(1L).category(category).build();
-        when(categoryService.findById(anyLong())).thenReturn(category);
+        when(categoryService.findCategoryByName(anyString())).thenReturn(category);
         when(productService.save(any())).thenReturn(product);
 
-        mockMvc.perform(post("/categories/1/products/new")
+
+        mockMvc.perform(post("/admin/categories/products/new")
                     .param("sku","12345")
                     .param("name","ABC Shoes")
                     .param("productDescription","ABC Description")
-                    .param("productPrice","1234.00"))
+                    .param("productPrice","1234.00")
+                    .param("categoryName","Alpha"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/categories/1"))
+                .andExpect(view().name("redirect:/admin/categories/?categoryName=Alpha"))
                 .andExpect(model().attributeExists("product"));
 
         verify(productService).save(any());
@@ -116,9 +121,11 @@ class ProductControllerTest {
     @Test
     void initializeUpdateProductForm () throws Exception {
 
-        when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
+        when(productService.findProductByName(anyString()))
+                .thenReturn(Product.builder().id(1L).name("ABC").build());
 
-        mockMvc.perform(get("/categories/1/products/1/edit"))
+        mockMvc.perform(get("/admin/categories/products/edit")
+                    .param("productName","ABC"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/createOrUpdateProductForm"))
                 .andExpect(model().attributeExists("product"));
@@ -130,7 +137,7 @@ class ProductControllerTest {
         when(productService.save(any())).thenReturn(Product.builder().id(1L).build());
         when(categoryService.findById(anyLong())).thenReturn(category);
 
-        mockMvc.perform(post("/categories/1/products/1/edit")
+        mockMvc.perform(post("/admin/categories/1/products/1/edit")
                     .param("sku","12345")
                     .param("name","ABC Shoes")
                     .param("productDescription","ABC Description")
@@ -144,7 +151,7 @@ class ProductControllerTest {
 
     @Test
     void createProductReturnErrorInSkuWithBlankValue () throws Exception {
-        mockMvc.perform(post("/categories/1/products/new")
+        mockMvc.perform(post("/admin/categories/1/products/new")
                     .param("sku",""))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("product","sku"))
@@ -153,7 +160,7 @@ class ProductControllerTest {
 
     @Test
     void createProductReturnErrorInSkuWithLessThanOneValue () throws Exception {
-        mockMvc.perform(post("/categories/1/products/new")
+        mockMvc.perform(post("/admin/categories/1/products/new")
                 .param("sku","0"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("product","sku"))
@@ -162,7 +169,7 @@ class ProductControllerTest {
 
     @Test
     void createProductReturnErrorInProductDescriptionWithBlankValue () throws Exception {
-        mockMvc.perform(post("/categories/1/products/new")
+        mockMvc.perform(post("/admin/categories/1/products/new")
                 .param("productDescription",""))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("product","productDescription"))
@@ -171,7 +178,7 @@ class ProductControllerTest {
 
     @Test
     void createProductReturnErrorInProductPriceWithOutsideScopeValue () throws Exception {
-        mockMvc.perform(post("/categories/1/products/new")
+        mockMvc.perform(post("/admin/categories/1/products/new")
                 .param("productPrice","123456.123"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("product","productPrice"))

@@ -4,10 +4,7 @@ import com.springboot.ecommercev1.domain.Product;
 import com.springboot.ecommercev1.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author KMCruz
@@ -57,12 +54,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean existsProductBySku(Long sku) {
-        return productRepository.existsProductBySku(sku);
+    public boolean existsProductBySku(Product product) {
+        Product foundProduct = productRepository.findProductBySku(product.getSku());
+        if(foundProduct!=null) {
+            return foundProduct.getId() != product.getId();
+        }
+        return false;
     }
 
     @Override
     public List<Product> findAllByNameLikeIgnoreCase(String name) {
         return productRepository.findAllByNameLikeIgnoreCase(name);
+    }
+
+    @Override
+    public Product findProductByName(String name) {
+        return productRepository.findProductByName(name);
     }
 }

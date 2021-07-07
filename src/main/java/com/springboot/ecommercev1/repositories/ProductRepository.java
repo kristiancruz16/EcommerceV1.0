@@ -15,8 +15,11 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
 
     List<Product> findAllBySkuLike(Long sku);
 
-    boolean existsProductBySku(Long sku);
 
     List<Product> findAllByNameLikeIgnoreCase(String name);
+
+    Product findProductByName(String name);
+
+    Product findProductBySku(Long sku);
 
 }

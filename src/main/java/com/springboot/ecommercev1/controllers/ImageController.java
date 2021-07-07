@@ -19,7 +19,7 @@ import java.io.InputStream;
  * 6/10/2021
  */
 @Controller
-@RequestMapping("/categories/{categoryId}/products")
+@RequestMapping("/admin/categories/{categoryId}/products")
 public class ImageController {
 
     private final ImageService imageService;

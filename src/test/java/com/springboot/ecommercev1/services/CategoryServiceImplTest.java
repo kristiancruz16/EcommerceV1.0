@@ -22,7 +22,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
 
-    private final static String CODE = "AAA";
     private final static String NAME = "ALPHA ALPHA ALPHA";
 
     @Mock
@@ -35,24 +34,15 @@ class CategoryServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnCategory = Category.builder().id(1L).name(NAME).categoryCode(CODE).build();
+        returnCategory = Category.builder().id(1L).name(NAME).build();
     }
 
-    @Test
-    void findByCategoryCode() {
-        when(categoryRepository.findByCategoryCode(any())).thenReturn(returnCategory);
-
-        Category foundCategory = categoryService.findByCategoryCode(CODE);
-
-        assertEquals(CODE,foundCategory.getCategoryCode());
-        verify(categoryRepository).findByCategoryCode(any());
-    }
 
     @Test
     void findAllByNameLikeIgnoreCase() {
         when(categoryRepository.findAllByNameLikeIgnoreCase(any())).thenReturn(Arrays.asList(returnCategory));
 
-        List <Category> foundCategoryList = categoryService.findAllByNameLikeIgnoreCase("alpha");
+        List <Category> foundCategoryList = categoryService.findAllByNameLikeIgnoreCase(NAME);
 
         assertEquals(NAME,foundCategoryList.get(0).getName());
         verify(categoryRepository).findAllByNameLikeIgnoreCase(any());
@@ -60,21 +50,13 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void existsByCategoryCode() {
-        when(categoryRepository.existsByCategoryCodeIgnoreCase(anyString())).thenReturn(Optional.of(returnCategory).isPresent());
+    void findCategoryByName() {
+        when(categoryRepository.findCategoryByName(anyString())).thenReturn(returnCategory);
 
-        boolean result = categoryService.existsByCategoryCodeIgnoreCase("ABC");
+        Category category = categoryService.findCategoryByName("Alpha");
 
-        assertTrue(result);
-
-    }
-    @Test
-    void existsByCategoryCodeNotFound() {
-        when(categoryRepository.existsByCategoryCodeIgnoreCase(anyString())).thenReturn(Optional.empty().isPresent());
-
-        boolean result = categoryService.existsByCategoryCodeIgnoreCase("ABC");
-
-        assertFalse(result);
+        assertNotNull(category);
+        assertEquals(returnCategory,category);
     }
 
     @Test
@@ -130,7 +112,7 @@ class CategoryServiceImplTest {
 
     @Test
     void save() {
-        Category categoryToSave = Category.builder().id(1L).categoryCode("ABC").build();
+        Category categoryToSave = Category.builder().id(1L).build();
         when(categoryRepository.save(any())).thenReturn(returnCategory);
         Category savedCategory = categoryService.save(categoryToSave);
 
