@@ -85,12 +85,12 @@ class ProductControllerTest {
 
     @Test
     void showProductDetails() throws Exception {
-        when(productService.findProductByName(anyString())).thenReturn(Product.builder().id(1L).name("Alpha").build());
+        when(productService.findProductBySku(anyLong())).thenReturn(Product.builder().id(1L).sku(1L).build());
 
-        mockMvc.perform(get("/admin/categories/products").param("productName","Alpha"))
+        mockMvc.perform(get("/admin/categories/products").param("sku","1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/productDetails"))
-                .andExpect(model().attribute("product",hasProperty("name",is("Alpha"))));
+                .andExpect(model().attribute("product",hasProperty("sku",is(1L))));
     }
 
     @Test
@@ -127,11 +127,11 @@ class ProductControllerTest {
     @Test
     void initializeUpdateProductForm () throws Exception {
 
-        when(productService.findProductByName(anyString()))
-                .thenReturn(Product.builder().id(1L).name("ABC").build());
+        when(productService.findProductBySku(anyLong()))
+                .thenReturn(Product.builder().id(1L).sku(1L).build());
 
         mockMvc.perform(get("/admin/categories/products/edit")
-                    .param("productName","ABC"))
+                    .param("sku","1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("products/createOrUpdateProductForm"))
                 .andExpect(model().attributeExists("product"));

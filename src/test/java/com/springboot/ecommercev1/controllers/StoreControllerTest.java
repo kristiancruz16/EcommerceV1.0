@@ -65,7 +65,7 @@ class StoreControllerTest {
         Set<Product> convertProductToSet = new HashSet<>();
         productList.forEach(convertProductToSet::add);
 
-        category = Category.builder().id(1L).products(convertProductToSet).build();
+        category = Category.builder().id(1L).name("ABC").products(convertProductToSet).build();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -85,10 +85,11 @@ class StoreControllerTest {
 
     @Test
     void showProductDetails() throws Exception {
-        when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
+        when(productService.findProductBySku(anyLong())).thenReturn(Product.builder().id(1L).sku(1L).build());
         when(shoppingCartLineItemService.totalQuantityByShoppingCartID(anyString())).thenReturn("5");
 
-        mockMvc.perform(get("/1/products/1"))
+        mockMvc.perform(get("/categories/products")
+                        .param("sku","1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("product"))
                 .andExpect(view().name("store/productDetails"));
@@ -96,10 +97,11 @@ class StoreControllerTest {
 
     @Test
     void filterProductsByCategory() throws Exception {
-        when(categoryService.findById(anyLong())).thenReturn(category);
+        when(categoryService.findCategoryByName(anyString())).thenReturn(category);
         when(shoppingCartLineItemService.totalQuantityByShoppingCartID(anyString())).thenReturn("5");
 
-        mockMvc.perform(get("/1"))
+        mockMvc.perform(get("/categories")
+                    .param("categoryName","ABC"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("category"))
                 .andExpect(view().name("store/categoryDetails"));
@@ -108,7 +110,7 @@ class StoreControllerTest {
     @Test
     void renderImageFromDatabase() throws Exception {
 
-        Product product = Product.builder().id(1L).build();
+        Product product = Product.builder().id(1L).sku(1L).build();
 
         String mockFile = "This is a mock file";
 
@@ -121,9 +123,10 @@ class StoreControllerTest {
         }
 
         product.setImage(fileByteObject);
-        when(productService.findById(anyLong())).thenReturn(product);
+        when(productService.findProductBySku(anyLong())).thenReturn(product);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/1/products/1/image"))
+        MockHttpServletResponse response = mockMvc.perform(get("/categories/products/image")
+                    .param("sku","1"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
@@ -135,17 +138,17 @@ class StoreControllerTest {
     @Test
     void addToCart () throws Exception {
         ShoppingCart shoppingCart = new ShoppingCart();
-        Product product = Product.builder().productPrice(3d).build();
+        Product product = Product.builder().sku(1L).productPrice(3d).build();
         ShoppingCartLineItem cartLineItem = new ShoppingCartLineItem();
 
-       when(productService.findById(anyLong())).thenReturn(product);
+       when(productService.findProductBySku(anyLong())).thenReturn(product);
        when(shoppingCartService.save(any())).thenReturn(shoppingCart);
        when(shoppingCartLineItemService.save(any())).thenReturn(cartLineItem);
 
-        mockMvc.perform(post("/1/products/1")
-                    .param("productId","1"))
+        mockMvc.perform(post("/categories/products")
+                    .param("sku","1"))
                .andExpect(status().is3xxRedirection())
-               .andExpect(view().name("redirect:/1/products/1" ));
+               .andExpect(view().name("redirect:/categories/products?sku=1" ));
 
        verify(shoppingCartLineItemService).save(any());
 

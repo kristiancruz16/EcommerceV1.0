@@ -53,18 +53,18 @@ public class StoreController {
         return "store/homePage";
     }
 
-    @GetMapping("/{categoryId}")
-    public String filerProductsByCategory (HttpSession session, @PathVariable Long categoryId, Model model) {
+    @GetMapping("/categories")
+    public String filerProductsByCategory (HttpSession session, @RequestParam String categoryName, Model model) {
         String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
-        model.addAttribute("category",categoryService.findById(categoryId));
+        model.addAttribute("category",categoryService.findCategoryByName(categoryName));
         model.addAttribute("cart",cartQuantity);
         return "store/categoryDetails";
     }
 
-    @GetMapping("/{categoryId}/products/{productId}/image")
-    public void renderImageFromDatabase(@PathVariable Long productId, HttpServletResponse response) throws IOException {
+    @GetMapping("/categories/products/image")
+    public void renderImageFromDatabase(@RequestParam Long sku, HttpServletResponse response) throws IOException {
 
-        Product product = productService.findById(productId);
+        Product product = productService.findProductBySku(sku);
 
         if(product.getImage()!=null) {
             Byte [] imageByteObject = product.getImage();
@@ -80,9 +80,9 @@ public class StoreController {
 
         }
     }
-    @GetMapping("/{categoryId}/products/{productId}")
-    public String showProductDetails(HttpSession session,@PathVariable Long productId, Model model) {
-        Product product = productService.findById(productId);
+    @GetMapping("/categories/products")
+    public String showProductDetails(HttpSession session,@RequestParam Long sku, Model model) {
+        Product product = productService.findProductBySku(sku);
         String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
 
         model.addAttribute("product",product);
@@ -90,10 +90,9 @@ public class StoreController {
         return "store/productDetails";
     }
 
-    @PostMapping({"","/{categoryId}","/{categoryId}/products/{productId}"})
-    public String addToCart(@RequestParam Long productId, HttpSession session, HttpServletRequest request) {
-        String url = request.getRequestURI();
-        Product product = productService.findById(productId);
+    @PostMapping("/categories/products")
+    public String addToCart(@RequestParam Long sku, HttpSession session) {
+        Product product = productService.findProductBySku(sku);
         ShoppingCart cartToSave = new ShoppingCart();
         cartToSave.setId(session.getId());
         ShoppingCart savedCart = shoppingCartService.save(cartToSave);
@@ -112,7 +111,7 @@ public class StoreController {
 
         shoppingCartLineItemService.save(cartLineItemToSave);
 
-        return "redirect:" + url ;
+        return "redirect:/categories/products?sku="+product.getSku();
     }
 
 

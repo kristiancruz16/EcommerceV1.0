@@ -40,7 +40,7 @@ public class ImageController {
     public String processUploadImageForm(@RequestParam Long sku, @RequestParam("imagefile")MultipartFile file) {
         Product product = productService.findProductBySku(sku);
         imageService.saveImageFile(product.getId(),file);
-        return "redirect:/admin/categories/products?productName="+product.getName();
+        return "redirect:/admin/categories/products?sku="+product.getSku();
     }
 
     @GetMapping("/productImage")

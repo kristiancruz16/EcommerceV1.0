@@ -21,7 +21,7 @@
     <tbody>
     <tr th:each="product:${products}">
         <td>
-            <a th:href="@{'/admin/categories/products?productName='+${product.name}}" th:text="${product.sku}"/></a>
+            <a th:href="@{'/admin/categories/products?sku='+${product.sku}}" th:text="${product.sku}"/></a>
         </td>
         <td>
             <a href=# th:href="@{'/admin/categories/products/productImage?sku='+${product.sku}}" target="_blank">

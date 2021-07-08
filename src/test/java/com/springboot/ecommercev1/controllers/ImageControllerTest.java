@@ -70,7 +70,7 @@ class ImageControllerTest {
         mockMvc.perform(multipart("/admin/categories/products/image").file(multipartFile)
                         .param("sku","1234"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/admin/categories/products?productName=ABC"));
+                .andExpect(view().name("redirect:/admin/categories/products?sku=123"));
 
         verify(imageService,times(1)).saveImageFile(anyLong(),any());
     }

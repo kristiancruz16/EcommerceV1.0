@@ -39,8 +39,8 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String showProductDetails(@RequestParam String productName, Model model){
-        model.addAttribute("product",productService.findProductByName(productName));
+    public String showProductDetails(@RequestParam Long sku, Model model){
+        model.addAttribute("product",productService.findProductBySku(sku));
         return "products/productDetails";
     }
 
@@ -72,8 +72,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/edit")
-    public String initializeUpdateProductForm(@RequestParam String productName, Model model) {
-        model.addAttribute("product",productService.findProductByName(productName));
+    public String initializeUpdateProductForm(@RequestParam Long sku, Model model) {
+        model.addAttribute("product",productService.findProductBySku(sku));
         return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
     }
 

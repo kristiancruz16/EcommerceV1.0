@@ -35,7 +35,7 @@
                 </thead>
                 <tr th:each="product : ${category.products}">
                     <td>
-                        <a style="width: 200px" th:href="@{'/admin/categories/products?productName='+${product.name}}" th:text="${product.sku}"></a>
+                        <a style="width: 200px" th:href="@{'/admin/categories/products?sku='+${product.sku}}" th:text="${product.sku}"></a>
                     </td>
                     <td>
                         <a href=# th:href="@{'/admin/categories/products/productImage?sku='+${product.sku}}" target="_blank">

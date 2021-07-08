@@ -6,40 +6,29 @@
     <link rel="icon" th:href="@{/resources/images/favicon.ico}">
 </head>
 <body>
-    <table>
-        <tr>
-            <td th:each="category:${categories}">
-                <a th:href="@{${category.id}}" th:text="${category.name}"/>
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td th:each="product:${products}">
-                <a th:href="@{${product.category.id} + '/products/' + ${product.id}}">
-                    <img th:src="@{${product.category.id} + '/products/' + ${product.id} + '/image'}"
-                         width="200" height="200">
-                </a>
-                <br/>
-                <a th:href="@{${product.category.id} + '/products/' + ${product.id}}" th:text="${product.name}"/>
-                <br/>
-                <label th:text="${product.productDescription}">Product Description</label>
-                <br/>
-                <label th:text="${product.productPrice}">Product Price</label>
-                <br/>
-                <form method="post">
-                    <input type="hidden" name="productId" th:value="${product.id}">
-                    <input type="submit" value="Add to cart" />
-                    <input type="hidden"
-                           th:name="${_csrf.parameterName}"
-                           th:value="${_csrf.token}" />
-                </form>
-            </td>
-        </tr>
-    </table>
-
-    <a th:href="@{'/shoppingcart'}">
-        <label th:text="${cart} +'items'"/>
-    </a>
+<div>
+    <div> <!--header-->
+        <div th:each="category:${categories}">
+            <a th:href="@{'/categories?categoryName='+${category.name}}" th:text="${category.name}">Categories</a>
+        </div>
+        <a th:href="@{'/shoppingcart'}">
+            <label th:text="${cart} +'items'"/>
+        </a>
+    </div><!--header-->
+    <div><!--content-->
+        <div th:each="product:${products}">
+            <a th:href="@{'/categories/products?sku='+${product.sku}}">
+                <img th:src="@{'/categories/products/image?sku='+${product.sku}}"
+                     width="200" height="200">
+            </a>
+            <br/>
+            <a th:href="@{'categories/products?sku='+${product.sku}}" th:text="${product.name}"/>
+            <br/>
+            <label th:text="${product.productDescription}">Product Description</label>
+            <br/>
+            <label th:text="${product.productPrice}">Product Price</label>
+        </div>
+    </div><!--content-->
+</div>
 </body>
 </html>
