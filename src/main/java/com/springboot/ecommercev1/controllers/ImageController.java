@@ -19,7 +19,7 @@ import java.io.InputStream;
  * 6/10/2021
  */
 @Controller
-@RequestMapping("/admin/categories/{categoryId}/products")
+@RequestMapping("/admin/categories/products")
 public class ImageController {
 
     private final ImageService imageService;
@@ -30,23 +30,22 @@ public class ImageController {
         this.productService = productService;
     }
 
-    @GetMapping("/{productId}/image")
-    public String showUploadImageForm(@PathVariable Long productId, Model model){
-        model.addAttribute("product", productService.findById(productId));
+    @GetMapping("/image")
+    public String showUploadImageForm(@RequestParam Long sku, Model model){
+        model.addAttribute("product", productService.findProductBySku(sku));
         return "images/uploadImage";
     }
 
-    @PostMapping("/{productId}/image")
-    public String processUploadImageForm(@PathVariable Long productId,@PathVariable Long categoryId, @RequestParam("imagefile")MultipartFile file) {
-        imageService.saveImageFile(productId,file);
-        String redirectUrl = "redirect:/categories/" +categoryId+"/products/" + productId;
-        return redirectUrl;
-
+    @PostMapping("/image")
+    public String processUploadImageForm(@RequestParam Long sku, @RequestParam("imagefile")MultipartFile file) {
+        Product product = productService.findProductBySku(sku);
+        imageService.saveImageFile(product.getId(),file);
+        return "redirect:/admin/categories/products?productName="+product.getName();
     }
 
-    @GetMapping("/{productId}/productImage")
-    public void renderImageFromDatabase(@PathVariable Long productId, HttpServletResponse response) throws IOException {
-        Product product = productService.findById(productId);
+    @GetMapping("/productImage")
+    public void renderImageFromDatabase(@RequestParam Long sku, HttpServletResponse response) throws IOException {
+        Product product = productService.findProductBySku(sku);
 
         if(product.getImage()!=null) {
             Byte [] imageByteObject = product.getImage();
@@ -64,9 +63,5 @@ public class ImageController {
             IOUtils.copy(inputStream,response.getOutputStream());
 
         }
-
     }
-
-
-
 }

@@ -49,25 +49,28 @@ class ImageControllerTest {
 
     @Test
     void showUploadImageForm() throws Exception {
-        when(productService.findById(anyLong())).thenReturn(Product.builder().id(1L).build());
+        when(productService.findProductBySku(anyLong())).thenReturn(Product.builder()
+                .id(1L).name("ABC").sku(123L).build());
 
-        mockMvc.perform(get("/admin/categories/1/products/1/image"))
+        mockMvc.perform(get("/admin/categories/products/image")
+                    .param("sku","123"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("images/uploadImage"))
                 .andExpect(model().attributeExists("product"));
-
-        verify(productService,times(1)).findById(anyLong());
 
     }
 
     @Test
     void processUploadImageForm() throws Exception {
+        when(productService.findProductBySku(anyLong())).thenReturn(Product.builder()
+                .id(1L).name("ABC").sku(123L).build());
         MockMultipartFile multipartFile = new MockMultipartFile("imagefile","image.jpg","image/jpg",
                 "image".getBytes());
 
-        mockMvc.perform(multipart("/admin/categories/1/products/1/image").file(multipartFile))
+        mockMvc.perform(multipart("/admin/categories/products/image").file(multipartFile)
+                        .param("sku","1234"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/categories/1/products/1"));
+                .andExpect(view().name("redirect:/admin/categories/products?productName=ABC"));
 
         verify(imageService,times(1)).saveImageFile(anyLong(),any());
     }
@@ -75,7 +78,8 @@ class ImageControllerTest {
     @Test
     void renderImageFromDatabase() throws Exception {
 
-        Product product = Product.builder().id(1L).build();
+        Product product = Product.builder()
+                .id(1L).name("ABC").sku(123L).build();
 
         String mockFile = "This is a mock file";
 
@@ -88,9 +92,10 @@ class ImageControllerTest {
         }
 
         product.setImage(fileByteObject);
-        when(productService.findById(anyLong())).thenReturn(product);
+        when(productService.findProductBySku(anyLong())).thenReturn(product);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/admin/categories/1/products/1/productImage"))
+        MockHttpServletResponse response = mockMvc
+                .perform(get("/admin/categories/products/productImage?sku=123"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 

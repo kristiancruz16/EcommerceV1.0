@@ -18,4 +18,6 @@ public interface ProductService extends CrudService<Product,Long>{
     List <Product> findAllByNameLikeIgnoreCase(String name);
 
     Product findProductByName(String name);
+
+    Product findProductBySku(Long sku);
 }

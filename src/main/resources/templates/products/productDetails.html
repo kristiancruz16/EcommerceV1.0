@@ -11,14 +11,14 @@
 
 <table class="table table-striped">
     <tr>
-        <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+${product.id}+'/productImage'}" target="_blank">
-        <img th:src="@{'/categories/' + *{category.id} + '/products/' + ${product.id} + '/productImage'}"
-             width="200" height="200">
+        <a href=# th:href="@{'/admin/categories/products/productImage?sku='+*{sku}}" target="_blank">
+            <img th:src="@{'/admin/categories/products/productImage?sku='+*{sku}}"
+                 width="200" height="200">
         </a>
     </tr>
     <tr>
         <td>
-            <a href=# th:href="@{'/categories/'+*{category.id}+'/products/'+*{id}+'/image'}" >
+            <a href=# th:href="@{'/admin/categories/products/image?sku='+*{sku}}" >
                 <input type="button" value="Upload Image" />
             </a>
         </td>

@@ -38,8 +38,8 @@
                         <a style="width: 200px" th:href="@{'/admin/categories/products?productName='+${product.name}}" th:text="${product.sku}"></a>
                     </td>
                     <td>
-                        <a href=# th:href="@{'admin/categories/'+${category.id}+'/products/'+${product.id}+'/productImage'}" target="_blank">
-                            <img th:src="@{'admin/categories/' + ${category.id} + '/products/' + ${product.id} + '/productImage'}"
+                        <a href=# th:href="@{'/admin/categories/products/productImage?sku='+${product.sku}}" target="_blank">
+                            <img th:src="@{'/admin/categories/products/productImage?sku='+${product.sku}}"
                                 width="200" height="200">
                         </a>
                     </td>

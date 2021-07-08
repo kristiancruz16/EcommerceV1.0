@@ -21,12 +21,12 @@
     <tbody>
     <tr th:each="product:${products}">
         <td>
-            <a th:href="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id}}" th:text="${product.sku}"/></a>
+            <a th:href="@{'/admin/categories/products?productName='+${product.name}}" th:text="${product.sku}"/></a>
         </td>
         <td>
-            <a href=# th:href="@{'/categories/'+${product.category.id}+'/products/'+${product.id}+'/productImage'}" target="_blank">
-                <img th:src="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id} + '/productImage'}"
-                    width="200" height="200">
+            <a href=# th:href="@{'/admin/categories/products/productImage?sku='+${product.sku}}" target="_blank">
+                <img th:src="@{'/admin/categories/products/productImage?sku='+${product.sku}}"
+                     width="200" height="200">
             </a>
         </td>
         <td th:text="${product.name}" >Nike</td>

@@ -144,4 +144,11 @@ class ProductServiceImplTest {
         Product product = productService.findProductByName(NAME);
         assertNotNull(product);
     }
+    @Test
+    void findProductBySku(){
+        when(productRepository.findProductBySku(anyLong())).thenReturn(returnProduct);
+        Product product = productService.findProductBySku(1L);
+        assertNotNull(product);
+
+    }
 }

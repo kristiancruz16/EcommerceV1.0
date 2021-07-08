@@ -8,10 +8,11 @@
 <body>
 <!--/*@thymesVar id="product" type="com.springboot.ecommercev1.domain.Product"*/-->
 <form action="http:\\localhost" method="post" enctype="multipart/form-data"
-    th:action="@{'/categories/' + ${product.category.id} + '/products/' + ${product.id} + '/image'} ">
+    th:action="@{/admin/categories/products/image}">
     <label class="control-label">Select File</label>
     <input id="imagefile" name="imagefile" type="file" class="file">
     <br/>
+    <input type="hidden" th:field="${product.sku}">
     <input type="submit" value="Save Image"/>
 </form>
 
