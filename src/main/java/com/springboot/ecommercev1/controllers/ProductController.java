@@ -78,22 +78,15 @@ public class ProductController {
     }
 
     @PostMapping("/products/edit")
-    public String processUpdateProductFrom (@Valid Product product, BindingResult result) {
-        Product productToSave = productService.findById(product.getId());
+    public String processUpdateProductForm (@Valid Product product, BindingResult result) {
         if(productService.existsProductBySku(product)) {
-            if(productToSave.getSku()!=product.getSku()) {
                 result.rejectValue("sku", "duplicate", "already exists");
-            }
         }
 
         if(result.hasErrors()){
             return CREATE_OR_UPDATE_PRODUCT_FORM_VIEW;
         }
-        productToSave.setSku(product.getSku());
-        productToSave.setName(product.getName());
-        productToSave.setProductDescription(product.getProductDescription());
-        productToSave.setProductPrice(product.getProductPrice());
-        Product savedProduct = productService.save(productToSave);
+        Product savedProduct = productService.save(product);
         return "redirect:/admin/categories/products?productName="+savedProduct.getName();
 
 

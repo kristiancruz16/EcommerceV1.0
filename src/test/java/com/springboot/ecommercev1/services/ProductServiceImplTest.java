@@ -137,4 +137,11 @@ class ProductServiceImplTest {
         List<Product> productList = productService.findAllByNameLikeIgnoreCase("ni");
         assertEquals(NAME,productList.get(0).getName());
     }
+
+    @Test
+    void findProductByName(){
+        when(productRepository.findProductByName(anyString())).thenReturn(returnProduct);
+        Product product = productService.findProductByName(NAME);
+        assertNotNull(product);
+    }
 }
