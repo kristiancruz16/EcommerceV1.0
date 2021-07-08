@@ -5,10 +5,12 @@ import com.springboot.ecommercev1.services.CategoryService;
 import com.springboot.ecommercev1.services.ProductService;
 import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
 import com.springboot.ecommercev1.services.ShoppingCartService;
+import com.springboot.security.models.Role;
+import com.springboot.security.models.User;
+import com.springboot.security.services.UserService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.servlet.mvc.condition.RequestConditionHolder;
 
 /**
  * @author KMCruz
@@ -21,12 +23,16 @@ public class DataLoader implements CommandLineRunner {
         private final CategoryService categoryService;
         private final ShoppingCartService shoppingCartService;
         private final ShoppingCartLineItemService shoppingCartLineItemService;
+        private final PasswordEncoder passwordEncoder;
+        private final UserService userService;
 
-        public DataLoader(ProductService productService, CategoryService categoryService, ShoppingCartService shoppingCartService, ShoppingCartLineItemService shoppingCartLineItemService) {
+        public DataLoader(ProductService productService, CategoryService categoryService, ShoppingCartService shoppingCartService, ShoppingCartLineItemService shoppingCartLineItemService, PasswordEncoder passwordEncoder, UserService userService) {
             this.productService = productService;
             this.categoryService = categoryService;
             this.shoppingCartService = shoppingCartService;
             this.shoppingCartLineItemService = shoppingCartLineItemService;
+            this.passwordEncoder = passwordEncoder;
+            this.userService = userService;
         }
 
         @Override
@@ -110,5 +116,14 @@ public class DataLoader implements CommandLineRunner {
                     *savedRebookRunningShoes.getProductPrice());
 
             shoppingCartLineItemService.save(shoppingCartLineItem);
+
+            User user = new User();
+            user.setFirstName("Admin");
+            user.setLastName("Account");
+            user.setEmail("tayeah12@gmail.com");
+            user.setPassword(passwordEncoder.encode("!Mar0604"));
+            user.setRole(Role.ADMIN);
+            user.setEnabled(true);
+            userService.savedRegisteredUser(user);
         }
 }
