@@ -32,4 +32,7 @@ public class Customer extends BaseEntity{
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Address> address;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CreditCardInfo> creditCardInfo;
 }
