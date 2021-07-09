@@ -1,5 +1,6 @@
 package com.springboot.security.models;
 
+import com.springboot.ecommercev1.domain.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,9 @@ public class User {
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private PasswordResetToken passwordResetToken;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private Customer customer;
 
     public boolean hasPasswordResetToken(){
         return this.getPasswordResetToken()!=null;

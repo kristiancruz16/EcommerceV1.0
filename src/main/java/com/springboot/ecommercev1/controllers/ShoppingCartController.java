@@ -74,11 +74,4 @@ public class ShoppingCartController {
         return "redirect:/shoppingcart";
     }
 
-    @GetMapping("/sample")
-    public String Sample(@RequestParam("id") String id){
-        System.out.println("HelloWorld");
-        if(id == "1" )
-            return "Hello";
-        return "World";
-    }
 }
