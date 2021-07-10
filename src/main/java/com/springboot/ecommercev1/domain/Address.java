@@ -11,16 +11,19 @@ import javax.validation.constraints.NotNull;
  * @author KMCruz
  * 7/9/2021
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Address extends BaseEntity{
 
+    public Address() {
+    }
+
     @Builder
-    public Address(Long id, String addressLine, String baranggay,
-                   String city, String province, String postalCode,
-                   AddressCategory addressCategory, Customer customer) {
+    public Address(Long id, String addressLine,
+                   String baranggay, String city,
+                   String province, String postalCode,
+                   AddressCategory addressCategory, Customer customer,
+                   CustomerOrder order) {
         super(id);
         this.addressLine = addressLine;
         this.baranggay = baranggay;
@@ -29,6 +32,7 @@ public class Address extends BaseEntity{
         this.postalCode = postalCode;
         this.addressCategory = addressCategory;
         this.customer = customer;
+        this.order = order;
     }
 
     @NotNull

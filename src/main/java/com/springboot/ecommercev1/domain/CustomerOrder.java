@@ -8,40 +8,44 @@ import javax.persistence.*;
  * @author KMCruz
  * 7/9/2021
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 public class CustomerOrder extends BaseEntity {
 
-   /* @Builder
-    public Order(Long id, OrderStatus orderStatus, Double orderAmount) {
-        super(id);
-        this.orderStatus = orderStatus;
-        this.orderAmount = orderAmount;
-    }*/
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+ public CustomerOrder(){}
 
-    private Double orderAmount;
+@Builder
+ public CustomerOrder(Long id, OrderStatus orderStatus,
+                      Double orderAmount, Customer customer,
+                      Address address, ShoppingCart shoppingCart,
+                      Payment payment) {
+  super(id);
+  this.orderStatus = orderStatus;
+  this.orderAmount = orderAmount;
+  this.customer = customer;
+  this.address = address;
+  this.shoppingCart = shoppingCart;
+  this.payment = payment;
+ }
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+ @Enumerated(EnumType.STRING)
+ private OrderStatus orderStatus;
 
-    @OneToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
+ private Double orderAmount;
 
-    @OneToOne
-    @JoinColumn(name = "shopping_cart_id")
-    private ShoppingCart shoppingCart;
+ @ManyToOne
+ @JoinColumn(name = "customer_id")
+ private Customer customer;
 
-    @OneToOne(mappedBy = "order")
-    private Payment payment;
+ @OneToOne
+ @JoinColumn(name = "address_id")
+ private Address address;
+
+ @OneToOne
+ @JoinColumn(name = "shopping_cart_id")
+ private ShoppingCart shoppingCart;
+
+ @OneToOne(mappedBy = "order")
+ private Payment payment;
 
 }

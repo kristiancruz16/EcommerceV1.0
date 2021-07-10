@@ -1,8 +1,6 @@
 package com.springboot.ecommercev1.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.persistence.*;
@@ -13,11 +11,26 @@ import javax.validation.constraints.Pattern;
  * @author KMCruz
  * 7/9/2021
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class CreditCardInfo extends BaseEntity {
+
+    public CreditCardInfo() {
+    }
+
+    @Builder
+    public CreditCardInfo(Long id, CardType cardType,
+                          String cardNo, String expiryDate,
+                          String cvv, Customer customer,
+                          Payment payment) {
+        super(id);
+        this.cardType = cardType;
+        this.cardNo = cardNo;
+        this.expiryDate = expiryDate;
+        this.cvv = cvv;
+        this.customer = customer;
+        this.payment = payment;
+    }
 
     @Enumerated(EnumType.STRING)
     private CardType cardType;
@@ -37,4 +50,6 @@ public class CreditCardInfo extends BaseEntity {
 
     @OneToOne(mappedBy = "creditCardInfo")
     private Payment payment;
+
+
 }

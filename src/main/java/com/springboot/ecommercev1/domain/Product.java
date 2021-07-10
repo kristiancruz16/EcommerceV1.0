@@ -16,13 +16,12 @@ import java.util.List;
  * 6/5/2021
  */
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 @Table
 public class Product extends BaseEntity{
+
+    public Product() {}
 
     @Builder
     public Product(Long id, String name, Long sku, String productDescription, Double productPrice, Category category,

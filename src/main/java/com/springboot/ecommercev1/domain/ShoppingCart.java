@@ -12,17 +12,19 @@ import java.util.List;
  * 6/14/2021
  */
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 @Table
 public class ShoppingCart{
 
-    @Builder
-    public ShoppingCart(String id, List<ShoppingCartLineItem> shoppingCartList) {
+    public ShoppingCart() {}
+
+    public ShoppingCart(String id, List<ShoppingCartLineItem> shoppingCartList,
+                        CustomerOrder order, Customer customer) {
         this.id = id;
         this.shoppingCartList = shoppingCartList;
+        this.order = order;
+        this.customer = customer;
     }
 
     @Id

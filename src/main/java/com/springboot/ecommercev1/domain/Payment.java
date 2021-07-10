@@ -1,8 +1,6 @@
 package com.springboot.ecommercev1.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.context.annotation.EnableMBeanExport;
 
 import javax.persistence.Entity;
@@ -13,11 +11,19 @@ import javax.persistence.OneToOne;
  * @author KMCruz
  * 7/10/2021
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Payment  extends BaseEntity{
+
+    public Payment() {}
+
+    @Builder
+    public Payment(Long id, Double paymentAmount, CustomerOrder order, CreditCardInfo creditCardInfo) {
+        super(id);
+        this.paymentAmount = paymentAmount;
+        this.order = order;
+        this.creditCardInfo = creditCardInfo;
+    }
 
     private Double paymentAmount;
 

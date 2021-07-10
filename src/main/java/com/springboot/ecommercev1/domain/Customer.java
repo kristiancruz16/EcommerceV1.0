@@ -10,18 +10,24 @@ import java.util.List;
  * @author KMCruz
  * 7/9/2021
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Customer extends BaseEntity{
 
+    public Customer () {}
+
     @Builder
-    public Customer(Long id, String phoneNo, User user, List<Address> address) {
+    public Customer(Long id, String phoneNo,
+                    User user, List<Address> address,
+                    List<CreditCardInfo> creditCardInfo,
+                    List<CustomerOrder> orders, ShoppingCart shoppingCart) {
         super(id);
         this.phoneNo = phoneNo;
         this.user = user;
         this.address = address;
+        this.creditCardInfo = creditCardInfo;
+        this.orders = orders;
+        this.shoppingCart = shoppingCart;
     }
 
     private String phoneNo;
