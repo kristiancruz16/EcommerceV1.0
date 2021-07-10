@@ -27,7 +27,7 @@ public class Customer extends BaseEntity{
     private String phoneNo;
 
     @OneToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
@@ -38,4 +38,7 @@ public class Customer extends BaseEntity{
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerOrder> orders;
+
+    @OneToOne(mappedBy = "customer",cascade = CascadeType.ALL)
+    private ShoppingCart shoppingCart;
 }

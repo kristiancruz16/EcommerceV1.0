@@ -56,7 +56,7 @@ public class Address extends BaseEntity{
     private AddressCategory addressCategory;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id",referencedColumnName = "id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToOne(mappedBy = "address")

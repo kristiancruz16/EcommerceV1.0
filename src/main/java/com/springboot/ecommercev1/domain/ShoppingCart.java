@@ -34,4 +34,7 @@ public class ShoppingCart{
     @OneToOne(mappedBy = "shoppingCart")
     private CustomerOrder order;
 
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

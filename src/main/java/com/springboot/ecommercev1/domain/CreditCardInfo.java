@@ -32,6 +32,9 @@ public class CreditCardInfo extends BaseEntity {
     private String cvv;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id",referencedColumnName = "id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToOne(mappedBy = "creditCardInfo")
+    private Payment payment;
 }

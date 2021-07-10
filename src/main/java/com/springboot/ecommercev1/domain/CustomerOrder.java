@@ -30,15 +30,18 @@ public class CustomerOrder extends BaseEntity {
     private Double orderAmount;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "address_id")
     private Address address;
 
     @OneToOne
-    @JoinColumn(name = "shopping_cart_id",referencedColumnName = "id")
+    @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart shoppingCart;
+
+    @OneToOne(mappedBy = "order")
+    private Payment payment;
 
 }
