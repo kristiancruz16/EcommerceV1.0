@@ -31,4 +31,7 @@ public class ShoppingCart{
     @OneToMany(mappedBy="shoppingCart")
     private List<ShoppingCartLineItem> shoppingCartList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "shoppingCart")
+    private CustomerOrder order;
+
 }
