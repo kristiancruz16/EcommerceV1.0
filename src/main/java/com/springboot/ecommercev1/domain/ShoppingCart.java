@@ -19,12 +19,10 @@ public class ShoppingCart{
 
     public ShoppingCart() {}
 
-    public ShoppingCart(String id, List<ShoppingCartLineItem> shoppingCartList,
-                        CustomerOrder order, Customer customer) {
+    @Builder
+    public ShoppingCart(String id, List<ShoppingCartLineItem> shoppingCartList) {
         this.id = id;
         this.shoppingCartList = shoppingCartList;
-        this.order = order;
-        this.customer = customer;
     }
 
     @Id
@@ -33,10 +31,4 @@ public class ShoppingCart{
     @OneToMany(mappedBy="shoppingCart")
     private List<ShoppingCartLineItem> shoppingCartList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "shoppingCart")
-    private CustomerOrder order;
-
-    @OneToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
 }

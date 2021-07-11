@@ -20,14 +20,13 @@ public class Customer extends BaseEntity{
     public Customer(Long id, String phoneNo,
                     User user, List<Address> address,
                     List<CreditCardInfo> creditCardInfo,
-                    List<CustomerOrder> orders, ShoppingCart shoppingCart) {
+                    List<CustomerOrder> orders) {
         super(id);
         this.phoneNo = phoneNo;
         this.user = user;
         this.address = address;
         this.creditCardInfo = creditCardInfo;
         this.orders = orders;
-        this.shoppingCart = shoppingCart;
     }
 
     private String phoneNo;
@@ -44,7 +43,4 @@ public class Customer extends BaseEntity{
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerOrder> orders;
-
-    @OneToOne(mappedBy = "customer",cascade = CascadeType.ALL)
-    private ShoppingCart shoppingCart;
 }

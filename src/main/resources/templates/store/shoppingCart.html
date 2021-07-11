@@ -35,6 +35,7 @@
             </form>
         </div>
     </div>
+    <button><a th:href="@{/user/checkout}" th:text="Checkout">Checkout</a></button>
     <form th:action="@{/shoppingcart/deleteAll}" method="post">
         <input type="submit" value="Delete All Items">
     </form>
