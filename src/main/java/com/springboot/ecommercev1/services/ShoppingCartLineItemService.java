@@ -2,6 +2,8 @@ package com.springboot.ecommercev1.services;
 
 import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
 
+import java.util.Optional;
+
 
 /**
  * @author KMCruz
@@ -15,7 +17,7 @@ public interface ShoppingCartLineItemService <T,ID> {
 
     ShoppingCartLineItem findByID(ID id);
 
-    String totalQuantityByShoppingCartID(String id);
+    String totalQuantityByShoppingCartID(Long id);
 }
 
 

@@ -21,8 +21,6 @@ public class UserController {
     @GetMapping("/checkout")
     public ModelAndView showCheckoutForm(HttpSession session){
         LOGGER.info("Session Id: "+session.getId());
-        session.invalidate();
-        LOGGER.info("Session ID: " + session.getId());
         return new ModelAndView("/user/checkOut");
     }
 }

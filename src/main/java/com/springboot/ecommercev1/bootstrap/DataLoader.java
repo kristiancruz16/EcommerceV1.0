@@ -98,7 +98,6 @@ public class DataLoader implements CommandLineRunner {
             Product savedRebookRunningShoes = productService.save(rebookRunningShoes);
 
             ShoppingCart shoppingCart = new ShoppingCart();
-            shoppingCart.setId("ABC");
             ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCart);
 
 
@@ -117,13 +116,22 @@ public class DataLoader implements CommandLineRunner {
 
             shoppingCartLineItemService.save(shoppingCartLineItem);
 
-            User user = new User();
-            user.setFirstName("Admin");
-            user.setLastName("Account");
-            user.setEmail("tayeah12@gmail.com");
-            user.setPassword(passwordEncoder.encode("!Mar0604"));
-            user.setRole(Role.ADMIN);
-            user.setEnabled(true);
-            userService.savedRegisteredUser(user);
+            User userAdmin = new User();
+            userAdmin.setFirstName("Admin");
+            userAdmin.setLastName("Account");
+            userAdmin.setEmail("tayeah12@gmail.com");
+            userAdmin.setPassword(passwordEncoder.encode("!Mar0604"));
+            userAdmin.setRole(Role.ADMIN);
+            userAdmin.setEnabled(true);
+            userService.savedRegisteredUser(userAdmin);
+
+            User userTest = new User();
+            userTest.setFirstName("Test");
+            userTest.setLastName("User");
+            userTest.setEmail("usertest@email.com");
+            userTest.setPassword(passwordEncoder.encode("!Mar0604"));
+            userTest.setRole(Role.USER);
+            userTest.setEnabled(true);
+            userService.savedRegisteredUser(userTest);
         }
 }

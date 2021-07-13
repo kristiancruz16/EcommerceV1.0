@@ -34,7 +34,7 @@ class ShoppingCartServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnShoppingCart =ShoppingCart.builder().id("BC012").build();
+        returnShoppingCart =ShoppingCart.builder().id(1L).build();
     }
 
     @Test

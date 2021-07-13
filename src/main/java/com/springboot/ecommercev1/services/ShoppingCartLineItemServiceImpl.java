@@ -5,6 +5,7 @@ import com.springboot.ecommercev1.domain.ShoppingCart;
 import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
 import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
 import com.springboot.ecommercev1.repositories.ShoppingCartLineItemRepository;
+import org.checkerframework.checker.nullness.Opt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class ShoppingCartLineItemServiceImpl implements ShoppingCartLineItemServ
     }
 
     @Override
-    public String totalQuantityByShoppingCartID(String id) {
+    public String totalQuantityByShoppingCartID(Long id) {
         return shoppingCartLineItemRepository.totalQuantityByShoppingCartID(id).orElse("");
     }
 

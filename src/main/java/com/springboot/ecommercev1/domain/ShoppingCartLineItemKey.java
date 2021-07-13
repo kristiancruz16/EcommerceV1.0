@@ -19,10 +19,10 @@ public class ShoppingCartLineItemKey implements Serializable {
     private Long productId;
 
     @Column(name = "shopping_cart_id")
-    private String shoppingCartId;
+    private Long shoppingCartId;
 
     @Builder
-    public ShoppingCartLineItemKey(Long productId, String shoppingCartId) {
+    public ShoppingCartLineItemKey(Long productId, Long shoppingCartId) {
         this.productId = productId;
         this.shoppingCartId = shoppingCartId;
     }

@@ -47,8 +47,8 @@ class ShoppingCartControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
-                .shoppingCartId("ABC").productId(1L).build();
-        shoppingCart = ShoppingCart.builder().id("ABC")
+                .shoppingCartId(1L).productId(1L).build();
+        shoppingCart = ShoppingCart.builder().id(1L)
                 .shoppingCartList(List.of(ShoppingCartLineItem.builder()
                                                         .id(key)
                                                         .quantity(1)
@@ -77,7 +77,7 @@ class ShoppingCartControllerTest {
 
         ShoppingCartLineItem cartLineItem = ShoppingCartLineItem.builder()
                 .id(ShoppingCartLineItemKey.builder()
-                        .shoppingCartId("ABC")
+                        .shoppingCartId(1L)
                         .productId(1L)
                         .build())
                 .shoppingCart(shoppingCart)

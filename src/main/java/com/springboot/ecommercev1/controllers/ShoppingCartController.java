@@ -1,18 +1,21 @@
 package com.springboot.ecommercev1.controllers;
 
 
-import com.springboot.ecommercev1.domain.ShoppingCart;
-import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
-import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
+import com.springboot.ecommercev1.domain.*;
+import com.springboot.ecommercev1.services.CustomerService;
 import com.springboot.ecommercev1.services.ProductService;
 import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
 import com.springboot.ecommercev1.services.ShoppingCartService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.Optional;
+import java.security.Principal;
+
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * @author KMCruz
@@ -21,29 +24,38 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/shoppingcart")
 public class ShoppingCartController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final ShoppingCartService shoppingCartService;
     private final ShoppingCartLineItemService shoppingCartLineItemService;
+    private final CustomerService customerService;
+    private final ProductService productService;
 
     public ShoppingCartController(ShoppingCartService shoppingCartService,
-                                  ShoppingCartLineItemService shoppingCartLineItemService) {
+                                  ShoppingCartLineItemService shoppingCartLineItemService, CustomerService customerService, ProductService productService) {
         this.shoppingCartService = shoppingCartService;
         this.shoppingCartLineItemService = shoppingCartLineItemService;
+        this.customerService = customerService;
+        this.productService = productService;
     }
 
+
+
     @GetMapping
-    public String showShoppingCart(HttpSession session, Model model) {
-        ShoppingCart shoppingCart = Optional.ofNullable(shoppingCartService.findById(session.getId()))
-                                            .orElse(new ShoppingCart());
+    public String showShoppingCart(Model model, Principal principal) {
+        Customer customer = customerService.findLoggedInCustomer(principal.getName());
+        ShoppingCart shoppingCart = customer.getShoppingCart();
         model.addAttribute("cartLineItems", shoppingCart.getShoppingCartList());
         return "store/shoppingCart";
     }
 
 
     @PostMapping("/add")
-    public String addLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
-
+    public String addLineItemQuantity(@RequestParam Long productId, Principal principal){
+        Customer customer = customerService.findLoggedInCustomer(principal.getName());
+        ShoppingCart shoppingCart = customer.getShoppingCart();
         ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
-                .shoppingCartId(cartId).productId(productId).build();
+                .shoppingCartId(shoppingCart.getId()).productId(productId).build();
         ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
         ShoppingCartLineItem cartLineItemToSave = cartLineItem.addCartLineItem();
         shoppingCartLineItemService.save(cartLineItemToSave);
@@ -51,9 +63,11 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/delete")
-    public String deleteLineItemQuantity(@RequestParam String cartId, @RequestParam Long productId){
+    public String deleteLineItemQuantity(@RequestParam Long productId, Principal principal){
+        Customer customer = customerService.findLoggedInCustomer(principal.getName());
+        ShoppingCart shoppingCart = customer.getShoppingCart();
         ShoppingCartLineItemKey key = ShoppingCartLineItemKey.builder()
-                .shoppingCartId(cartId).productId(productId).build();
+                .shoppingCartId(shoppingCart.getId()).productId(productId).build();
         ShoppingCartLineItem cartLineItem = shoppingCartLineItemService.findByID(key);
         Integer lineItemQuantity = cartLineItem.getQuantity() - 1;
         cartLineItem.setQuantity(lineItemQuantity);
@@ -67,8 +81,9 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/deleteAll")
-    public String deleteAllLineItems (HttpSession session) {
-        ShoppingCart shoppingCart = shoppingCartService.findById(session.getId());
+    public String deleteAllLineItems (Principal principal) {
+        Customer customer = customerService.findLoggedInCustomer(principal.getName());
+        ShoppingCart shoppingCart = customer.getShoppingCart();
         shoppingCart.getShoppingCartList().stream()
                 .forEach(shoppingCartLineItemService::delete);
         return "redirect:/shoppingcart";

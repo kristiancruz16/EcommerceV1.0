@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 /**
@@ -15,5 +16,5 @@ import java.util.Optional;
 public interface ShoppingCartLineItemRepository extends CrudRepository<ShoppingCartLineItem, ShoppingCartLineItemKey> {
 
     @Query(value = "SELECT sum(cartItem.quantity) FROM ShoppingCartLineItem  cartItem WHERE cartItem.shoppingCart.id= :shoppingCartID")
-    Optional<String> totalQuantityByShoppingCartID(@Param("shoppingCartID") String id);
+    Optional<String> totalQuantityByShoppingCartID(@Param("shoppingCartID") Long id);
 }

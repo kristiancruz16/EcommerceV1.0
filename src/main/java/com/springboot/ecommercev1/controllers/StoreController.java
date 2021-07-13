@@ -1,24 +1,27 @@
 package com.springboot.ecommercev1.controllers;
 
-import com.springboot.ecommercev1.domain.Product;
-import com.springboot.ecommercev1.domain.ShoppingCart;
-import com.springboot.ecommercev1.domain.ShoppingCartLineItem;
-import com.springboot.ecommercev1.domain.ShoppingCartLineItemKey;
-import com.springboot.ecommercev1.services.CategoryService;
-import com.springboot.ecommercev1.services.ProductService;
-import com.springboot.ecommercev1.services.ShoppingCartLineItemService;
-import com.springboot.ecommercev1.services.ShoppingCartService;
+import com.springboot.ecommercev1.domain.*;
+import com.springboot.ecommercev1.services.*;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.checkerframework.checker.units.qual.C;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author KMCruz
@@ -28,25 +31,27 @@ import java.io.InputStream;
 @Controller
 @RequestMapping
 public class StoreController {
-
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final CategoryService categoryService;
     private final ProductService productService;
     private final ShoppingCartLineItemService shoppingCartLineItemService;
     private final ShoppingCartService shoppingCartService;
+    private final CustomerService customerService;
 
 
     public StoreController(CategoryService categoryService, ProductService productService,
                            ShoppingCartLineItemService shoppingCartLineItemService,
-                           ShoppingCartService shoppingCartService, HttpSession session) {
+                           ShoppingCartService shoppingCartService, CustomerService customerService) {
         this.categoryService = categoryService;
         this.productService = productService;
         this.shoppingCartLineItemService = shoppingCartLineItemService;
         this.shoppingCartService = shoppingCartService;
+        this.customerService = customerService;
     }
 
     @GetMapping("")
-    public String displayHomePage (Model model, HttpSession session) {
-        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
+    public String displayHomePage (Model model, Principal principal) {
+        String cartQuantity = getCartQuantity(principal);
         model.addAttribute("products",productService.findAll());
         model.addAttribute("categories",categoryService.findAll());
         model.addAttribute("cart",cartQuantity);
@@ -54,8 +59,8 @@ public class StoreController {
     }
 
     @GetMapping("/categories")
-    public String filerProductsByCategory (HttpSession session, @RequestParam String categoryName, Model model) {
-        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
+    public String filerProductsByCategory (Principal principal, @RequestParam String categoryName, Model model) {
+        String cartQuantity = getCartQuantity(principal);
         model.addAttribute("category",categoryService.findCategoryByName(categoryName));
         model.addAttribute("cart",cartQuantity);
         return "store/categoryDetails";
@@ -81,30 +86,29 @@ public class StoreController {
         }
     }
     @GetMapping("/categories/products")
-    public String showProductDetails(HttpSession session,@RequestParam Long sku, Model model) {
+    public String showProductDetails(Principal principal,@RequestParam Long sku, Model model) {
         Product product = productService.findProductBySku(sku);
-        String cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(session.getId());
-
+        String cartQuantity = getCartQuantity(principal);
         model.addAttribute("product",product);
         model.addAttribute("cart",cartQuantity);
         return "store/productDetails";
     }
-
+    @PreAuthorize(value = "hasRole('USER')")
     @PostMapping("/categories/products")
-    public String addToCart(@RequestParam Long sku, HttpSession session) {
+    public String addToCart(@RequestParam Long sku, Principal principal) {
         Product product = productService.findProductBySku(sku);
-        ShoppingCart cartToSave = new ShoppingCart();
-        cartToSave.setId(session.getId());
-        ShoppingCart savedCart = shoppingCartService.save(cartToSave);
+        Customer customer = customerService.findLoggedInCustomer(principal.getName());
+        ShoppingCart shoppingCart = customer.getShoppingCart();
+//        ShoppingCart savedCart = shoppingCartService.save(cartToSave);
 
         ShoppingCartLineItemKey compositePrimaryKey = ShoppingCartLineItemKey.builder()
                 .productId(product.getId())
-                .shoppingCartId(savedCart.getId())
+                .shoppingCartId(shoppingCart.getId())
                 .build();
 
         ShoppingCartLineItem cartLineItem = ShoppingCartLineItem.builder()
                 .id(compositePrimaryKey)
-                .shoppingCart(savedCart)
+                .shoppingCart(shoppingCart)
                 .product(product)
                 .build();
         ShoppingCartLineItem cartLineItemToSave = cartLineItem.addCartLineItem();
@@ -114,5 +118,16 @@ public class StoreController {
         return "redirect:/categories/products?sku="+product.getSku();
     }
 
+    private String getCartQuantity(Principal principal) {
+        String cartQuantity;
+        try {
+            Customer customer = customerService.findLoggedInCustomer(principal.getName());
+            ShoppingCart shoppingCart = customer.getShoppingCart();
+            cartQuantity = shoppingCartLineItemService.totalQuantityByShoppingCartID(shoppingCart.getId());
+        } catch (NullPointerException nullEx) {
+            cartQuantity = "";
+        }
+        return cartQuantity;
+    }
 
 }

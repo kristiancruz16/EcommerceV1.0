@@ -15,20 +15,21 @@ import java.util.List;
 @Data
 @Entity
 @Table
-public class ShoppingCart{
+public class ShoppingCart extends BaseEntity{
 
     public ShoppingCart() {}
 
     @Builder
-    public ShoppingCart(String id, List<ShoppingCartLineItem> shoppingCartList) {
-        this.id = id;
+    public ShoppingCart(Long id, List<ShoppingCartLineItem> shoppingCartList) {
+        super(id);
         this.shoppingCartList = shoppingCartList;
     }
 
-    @Id
-    private String id;
-
     @OneToMany(mappedBy="shoppingCart")
     private List<ShoppingCartLineItem> shoppingCartList = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 }

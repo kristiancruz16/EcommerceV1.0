@@ -1,7 +1,10 @@
 package com.springboot.security.services;
 
+import com.springboot.ecommercev1.domain.Customer;
+import com.springboot.ecommercev1.domain.ShoppingCart;
 import com.springboot.security.dto.UserDto;
 import com.springboot.security.exceptions.UserAlreadyExistsException;
+import com.springboot.security.models.Role;
 import com.springboot.security.models.User;
 import com.springboot.security.models.VerificationToken;
 import com.springboot.security.repositories.UserRepository;
@@ -45,6 +48,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User savedRegisteredUser(User user) {
+        if (user.getRole().equals(USER)){
+            Customer customer = new Customer();
+            ShoppingCart shoppingCart = new ShoppingCart();
+            user.setCustomer(customer);
+            customer.setUser(user);
+            customer.setShoppingCart(shoppingCart);
+            shoppingCart.setCustomer(customer);
+        }
         return userRepository.save(user);
     }
 

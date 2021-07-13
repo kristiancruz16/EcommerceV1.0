@@ -58,4 +58,6 @@ public class User {
     public void deleteVerificationToken(){
         this.verificationToken=null;
     }
+
+
 }
