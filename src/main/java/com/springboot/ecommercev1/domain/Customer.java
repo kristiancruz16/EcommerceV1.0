@@ -4,6 +4,7 @@ import com.springboot.security.models.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,12 +18,10 @@ public class Customer extends BaseEntity{
     public Customer () {}
 
     @Builder
-    public Customer(Long id, String phoneNo, User user, List<Address> address, List<CreditCardInfo> creditCardInfo, List<CustomerOrder> orders, ShoppingCart shoppingCart) {
+    public Customer(Long id, String phoneNo, User user, List<CustomerOrder> orders, ShoppingCart shoppingCart) {
         super(id);
         this.phoneNo = phoneNo;
         this.user = user;
-        this.address = address;
-        this.creditCardInfo = creditCardInfo;
         this.orders = orders;
         this.shoppingCart = shoppingCart;
     }
@@ -32,12 +31,6 @@ public class Customer extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Address> address;
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<CreditCardInfo> creditCardInfo;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerOrder> orders;

@@ -1,6 +1,8 @@
 package com.springboot.ecommercev1.services;
 
 import com.springboot.ecommercev1.domain.Payment;
+import com.springboot.ecommercev1.repositories.PaymentRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -8,7 +10,15 @@ import java.util.List;
  * @author KMCruz
  * 7/10/2021
  */
+@Service
 public class PaymentServiceImpl implements PaymentService {
+
+    private final PaymentRepository paymentRepository;
+
+    public PaymentServiceImpl(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
+
     @Override
     public List<Payment> findAll() {
         return null;
@@ -20,8 +30,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment save(Payment object) {
-        return null;
+    public Payment save(Payment payment) {
+        return paymentRepository.save(payment);
     }
 
     @Override

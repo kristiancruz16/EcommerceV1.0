@@ -19,19 +19,16 @@ public class Address extends BaseEntity{
     }
 
     @Builder
-    public Address(Long id, String addressLine,
+    public Address(String addressLine,
                    String baranggay, String city,
                    String province, String postalCode,
-                   AddressCategory addressCategory, Customer customer,
-                   CustomerOrder order) {
-        super(id);
+                   AddressCategory addressCategory, CustomerOrder order) {
         this.addressLine = addressLine;
         this.baranggay = baranggay;
         this.city = city;
         this.province = province;
         this.postalCode = postalCode;
         this.addressCategory = addressCategory;
-        this.customer = customer;
         this.order = order;
     }
 
@@ -58,10 +55,6 @@ public class Address extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private AddressCategory addressCategory;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
 
     @OneToOne(mappedBy = "address")
     private CustomerOrder order;

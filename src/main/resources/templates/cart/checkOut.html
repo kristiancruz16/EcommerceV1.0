@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/shoppingCart/checkOut}" method="post">
+<div>
+    <div><!--heading-->
+        <div >
+            <H2>Order</H2>
+            <div th:object="${order}">
+                <label>Order No: </label>
+                <text th:text="*{id}"></text>
+            </div>
+            <div th:object="${address}">
+                <label>Address Line 1:</label>
+                <input type="text" th:field="*{addressLine}"/>
+                <span th:if="${#fields.hasErrors('addressLine')}" th:errors="*{addressLine}">Error</span><br/>
+                <label>Brgy.</label>
+                <input type="text" th:field="*{baranggay}">
+                <span th:if="${#fields.hasErrors('baranggay')}" th:errors="*{baranggay}">Error</span><br/>
+                <label>City:</label>
+                <input type="text" th:field="*{city}"/>
+                <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Error</span><br/>
+                <label>Province:</label>
+                <input type="text" th:field="*{province}">
+                <span th:if="${#fields.hasErrors('province')}" th:errors="*{province}">Error</span><br/>
+                <label>Postal Code:</label>
+                <input type="text" th:field="*{postalCode}"/>
+                <span th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}">Error</span>
+            </div>
+            <div th:object="${creditCard}">
+                <label>Credit Card No.:</label>
+                <input type="text" th:field="*{cardNo}"/>
+                <span th:if="${#fields.hasErrors('cardNo')}" th:errors="*{cardNo}">Error</span><br/>
+                <label>Expiry Date:</label>
+                <input type="text" th:field="*{expiryDate}"/>
+                <span th:if="${#fields.hasErrors('expiryDate')}" th:errors="*{expiryDate}">Error</span><br/>
+                <label>CVV:</label>
+                <input type="text" th:field="*{cvv}"/>
+                <span th:if="${#fields.hasErrors('cvv')}" th:errors="*{cvv}">Error</span>
+            </div>
+        </div>
+    </div>
+    <div><!--content-->
+        <div th:each="orderItems:${order.orderItems}">
+            <div th:object="${orderItems}">
+                <label th:text="*{product.getName()}"></label><br/>
+                <label th:text="*{product.getProductPrice()}"></label><br/>
+                <label th:text="*{quantity}"></label><br/>
+                <label th:text="*{lineAmount}"></label>
+            </div>
+        </div>
+    </div>
+</div>
+    <input type="hidden" name="orderNo" th:value="${order.id}">
+    <input type="submit" value="Proceed to payment">
+</form>
+</body>
+</html>

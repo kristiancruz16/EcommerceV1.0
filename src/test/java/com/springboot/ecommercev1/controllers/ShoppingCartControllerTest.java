@@ -61,7 +61,7 @@ class ShoppingCartControllerTest {
     void showShoppingCart() throws Exception {
         when(shoppingCartService.findById(anyString())).thenReturn(shoppingCart);
 
-        mockMvc.perform(get("/shoppingcart"))
+        mockMvc.perform(get("/shoppingCart"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("cartLineItems"))
                 .andExpect(view().name("store/shoppingCart"));
@@ -90,7 +90,7 @@ class ShoppingCartControllerTest {
         cartLineItem = cartLineItem.addCartLineItem();
         when(shoppingCartLineItemService.save(any())).thenReturn(cartLineItem);
 
-        mockMvc.perform(post("/shoppingcart/add")
+        mockMvc.perform(post("/shoppingCart/add")
                     .param("cartId","ABC")
                     .param("productId","1"))
                 .andExpect(status().is3xxRedirection())
@@ -107,7 +107,7 @@ class ShoppingCartControllerTest {
 
         shoppingCartLineItemService.save(cartLineItem);
 
-        mockMvc.perform(post("/shoppingcart/delete")
+        mockMvc.perform(post("/shoppingCart/delete")
                                 .param("cartId","ABC")
                                 .param("productId","1"))
                 .andExpect(status().is3xxRedirection())
@@ -122,7 +122,7 @@ class ShoppingCartControllerTest {
 
         shoppingCartLineItemService.save(cartLineItem);
 
-        mockMvc.perform(post("/shoppingcart/delete")
+        mockMvc.perform(post("/shoppingCart/delete")
                 .param("cartId","ABC")
                 .param("productId","1"))
                 .andExpect(status().is3xxRedirection())
@@ -135,7 +135,7 @@ class ShoppingCartControllerTest {
 
         shoppingCartLineItemService.delete(shoppingCart);
 
-        mockMvc.perform(post("/shoppingcart/deleteAll")
+        mockMvc.perform(post("/shoppingCart/deleteAll")
                     .param("productId","1")
                     .param("cartId","ABC"))
                 .andExpect(status().is3xxRedirection())

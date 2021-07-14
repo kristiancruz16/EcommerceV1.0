@@ -25,7 +25,7 @@ public class OrderLineItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private Double price;
+    private Integer quantity;
 
     private Double lineAmount;
 }

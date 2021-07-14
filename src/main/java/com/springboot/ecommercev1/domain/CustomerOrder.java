@@ -3,6 +3,7 @@ package com.springboot.ecommercev1.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author KMCruz
@@ -32,10 +33,14 @@ public class CustomerOrder extends BaseEntity {
  @JoinColumn(name = "customer_id")
  private Customer customer;
 
- @OneToOne
+ @OneToOne(cascade = CascadeType.ALL)
  @JoinColumn(name = "address_id")
  private Address address;
- @OneToOne(mappedBy = "order")
+
+ @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
  private Payment payment;
+
+ @OneToMany(mappedBy = "customerOrder",cascade = CascadeType.ALL)
+ private List<OrderLineItem> orderItems;
 
 }

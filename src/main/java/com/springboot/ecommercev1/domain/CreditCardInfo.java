@@ -21,14 +21,12 @@ public class CreditCardInfo extends BaseEntity {
     @Builder
     public CreditCardInfo(Long id, CardType cardType,
                           String cardNo, String expiryDate,
-                          String cvv, Customer customer,
-                          Payment payment) {
+                          String cvv, Payment payment) {
         super(id);
         this.cardType = cardType;
         this.cardNo = cardNo;
         this.expiryDate = expiryDate;
         this.cvv = cvv;
-        this.customer = customer;
         this.payment = payment;
     }
 
@@ -43,10 +41,6 @@ public class CreditCardInfo extends BaseEntity {
 
     @Digits(integer = 3,fraction = 0)
     private String cvv;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
 
     @OneToOne(mappedBy = "creditCardInfo")
     private Payment payment;

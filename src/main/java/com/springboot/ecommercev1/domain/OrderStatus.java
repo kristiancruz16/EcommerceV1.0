@@ -5,5 +5,5 @@ package com.springboot.ecommercev1.domain;
  * 7/9/2021
  */
 public enum OrderStatus {
-    PACKED,SHIPPED,DELIVERED
+    PENDING,READY,PACKED,SHIPPED,DELIVERED
 }
