@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -33,12 +35,18 @@ public class CreditCardInfo extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CardType cardType;
 
+    @NotNull
+    @NotBlank
     @CreditCardNumber
     private String cardNo;
 
+    @NotNull
+    @NotBlank
     @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([0-9][0-9])$")
     private String expiryDate;
 
+    @NotNull
+    @NotBlank
     @Digits(integer = 3,fraction = 0)
     private String cvv;
 

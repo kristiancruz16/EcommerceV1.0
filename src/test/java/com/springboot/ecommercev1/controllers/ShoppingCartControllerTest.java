@@ -42,7 +42,7 @@ class ShoppingCartControllerTest {
     MockMvc mockMvc;
     ShoppingCart shoppingCart;
 
-    @BeforeEach
+   /* @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -141,5 +141,5 @@ class ShoppingCartControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/shoppingcart"));
 
-    }
+    }*/
 }

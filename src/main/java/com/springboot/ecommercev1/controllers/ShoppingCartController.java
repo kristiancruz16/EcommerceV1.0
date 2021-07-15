@@ -86,20 +86,21 @@ public class ShoppingCartController {
         CustomerOrder customerOrder = customerOrderService.findById(orderNo);
         LOGGER.info("Customer Id No.: "+customerOrder.getId());
         model.addAttribute("order",customerOrder);
-        model.addAttribute("creditCard", new CreditCardInfo());
+        model.addAttribute("creditCardInfo", new CreditCardInfo());
         model.addAttribute("address", new Address());
         return new ModelAndView("cart/checkOut",model);
     }
     @PostMapping("/checkOut")
     public ModelAndView processCheckOutForm(ModelMap model, @RequestParam Long orderNo,
-                                      @Valid Address address, BindingResult addressErrors,
-                                            @Valid CreditCardInfo creditCardInfo, BindingResult ccErrors){
+                                            @Valid CreditCardInfo creditCardInfo, BindingResult ccErrors,
+                                            @Valid Address address, BindingResult addressErrors){
+
         CustomerOrder customerOrder = customerOrderService.findById(orderNo);
-        if(addressErrors.hasErrors()|| ccErrors.hasErrors()){
+        if(ccErrors.hasFieldErrors()||addressErrors.hasFieldErrors()){
             model.addAttribute("order",customerOrder);
-            model.addAttribute("creditCard", new CreditCardInfo());
-            model.addAttribute("address", new Address());
-            return new ModelAndView("cart/checkOut");
+            model.addAttribute("creditCardInfo",creditCardInfo);
+            model.addAttribute("address",address);
+            return new ModelAndView("cart/checkOut",model);
         }
 
         Payment payment = new Payment();

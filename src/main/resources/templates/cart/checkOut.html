@@ -31,7 +31,7 @@
                 <input type="text" th:field="*{postalCode}"/>
                 <span th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}">Error</span>
             </div>
-            <div th:object="${creditCard}">
+            <div th:object="${creditCardInfo}">
                 <label>Credit Card No.:</label>
                 <input type="text" th:field="*{cardNo}"/>
                 <span th:if="${#fields.hasErrors('cardNo')}" th:errors="*{cardNo}">Error</span><br/>
